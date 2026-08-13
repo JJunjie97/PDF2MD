@@ -11,5 +11,6 @@ dependencies:
       - "requests>=2.32,<3"
       - "pypdf>=5,<7"
       - "pyinstaller>=6,<7"
+      - "pywebview==6.2.1"
       - "torch==2.8.0+cu128"
       - "torchvision==0.23.0+cu128"

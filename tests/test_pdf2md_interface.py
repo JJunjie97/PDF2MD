@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -38,6 +39,44 @@ class ProgressEventTests(unittest.TestCase):
         self.assertIsNone(core.parse_engine_progress("Loading models..."))
 
 
+class GuiBridgeTests(unittest.TestCase):
+    def test_bridge_prepares_cli_parameters_without_starting_gui(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "paper.pdf"
+            source.write_bytes(b"%PDF-1.4\n")
+            prepared = gui.PDF2MDBridge()._prepare_config(
+                {
+                    "source": str(source),
+                    "output": "",
+                    "pages": "1，3-5",
+                    "profile": "balanced",
+                    "method": "auto",
+                    "language": "ch",
+                    "timeout": "1800",
+                    "force": True,
+                }
+            )
+            self.assertEqual(prepared["output"], gui.default_output_for(source))
+            self.assertEqual(prepared["pages"], "1,3-5")
+            self.assertEqual(prepared["method"], "auto")
+            self.assertTrue(prepared["force"])
+
+    def test_bridge_rejects_unknown_method(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "paper.pdf"
+            source.write_bytes(b"%PDF-1.4\n")
+            with self.assertRaisesRegex(ValueError, "解析方式"):
+                gui.PDF2MDBridge()._prepare_config(
+                    {
+                        "source": str(source),
+                        "profile": "balanced",
+                        "method": "unknown",
+                        "language": "ch",
+                        "timeout": 1800,
+                    }
+                )
+
+
 class CliInterfaceTests(unittest.TestCase):
     def test_method_option_supports_text_mode(self) -> None:
         args = cli.build_parser().parse_args(["paper.pdf", "--method", "txt"])
@@ -51,4 +90,3 @@ class CliInterfaceTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

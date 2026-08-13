@@ -11,8 +11,8 @@ if (-not (Test-Path $Python)) {
     throw "PDF2MD environment is missing. Run .\scripts\install.ps1 first."
 }
 
-# Keep the project environment first so PyInstaller resolves Tcl/Tk and
-# runtime DLLs from the same Prefix instead of an active system Conda.
+# Keep the project environment first so PyInstaller resolves pywebview,
+# pythonnet, and native runtime DLLs from one Prefix.
 $env:PATH = @(
     $Paths.Environment,
     (Join-Path $Paths.Environment "Scripts"),

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>PDF2MD</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-frame">
+    <header class="titlebar">
+      <div class="brand-drag pywebview-drag-region" id="drag-region">
+        <img src="../assets/pdf2md-icon.png" class="brand-icon" alt="">
+        <span class="brand-name">PDF2MD</span>
+      </div>
+      <div class="window-actions" aria-label="窗口控制">
+        <button class="window-button" id="minimize-button" aria-label="最小化" title="最小化">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5h10"/></svg>
+        </button>
+        <button class="window-button" id="maximize-button" aria-label="最大化" title="最大化">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="3.5" width="9" height="9" rx="1"/></svg>
+        </button>
+        <button class="window-button close" id="close-button" aria-label="关闭" title="关闭">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="glass-card file-card" aria-labelledby="file-heading">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">PDF → MARKDOWN</span>
+            <h1 id="file-heading">选择文档</h1>
+          </div>
+          <div class="format-rail" aria-hidden="true">
+            <span class="format-node pdf-node">PDF</span>
+            <span class="rail-line"><i></i></span>
+            <span class="format-node md-node">MD</span>
+          </div>
+        </div>
+
+        <div class="path-stack">
+          <label class="field-label" for="source-path">PDF 文件</label>
+          <div class="path-control">
+            <input id="source-path" type="text" spellcheck="false" autocomplete="off">
+            <button class="button browse-button" id="choose-pdf" type="button">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h5l1.5 2h6.5v7.5h-13z"/><path d="M3.5 6.5V4h5l1.5 2"/></svg>
+              <span>选择文件</span>
+            </button>
+          </div>
+
+          <div class="path-connector" aria-hidden="true"><span></span></div>
+
+          <label class="field-label" for="output-path">输出目录</label>
+          <div class="path-control">
+            <input id="output-path" type="text" spellcheck="false" autocomplete="off">
+            <button class="button browse-button" id="choose-output" type="button">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h5l1.5 2h6.5v7.5h-13z"/><path d="M3.5 6.5V4h5l1.5 2"/></svg>
+              <span>选择目录</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="glass-card settings-card" aria-labelledby="settings-heading">
+        <div class="compact-heading">
+          <h2 id="settings-heading">转换设置</h2>
+        </div>
+        <div class="settings-grid">
+          <label class="setting-field">
+            <span>页码</span>
+            <input id="pages" type="text" value="全文" spellcheck="false" autocomplete="off">
+          </label>
+          <label class="setting-field">
+            <span>转换模式</span>
+            <select id="profile">
+              <option value="balanced" selected>均衡</option>
+              <option value="fast">高速</option>
+              <option value="accurate">精确</option>
+            </select>
+          </label>
+          <label class="setting-field">
+            <span>解析方式</span>
+            <select id="method">
+              <option value="auto" selected>自动</option>
+              <option value="txt">文本</option>
+              <option value="ocr">OCR</option>
+            </select>
+          </label>
+          <label class="setting-field">
+            <span>OCR 语言</span>
+            <select id="language">
+              <option value="ch" selected>中 / 英 / 日</option>
+              <option value="korean">韩文</option>
+              <option value="east_slavic">俄文 / 乌克兰文</option>
+              <option value="arabic">阿拉伯文</option>
+            </select>
+          </label>
+          <label class="setting-field">
+            <span>超时</span>
+            <select id="timeout">
+              <option value="1800" selected>30 分钟</option>
+              <option value="3600">60 分钟</option>
+              <option value="7200">120 分钟</option>
+            </select>
+          </label>
+          <label class="toggle-field" for="force">
+            <span class="toggle-copy">忽略缓存</span>
+            <input id="force" type="checkbox">
+            <span class="toggle" aria-hidden="true"><i></i></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="glass-card progress-card" aria-live="polite">
+        <div class="progress-head">
+          <div class="status">
+            <span class="status-dot" id="status-dot"></span>
+            <span id="status-text">就绪</span>
+          </div>
+          <span class="progress-percent" id="progress-percent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </section>
+
+      <div class="error-banner" id="error-banner" role="alert" hidden>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3.2 17 16H3z"/><path d="M10 7v4.5M10 14v.2"/></svg>
+        <span id="error-text"></span>
+        <button id="dismiss-error" type="button" aria-label="关闭错误提示">×</button>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <button class="button secondary-button" id="open-output" type="button" disabled>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 6.5h5l1.5 2h6.5v7.5h-13z"/><path d="M13 4h3v3M16 4l-5 5"/></svg>
+        <span>打开输出</span>
+      </button>
+      <div class="footer-actions">
+        <button class="button ghost-button" id="cancel" type="button" disabled>取消</button>
+        <button class="button primary-button" id="convert" type="button">
+          <span>开始转换</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

@@ -24,7 +24,7 @@ Write-Host "Installing PDF2MD OCR components..." -ForegroundColor Cyan
 if ($LASTEXITCODE -ne 0) {
     throw "pip/uv installation failed with exit code $LASTEXITCODE."
 }
-& $Python -m uv pip install --python $Python --upgrade "mineru[vlm,pipeline,lmdeploy]==3.4.4" "requests>=2.32,<3" "pypdf>=5,<7" "pyinstaller>=6,<7"
+& $Python -m uv pip install --python $Python --upgrade "mineru[vlm,pipeline,lmdeploy]==3.4.4" "requests>=2.32,<3" "pypdf>=5,<7" "pyinstaller>=6,<7" "pywebview==6.2.1"
 if ($LASTEXITCODE -ne 0) {
     throw "PDF2MD engine installation failed with exit code $LASTEXITCODE."
 }
@@ -41,8 +41,8 @@ if ($NvidiaGpu) {
     }
 }
 
-# This project has no web UI. Remove packages left by an older mineru[all]
-# installation while retaining FastAPI, which is used as the local OCR engine.
+# The desktop shell uses local HTML/WebView2, not Gradio. Remove packages left
+# by an older mineru[all] installation while retaining the internal FastAPI OCR.
 & $Python -m pip uninstall --yes gradio gradio-pdf gradio-client 2>$null | Out-Null
 $LegacyWebLauncher = Join-Path $Paths.Environment "Scripts\mineru-gradio.exe"
 if (Test-Path $LegacyWebLauncher) {
@@ -60,7 +60,7 @@ if ((Test-Path $TorchLibraryPath) -and -not (Test-Path $CudaBinPath)) {
 }
 
 Write-Host "Verifying installation..." -ForegroundColor Cyan
-& $Python -c "import mineru, torch; print('PDF2MD engine:', getattr(mineru, '__version__', 'installed')); print('PyTorch:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA runtime:', torch.version.cuda); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU only')"
+& $Python -c "import mineru, torch, webview; print('PDF2MD engine:', getattr(mineru, '__version__', 'installed')); print('pywebview: installed'); print('PyTorch:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA runtime:', torch.version.cuda); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU only')"
 & $Python -m mineru.cli.client --version
 
 Write-Host "Installation complete. Download models with: .\scripts\download-models.ps1" -ForegroundColor Green

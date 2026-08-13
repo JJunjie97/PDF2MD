@@ -5,8 +5,8 @@ import sys
 from pathlib import Path
 
 
-# _tkinter.pyd must resolve Tcl/Tk from this project environment. Without
-# this, an active system Conda can make PyInstaller bundle mismatched DLLs.
+# Keep native libraries from this project environment ahead of an active
+# system Conda while PyInstaller collects pywebview/pythonnet dependencies.
 runtime_library_bin = Path(sys.prefix) / "Library" / "bin"
 os.environ["PATH"] = os.pathsep.join(
     (str(runtime_library_bin), os.environ.get("PATH", ""))
@@ -19,7 +19,11 @@ a = Analysis(
     ['../src/pdf2md_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('../assets/pdf2md-icon.png', 'assets')],
+    datas=[
+        ('../assets/pdf2md-icon.png', 'assets'),
+        ('../assets/pdf2md-icon.ico', 'assets'),
+        ('../ui', 'ui'),
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

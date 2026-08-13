@@ -7,24 +7,22 @@ Windows 本地 PDF → Markdown 工具，面向两种使用方式：人在桌面
 ## 架构
 
 ```text
-                 ┌─ pdf2md.cmd ───────────────┐
-用户 / AI Agent ─┤                                ├─ src/pdf2md_cli.py
-                 └─ pdf2md-read-pdf Skill ────────┘          │
-                                                             ▼
-                                                     src/pdf2md_core.py
-                                                             │
-                                                     本地 PDF2MD OCR API
-                                                             │
-                                                 Markdown + images + raw
-
-PDF2MD.exe ──启动 src/pdf2md_cli.py──┘
+用户 / AI Agent ── pdf2md.cmd / Skill ──────────────┐
+                                                    ├─ src/pdf2md_cli.py
+PDF2MD.exe ── WebView2 ── ui/ ── Python JS Bridge ──┘          │
+                                                               ▼
+                                                       src/pdf2md_core.py
+                                                               │
+                                                       本地 PDF2MD OCR API
+                                                               │
+                                                   Markdown + images + raw
 ```
 
 依赖方向是固定的：
 
 - `src/pdf2md_cli.py` 是唯一正式转换入口。
 - `pdf2md.cmd` 是 CMD/PowerShell 中使用的便捷命令。
-- `PDF2MD.exe` 只是 GUI 外壳，通过子进程调用 Python CLI，不包含另一套转换实现。
+- `PDF2MD.exe` 只是 GUI 外壳：界面由本地 HTML/CSS/JavaScript 绘制，`src/pdf2md_gui.py` 仅提供 WebView2 原生桥接并通过子进程调用 Python CLI，不包含另一套转换实现。
 - Agent Skill 负责检查 PDF、搜索原生文本和选择最小页集，然后直接调用 Python CLI；不会调用 GUI EXE。
 
 ## 最终输出
@@ -127,7 +125,7 @@ PDF2MD 的公开命令、文件名、界面和 Skill 均使用 `PDF2MD` 品牌�
 4. 可直接设置转换模式、解析方式、OCR 语言、超时和是否忽略缓存。
 5. 点击“开始转换”。
 
-GUI 使用 Windows 11 深色玻璃视觉、确定型百分比进度和精简阶段文字。它始终调用 `src/pdf2md_cli.py --json`，只负责文件选择、参数组装、状态显示和取消任务。
+GUI 使用浅色毛玻璃视觉，所有按钮和表单控件保持统一尺寸，提供确定型百分比进度和精简阶段文字。它由本地 `ui/index.html`、`styles.css`、`app.js` 构成，通过系统 WebView2 显示；不会启动本地网页服务器，也不会访问远程页面。Python 只桥接文件选择、窗口控制、任务状态与 `src/pdf2md_cli.py --json`。
 
 ## OCR 执行效率
 
@@ -220,6 +218,7 @@ New-Item -ItemType Junction -Path (Join-Path $AgentSkills "pdf2md-read-pdf") -Ta
 
 - Windows 10/11 x64
 - 已安装 Conda，并可在 PowerShell 中运行 `conda --version`
+- 桌面 GUI 需要 Microsoft Edge WebView2 Runtime；Windows 11 通常已随系统提供，精简版系统或 Windows 10 若缺失需先安装 Evergreen Runtime
 - 推荐 NVIDIA GPU；当前环境使用 CUDA 12.8 PyTorch
 - 项目和模型需要较大磁盘空间
 
@@ -235,7 +234,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 
 1. 在 `runtime/env` 创建 Python 3.12 Conda Prefix 环境。
 2. 将 Conda、pip、uv、Torch、ModelScope、Hugging Face 等缓存限制在项目目录。
-3. 安装 `mineru[vlm,pipeline,lmdeploy]==3.4.4`、Requests、PyPDF 和 PyInstaller。
+3. 安装 `mineru[vlm,pipeline,lmdeploy]==3.4.4`、Requests、PyPDF、PyInstaller 和 pywebview。
 4. 检测 NVIDIA GPU，必要时安装 PyTorch 2.8.0 CUDA 12.8 wheels。
 5. 删除旧 `mineru[all]` 遗留的 Gradio 网页 UI 包；FastAPI 仍作为 CLI 内部 OCR 引擎。
 6. 创建 `runtime/cuda/bin` 到 PyTorch DLL 目录的 Junction。
@@ -256,12 +255,13 @@ PDF2MD/
 ├─ pdf2md.cmd                  # 正式 CLI 便捷入口
 ├─ PDF2MD.exe                  # 仅 GUI 外壳
 ├─ assets/                     # 程序 PNG/ICO 图标
+├─ ui/                         # 本地 HTML/CSS/JavaScript 桌面界面
 ├─ src/
 │  ├─ pdf2md_cli.py                # CLI 参数、JSON 契约、退出状态
 │  ├─ pdf2md_core.py               # OCR API、缓存、最小输出发布
 │  ├─ pdf2md_markdown.py           # HTML 表格转 GFM Markdown、发布格式整理
 │  ├─ pdf2md_toc.py                # 通用目录整理、标题匹配和内部链接
-│  └─ pdf2md_gui.py                # GUI，只调用 pdf2md_cli.py
+│  └─ pdf2md_gui.py                # WebView2 桥接，只调用 pdf2md_cli.py
 ├─ skills/pdf2md-read-pdf/         # Agent Skill
 ├─ integrations/codex/AGENTS.md    # 系统提示词模板
 ├─ scripts/
@@ -286,7 +286,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\scripts\build.ps1
 ```
 
-生成根目录 `PDF2MD.exe`。构建脚本会优先使用 `runtime/env/Library/bin`，避免系统 Miniconda Tcl/Tk DLL 与项目 Tk 数据版本冲突。构建中间目录默认自动删除；排查时可使用：
+生成根目录 `PDF2MD.exe`。PyInstaller 会打包 Python 桥接、pywebview 运行库和 `ui/` 静态资源，但复用 Windows 已安装的 WebView2 Runtime，不捆绑浏览器内核。构建脚本会优先使用项目环境中的原生依赖，避免活动中的系统 Conda 干扰。构建中间目录默认自动删除；排查时可使用：
 
 ```powershell
 .\scripts\build.ps1 -KeepWork
