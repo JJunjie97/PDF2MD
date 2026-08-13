@@ -19,7 +19,7 @@ a = Analysis(
     ['../src/pdf2md_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('../assets/pdf2md-icon.png', 'assets')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -49,4 +49,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon='../assets/pdf2md-icon.ico',
 )

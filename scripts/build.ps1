@@ -23,6 +23,11 @@ $env:PATH = @(
 
 $Spec = Join-Path $Paths.ProjectRoot "packaging\PDF2MD.spec"
 $Work = Join-Path $Paths.Runtime "build"
+$IconBuilder = Join-Path $Paths.ProjectRoot "scripts\build-icon.py"
+& $Python $IconBuilder
+if ($LASTEXITCODE -ne 0) {
+    throw "PDF2MD icon build failed with exit code $LASTEXITCODE."
+}
 Push-Location (Split-Path -Parent $Spec)
 try {
     & $Python -m PyInstaller --noconfirm --clean --distpath $Paths.ProjectRoot --workpath $Work $Spec

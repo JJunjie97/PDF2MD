@@ -22,7 +22,7 @@ from pdf2md_markdown import convert_html_tables
 from pdf2md_toc import enhance_document_navigation
 
 
-CORE_VERSION = "2.6.0"
+CORE_VERSION = "2.7.0"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
@@ -34,6 +34,10 @@ PROFILE_SETTINGS = {
 }
 
 EventCallback = Callable[[str, object], None]
+ENGINE_PROGRESS_RE = re.compile(
+    r"Processing pages.*?(\d{1,3})%.*?(\d+)\s*/\s*(\d+)",
+    re.IGNORECASE,
+)
 
 
 class ConversionError(RuntimeError):
@@ -99,6 +103,27 @@ class RunResult:
 
 def _noop_emit(_kind: str, _value: object) -> None:
     return
+
+
+def _emit_progress(emit: EventCallback, percent: float, message: str) -> None:
+    emit(
+        "progress",
+        {
+            "percent": max(0, min(100, round(float(percent), 1))),
+            "message": message,
+        },
+    )
+
+
+def parse_engine_progress(line: str) -> tuple[int, int, int] | None:
+    """Return MinerU's page-stage percentage and page counts from a tqdm line."""
+    match = ENGINE_PROGRESS_RE.search(line)
+    if not match:
+        return None
+    percent, completed, total = (int(value) for value in match.groups())
+    if total < 1 or completed < 0:
+        return None
+    return max(0, min(100, percent)), min(completed, total), total
 
 
 def project_root() -> Path:
@@ -267,7 +292,17 @@ def ensure_layout(layout: OutputLayout) -> None:
 def parse_page_ranges(expression: str | None) -> list[tuple[int, int | None]]:
     if expression is None or not expression.strip():
         return [(1, None)]
-    cleaned = expression.strip().replace("–", "-").replace("—", "-")
+    cleaned = (
+        expression.strip()
+        .replace("，", ",")
+        .replace("、", ",")
+        .replace("；", ",")
+        .replace(";", ",")
+        .replace("–", "-")
+        .replace("—", "-")
+    )
+    if cleaned.casefold() in {"all", "全文"}:
+        return [(1, None)]
     ranges: list[tuple[int, int]] = []
     for part in cleaned.split(","):
         match = re.fullmatch(r"\s*(\d+)\s*(?:-\s*(\d+)\s*)?", part)
@@ -407,6 +442,30 @@ class OCRService:
         self.session_root = paths.temp / "api" / f"session-{os.getpid()}-{uuid.uuid4().hex[:8]}"
         self.client_root = self.session_root / "client"
         self.log_lines: list[str] = []
+        self.progress_start = 20.0
+        self.progress_end = 88.0
+        self.progress_value = 20.0
+
+    def set_progress_window(self, start: float, end: float) -> None:
+        self.progress_start = start
+        self.progress_end = max(start, end)
+        self.progress_value = start
+
+    def _handle_log_line(self, raw_line: str) -> None:
+        line = re.sub(r"\x1b\[[0-9;?]*[ -/]*[@-~]", "", raw_line).strip()
+        if not line:
+            return
+        self.log_lines.append(line)
+        if len(self.log_lines) > 4000:
+            del self.log_lines[:1000]
+        parsed = parse_engine_progress(line)
+        if parsed is not None:
+            percent, completed, total = parsed
+            mapped = self.progress_start + (self.progress_end - self.progress_start) * percent / 100
+            if mapped > self.progress_value:
+                self.progress_value = mapped
+                _emit_progress(self.emit, mapped, f"解析页面 {completed}/{total}")
+        self.emit("line", line)
 
     def _free_port(self) -> int:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
@@ -416,14 +475,19 @@ class OCRService:
     def _read_logs(self) -> None:
         if self.process is None or self.process.stdout is None:
             return
-        for raw_line in self.process.stdout:
-            line = raw_line.rstrip()
-            if not line:
+        buffer: list[str] = []
+        while True:
+            character = self.process.stdout.read(1)
+            if not character:
+                if buffer:
+                    self._handle_log_line("".join(buffer))
+                return
+            if character in "\r\n":
+                if buffer:
+                    self._handle_log_line("".join(buffer))
+                    buffer.clear()
                 continue
-            self.log_lines.append(line)
-            if len(self.log_lines) > 4000:
-                del self.log_lines[:1000]
-            self.emit("line", line)
+            buffer.append(character)
 
     def start(self, timeout: float = 120.0) -> None:
         if self.process is not None and self.process.poll() is None:
@@ -448,7 +512,7 @@ class OCRService:
             creation_flags = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(
                 subprocess, "CREATE_NEW_PROCESS_GROUP", 0
             )
-        self.emit("message", "正在启动本地 OCR 引擎…")
+        self.emit("message", "启动引擎")
         self.process = subprocess.Popen(
             command,
             cwd=str(self.paths.root),
@@ -479,7 +543,7 @@ class OCRService:
             try:
                 response = self.session.get(f"{self.base_url}/health", timeout=3)
                 if response.status_code == 200:
-                    self.emit("message", "OCR 引擎已就绪。")
+                    self.emit("message", "引擎就绪")
                     return
                 last_error = f"HTTP {response.status_code}"
             except requests.RequestException as exc:
@@ -502,7 +566,7 @@ class OCRService:
         self._check_cancelled()
         profile = PROFILE_SETTINGS[options.profile]
         page_label = "all" if end is None else (str(start) if start == end else f"{start}-{end}")
-        self.emit("message", f"正在解析 PDF 页 {page_label}…")
+        self.emit("message", f"准备页面 {page_label}")
         form = [
             ("lang_list", options.language),
             ("backend", str(profile["backend"])),
@@ -557,9 +621,9 @@ class OCRService:
             if status != last_status:
                 last_status = status
                 if status == "pending":
-                    self.emit("message", "任务已提交，等待 OCR…")
+                    self.emit("message", "等待解析")
                 elif status == "processing":
-                    self.emit("message", f"正在识别 PDF 页 {page_label}…")
+                    self.emit("message", f"解析页面 {page_label}")
             if status == "completed":
                 break
             if status not in {"pending", "processing"}:
@@ -584,6 +648,7 @@ class OCRService:
             raise ConversionError(f"下载 OCR 结果失败：{exc}") from exc
         _safe_extract(zip_path, extract_dir)
         zip_path.unlink(missing_ok=True)
+        _emit_progress(self.emit, self.progress_end, "读取结果")
         return extract_dir
 
     def stop(self) -> None:
@@ -807,6 +872,7 @@ def run_conversion(
     cancel_event: threading.Event | None = None,
 ) -> RunResult:
     started = time.monotonic()
+    _emit_progress(emit, 2, "检查文件")
     cancel_event = cancel_event or threading.Event()
     source = options.source.expanduser().resolve()
     if not source.is_file():
@@ -839,6 +905,7 @@ def run_conversion(
     ensure_layout(layout)
     identity = _source_identity(source, layout)
     manifest = _load_manifest(source, layout, identity)
+    _emit_progress(emit, 7, "检查缓存")
     deadline = started + options.timeout
     service: OCRService | None = None
     completed: list[dict[str, object]] = []
@@ -853,15 +920,21 @@ def run_conversion(
             cached, cached_replacements = (
                 (None, 0) if options.force else _cached_selection(manifest, layout, key)
             )
+            task_start = 20 + (index - 1) * 70 / len(ranges)
+            task_end = 20 + index * 70 / len(ranges)
             if cached is not None:
                 cache_hits += 1
-                emit("message", f"复用缓存：PDF 页 {page_range}")
+                emit("message", f"读取缓存 {page_range}")
                 completed.append(cached)
+                _emit_progress(emit, task_end, "读取缓存")
                 continue
             if service is None:
                 service = OCRService(paths, emit, cancel_event)
+                _emit_progress(emit, 10, "启动引擎")
                 service.start(timeout=min(120, max(10, deadline - time.monotonic())))
-            emit("progress", (index, len(ranges), page_range))
+                _emit_progress(emit, 18, "引擎就绪")
+            service.set_progress_window(task_start, task_end - 2)
+            _emit_progress(emit, task_start, f"准备页面 {page_range}")
             if cached_replacements:
                 emit(
                     "message",
@@ -896,10 +969,12 @@ def run_conversion(
     if not completed:
         raise ConversionError("没有可发布的 Markdown 结果。")
     _write_json(layout.manifest, manifest)
-    emit("message", "正在整理 Markdown 和图片…")
+    emit("message", "整理输出")
+    _emit_progress(emit, 94, "整理输出")
     _publish_document(layout, completed)
     elapsed = time.monotonic() - started
-    emit("message", f"转换完成，用时 {elapsed:.1f} 秒。")
+    emit("message", "完成")
+    _emit_progress(emit, 100, "完成")
     return RunResult(
         markdown=layout.markdown,
         images=layout.images,

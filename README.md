@@ -104,13 +104,14 @@ PDF2MD 的公开命令、文件名、界面和 Skill 均使用 `PDF2MD` 品牌�
 
 | 参数 | 作用 |
 |---|---|
-| `-o, --output` | 指定结果目录；默认使用 PDF 同级 `<stem>.pdf2md` |
+| `-o, --output` | 指定输出目录；默认使用 PDF 同级 `<stem>.pdf2md` |
 | `--page N` | 转换一个物理 PDF 页码，从 1 开始 |
-| `--pages RANGES` | 转换 `3-8` 或 `1-3,8,12-15` |
+| `--pages RANGES` | Word 式页码：`1, 3, 5-12`；也接受中文逗号与长横线 |
 | `--profile fast` | Pipeline，高速/低资源模式 |
 | `--profile balanced` | Hybrid medium，默认模式，关闭图表分析 |
 | `--profile accurate` | Hybrid high，启用图表分析，速度较慢 |
-| `--ocr` | 强制 OCR；默认自动判断文本型或扫描型 PDF |
+| `--method auto\|txt\|ocr` | 自动、文本优先或强制 OCR |
+| `--ocr` | `--method ocr` 的兼容简写 |
 | `-l, --lang` | OCR 语言，默认 `ch` |
 | `--force` | 忽略匹配缓存并重新转换 |
 | `--timeout N` | 总超时秒数，默认 1800 |
@@ -121,11 +122,12 @@ PDF2MD 的公开命令、文件名、界面和 Skill 均使用 `PDF2MD` 品牌�
 双击 `PDF2MD.exe`：
 
 1. 选择 PDF。
-2. 可选填写页码，如 `3-8` 或 `1-3,8,12-15`。
-3. 选择高速、均衡或精确模式。
-4. 点击“开始转换”。
+2. 输出目录可选；未指定时使用 PDF 同级 `<stem>.pdf2md`。
+3. 页码缺省为“全文”，指定页使用 Word 式写法，如 `1, 3, 5-12`。
+4. 可直接设置转换模式、解析方式、OCR 语言、超时和是否忽略缓存。
+5. 点击“开始转换”。
 
-GUI 始终调用 `src/pdf2md_cli.py --json`，只负责文件选择、参数组装、状态显示和取消任务。
+GUI 使用 Windows 11 深色玻璃视觉、确定型百分比进度和精简阶段文字。它始终调用 `src/pdf2md_cli.py --json`，只负责文件选择、参数组装、状态显示和取消任务。
 
 ## OCR 执行效率
 
@@ -252,22 +254,24 @@ Set-ExecutionPolicy -Scope Process Bypass
 ```text
 PDF2MD/
 ├─ pdf2md.cmd                  # 正式 CLI 便捷入口
-├─ PDF2MD.exe                # 仅 GUI 外壳
+├─ PDF2MD.exe                  # 仅 GUI 外壳
+├─ assets/                     # 程序 PNG/ICO 图标
 ├─ src/
 │  ├─ pdf2md_cli.py                # CLI 参数、JSON 契约、退出状态
 │  ├─ pdf2md_core.py               # OCR API、缓存、最小输出发布
 │  ├─ pdf2md_markdown.py           # HTML 表格转 GFM Markdown、发布格式整理
 │  ├─ pdf2md_toc.py                # 通用目录整理、标题匹配和内部链接
-│  └─ pdf2md_gui.py              # GUI，只调用 pdf2md_cli.py
+│  └─ pdf2md_gui.py                # GUI，只调用 pdf2md_cli.py
 ├─ skills/pdf2md-read-pdf/         # Agent Skill
 ├─ integrations/codex/AGENTS.md    # 系统提示词模板
 ├─ scripts/
 │  ├─ install.ps1                  # 创建/修复本地环境
 │  ├─ download-models.ps1          # 下载模型
+│  ├─ build-icon.py                # 生成程序图标
 │  ├─ build.ps1                    # 构建 GUI EXE
 │  └─ runtime.ps1                  # 集中管理本地路径和环境变量
 ├─ config/                         # 可提交的 Conda/OCR 配置模板
-├─ packaging/PDF2MD.spec     # GUI 打包配置
+├─ packaging/PDF2MD.spec           # GUI 打包配置
 ├─ backups/                        # Skill ZIP 备份
 ├─ runtime/                        # 忽略：Conda、缓存、CUDA、临时数据
 └─ models/                         # 忽略：模型文件

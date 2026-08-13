@@ -25,7 +25,7 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("pdf", help="输入 PDF 文件")
-    parser.add_argument("-o", "--output", help="指定结果目录；默认是 PDF 同级的 <文件名>.pdf2md")
+    parser.add_argument("-o", "--output", help="指定输出目录；默认是 PDF 同级的 <文件名>.pdf2md")
     pages = parser.add_mutually_exclusive_group()
     pages.add_argument("--page", type=int, help="只转换一个物理 PDF 页码（从 1 开始）")
     pages.add_argument("--pages", help="页码或页段，例如 3-8 或 1-3,8,12-15")
@@ -35,7 +35,14 @@ def build_parser() -> argparse.ArgumentParser:
         default="balanced",
         help="fast=Pipeline 高速；balanced=Hybrid 均衡；accurate=Hybrid 高精度",
     )
-    parser.add_argument("--ocr", action="store_true", help="强制 OCR；默认自动判断文本型或扫描型 PDF")
+    method = parser.add_mutually_exclusive_group()
+    method.add_argument(
+        "--method",
+        choices=("auto", "txt", "ocr"),
+        default="auto",
+        help="解析方式：auto=自动；txt=文本优先；ocr=强制 OCR",
+    )
+    method.add_argument("--ocr", action="store_true", help="强制 OCR；等同于 --method ocr")
     parser.add_argument("-l", "--lang", default="ch", help="OCR 语言，默认 ch")
     parser.add_argument("--force", action="store_true", help="忽略匹配缓存并重新转换")
     parser.add_argument("--timeout", type=int, default=1800, help="总超时秒数，默认 1800")
@@ -82,7 +89,7 @@ def main(argv: list[str] | None = None) -> int:
         output=Path(args.output).expanduser().resolve() if args.output else None,
         pages=page_expression,
         profile=args.profile,
-        method="ocr" if args.ocr else "auto",
+        method="ocr" if args.ocr else args.method,
         language=args.lang,
         force=args.force,
         timeout=args.timeout,
@@ -92,6 +99,8 @@ def main(argv: list[str] | None = None) -> int:
     def emit(kind: str, value: object) -> None:
         if kind == "message":
             print(f"[状态] {value}", file=sys.stderr)
+        elif kind == "progress":
+            print(f"[进度] {json.dumps(value, ensure_ascii=False)}", file=sys.stderr)
         elif kind == "line" and not args.json:
             print(str(value), file=sys.stderr)
 
