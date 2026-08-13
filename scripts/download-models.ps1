@@ -7,11 +7,16 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-. (Join-Path $PSScriptRoot "activate.ps1")
+. (Join-Path $PSScriptRoot "runtime.ps1")
+$Paths = Initialize-MinerURuntime -CreateConfig
+$Downloader = Join-Path $Paths.Environment "Scripts\mineru-models-download.exe"
+if (-not (Test-Path $Downloader)) {
+    throw "MinerU environment is missing. Run .\scripts\install.ps1 first."
+}
 
-# The downloader stores models below this project and writes the resolved
-# machine-specific model paths to the ignored root mineru.json.
-mineru-models-download --source $Source --model_type $ModelType
+# Models are stored under models/ and machine-specific paths are written to
+# runtime/mineru.json.
+& $Downloader --source $Source --model_type $ModelType
 if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }

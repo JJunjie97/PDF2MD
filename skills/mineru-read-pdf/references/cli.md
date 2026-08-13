@@ -21,7 +21,7 @@ The public output is intentionally small:
 └── raw/
 ```
 
-`raw/` contains indexes, logs, manifests, cached selections, and untouched MinerU output. Do not inspect it during normal reading.
+`raw/` contains indexes, logs, manifests, and cached Markdown/image selections needed for fast reuse. Upstream JSON, model output, content lists, and original PDF copies are not requested. Do not inspect `raw/` during normal reading.
 
 ## Commands
 
@@ -33,7 +33,7 @@ The public output is intentionally small:
 
 ## Important options
 
-- `--profile balanced|accurate|pipeline`: Default `balanced` maps to hybrid medium; `accurate` maps to hybrid high.
+- `--profile fast|balanced|accurate`: `fast` uses Pipeline, `balanced` uses Hybrid medium without image/chart analysis, and `accurate` uses Hybrid high with image/chart analysis.
 - `--token-budget N`: Default `12000`; guides `prepare` page selection.
 - `--context-pages N`: Default `1`.
 - `--max-pages N`: Default `12` for automatic preparation.

@@ -5,7 +5,7 @@ description: Prepare and read local PDF content with the local MinerU CLI. Use w
 
 # Read PDFs with MinerU
 
-Use `scripts/mineru-pdf.cmd`; do not reconstruct MinerU environment commands when this wrapper is available.
+Use `scripts/mineru-pdf.cmd`. It calls the project's independent Python CLI directly; never call the desktop GUI/EXE or reconstruct MinerU environment commands.
 
 ## Workflow
 
@@ -15,7 +15,7 @@ Use `scripts/mineru-pdf.cmd`; do not reconstruct MinerU environment commands whe
 4. Keep the default 12k reading-token budget unless the task needs broader coverage. Do not convert a long PDF in full by default.
 5. Read only the single top-level Markdown path returned in JSON. Search it before loading large sections. Open files in the returned `images_dir` only when the answer depends on a figure or visual verification.
 6. Cite physical PDF page numbers from the returned page ranges. Distinguish printed page labels when known.
-7. Reuse valid output in the sibling `<pdf-stem>.mineru` directory. Treat `<pdf-stem>.md` and `images/` as the public reading interface. Do not enumerate or read `raw/` unless conversion troubleshooting or the conditional correction workflow specifically requires it. Never modify the source PDF.
+7. Reuse valid output in the sibling `<pdf-stem>.mineru` directory. Treat `<pdf-stem>.md` and `images/` as the public reading interface. `raw/` contains only CLI caches, logs, indexes, and manifests; do not enumerate or read it unless conversion troubleshooting or the conditional correction workflow specifically requires it. Never modify the source PDF.
 
 Use `search <pdf> --query <query>` to refine weak results before converting more pages. Merge the relevant evidence conceptually and expand by the smallest useful context range.
 

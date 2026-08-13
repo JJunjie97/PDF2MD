@@ -1,271 +1,127 @@
-# MinerU Local：Windows 本地 PDF 转 Markdown 与 Agent Skill
+# MinerU Local
 
-这是一个面向 Windows 的 MinerU 本地工作区，将 MinerU 3.4.4、CUDA 运行配置、简洁 GUI、可脚本化 CLI 和 AI Agent PDF 阅读 Skill 组织在同一个项目中。
+Windows 本地 PDF → Markdown 工具，面向两种使用方式：人在桌面 GUI 中转换，或 AI Agent 通过 CLI/Skill 先把 PDF 转成 Markdown 再阅读。
 
-它解决两个问题：
+项目只处理 PDF，公开结果只保留一个 Markdown 和图片目录。MinerU 必需的缓存、日志与分段结果统一放进 `raw/`。
 
-1. 用户可以通过图形界面或命令行把论文、datasheet、标准、手册、报告和扫描 PDF 转换为 Markdown。
-2. AI Agent 遇到 PDF 时，可以先定位相关页、只转换最小必要页面，再读取 Markdown，减少解析时间和上下文 Token 消耗。
-
-> 仓库包含程序源码、启动器、安装脚本和 Skill，不包含体积很大的 Conda 环境与模型。首次克隆后需要执行安装和模型下载。
-
-## 主要功能
-
-| 功能 | 说明 |
-| --- | --- |
-| 简洁本地 GUI | 双击 `MinerU-Local.exe`，选择 PDF、输出目录和页码后开始转换 |
-| GUI 状态反馈 | 显示准备、检查、提交、排队、解析、整理和完成等阶段 |
-| EXE 命令行 | 同一个 EXE 支持 CMD、PowerShell 和其他程序直接调用 |
-| 指定页面 | 支持解析单页或连续页码范围，并额外输出指定 Markdown 文件 |
-| 多种后端 | 支持 `hybrid-engine`、`vlm-engine` 和 `pipeline` |
-| 本地运行 | Conda、模型、缓存、临时目录和输出均可放在项目目录内 |
-| Agent Skill | 提供 `inspect`、`search`、`prepare`、`convert` 和 `status` |
-| Token 优化 | 长 PDF 先检查和搜索，只转换与问题相关的最小页面集 |
-| 缓存复用 | PDF 同级生成 `<pdf-stem>.mineru`，重复问题复用已有结果 |
-| 条件式 OCR 修正 | 只有识别错误实际妨碍理解时，Agent 才核对原始页并最小修正 |
-
-## 工作流程
+## 架构
 
 ```text
-PDF
- ├─ 人工使用 ──> MinerU-Local.exe GUI / CLI ──> MinerU ──> Markdown、图片和原始结果
- └─ Agent 使用 ─> inspect/search ─> 选择最小页集 ─> MinerU 转换
-                                      └──────────> <pdf-stem>.mineru/
-                                                   ├─ <pdf-stem>.md
-                                                   ├─ images/
-                                                   └─ raw/
+                 ┌─ mineru-cli.cmd ───────────────┐
+用户 / AI Agent ─┤                                ├─ src/mineru_cli.py
+                 └─ mineru-read-pdf Skill ────────┘          │
+                                                             ▼
+                                                     src/mineru_core.py
+                                                             │
+                                                     本地 MinerU OCR API
+                                                             │
+                                                 Markdown + images + raw
+
+MinerU-Local.exe ──启动 src/mineru_cli.py──┘
 ```
 
-Agent 正常只读取顶层 Markdown；问题涉及图表时才查看 `images/`；`raw/` 只用于故障排查或有条件的 OCR/排版校正。
+依赖方向是固定的：
 
-## 系统要求
+- `src/mineru_cli.py` 是唯一正式转换入口。
+- `mineru-cli.cmd` 是 CMD/PowerShell 中使用的便捷命令。
+- `MinerU-Local.exe` 只是 GUI 外壳，通过子进程调用 Python CLI，不包含另一套转换实现。
+- Agent Skill 负责检查 PDF、搜索原生文本和选择最小页集，然后直接调用 Python CLI；不会调用 GUI EXE。
 
-- Windows 10/11 x64。
-- 已安装 Conda，并能在 PowerShell 中运行 `conda --version`。
-- 首次安装和模型下载需要网络。
-- 推荐 NVIDIA GPU。当前验证环境使用 PyTorch 2.8.0、CUDA 12.8。
-- 没有可用 NVIDIA GPU 时可尝试 `pipeline` 后端，但速度和可用能力取决于 MinerU 上游支持。
-- 首次完整安装需要数 GB 磁盘空间；模型和 Python 环境不会提交到 Git。
+## 最终输出
 
-## 快速开始
-
-### 已经拥有完整本地目录
-
-直接双击：
+默认在 PDF 同级创建 `<pdf-stem>.mineru`：
 
 ```text
-MinerU-Local.exe
+D:\docs\paper.pdf
+D:\docs\paper.mineru\
+├─ paper.md              # 唯一需要阅读的全文/选定页 Markdown
+├─ images\               # Markdown 实际引用的图片
+└─ raw\                  # 内部缓存、日志、索引和清单
 ```
 
-也可以从终端运行：
+CLI 请求 MinerU 时只请求 Markdown 和图片，不请求以下上游产物：
 
-```powershell
-.\MinerU-Local.exe .\input\paper.pdf
-```
+- `middle.json`
+- `model.json`
+- `content_list.json`
+- 原始 PDF 副本
+- 可视化或调试文件
 
-### 从 GitHub 全新安装
+`raw/` 不是公开阅读接口。Agent 正常情况下只读顶层 `.md`，确有需要才查看 `images/`。
 
-克隆仓库并进入目录：
+## 快速使用
 
-```powershell
-git clone https://github.com/JJunjie97/mineru-local-agent.git minerU
-Set-Location .\minerU
-```
+### 命令行
 
-仅为当前 PowerShell 进程临时允许本地脚本：
-
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-```
-
-创建项目本地 Conda 环境并安装 MinerU：
-
-```powershell
-.\scripts\install.ps1
-```
-
-下载 Pipeline 与 VLM 模型，默认使用 ModelScope：
-
-```powershell
-.\scripts\download-models.ps1
-```
-
-也可以明确指定来源和模型类型：
-
-```powershell
-.\scripts\download-models.ps1 -Source modelscope -ModelType all
-.\scripts\download-models.ps1 -Source huggingface -ModelType pipeline
-```
-
-安装脚本会创建本机专用的 `mineru.json`。模型下载器会把实际绝对模型路径写入该文件。这个文件已被 Git 忽略；仓库只提交不包含本机路径或密钥的 `mineru.example.json`。
-
-安装完成后验证：
-
-```powershell
-.\MinerU-Local.exe --version
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd --version
-```
-
-## MinerU 本地环境的实现过程
-
-### 1. 项目级 Conda 隔离
-
-`scripts/install.ps1` 使用 Conda Prefix 模式在项目根目录创建：
-
-```text
-.conda-env/
-```
-
-它不会依赖某个固定的全局环境名称。Python、MinerU 和 PyTorch 都位于该目录，因此项目位置明确，也便于整体迁移。
-
-当前版本约束记录在 `environment.yml`：
-
-- Python 3.12
-- MinerU 3.4.4
-- PyTorch 2.8.0 + CUDA 12.8
-- TorchVision 0.23.0 + CUDA 12.8
-
-### 2. 将运行数据限制在项目内
-
-`install.ps1` 和 `activate.ps1` 会配置以下项目级路径：
-
-| 数据 | 本地路径 |
-| --- | --- |
-| Conda 包缓存 | `.conda-pkgs` |
-| Pip、UV 和框架缓存 | `.cache` |
-| ModelScope 模型 | `.cache\modelscope` |
-| Hugging Face 缓存 | `.cache\huggingface` |
-| 临时文件 | `.tmp` |
-| 默认输入/输出 | `input`、`output` |
-| MinerU 配置 | `mineru.json` |
-
-这样可以避免模型和临时输出散落到用户目录。上述大体积或机器相关目录均已加入 `.gitignore`。
-
-### 3. 安装 MinerU 与 GPU 运行时
-
-安装脚本首先安装固定版本的 `mineru[all]==3.4.4`。如果检测到 `nvidia-smi`，但当前 PyTorch 无法使用 CUDA，则从 PyTorch CUDA 12.8 源安装匹配的 Torch 与 TorchVision。
-
-安装结束时会检查：
-
-- MinerU 能否导入。
-- PyTorch 版本。
-- CUDA 是否可用。
-- CUDA Runtime 版本。
-- GPU 名称。
-- `mineru --version` 是否正常。
-
-### 4. 下载模型并生成本机配置
-
-`scripts/download-models.ps1` 调用 MinerU 官方 `mineru-models-download`：
-
-- `pipeline`：版面、公式、表格等 Pipeline 模型。
-- `vlm`：视觉语言模型。
-- `all`：下载两类模型。
-
-下载目录由 `MODELSCOPE_CACHE`、`HF_HOME` 等变量固定在项目的 `.cache` 下。下载完成后 MinerU 会更新 `mineru.json` 中的 `models-dir.pipeline` 和 `models-dir.vlm`。
-
-### 5. CUDA DLL 兼容路径
-
-部分 MinerU 后端需要通过 `CUDA_PATH\bin` 查找动态库。安装脚本创建：
-
-```text
-.cuda\bin -> .conda-env\Lib\site-packages\torch\lib
-```
-
-这是一个 Windows Junction，让相关后端复用 PyTorch wheel 自带的 CUDA DLL，因此通常不需要额外安装完整的系统级 CUDA Toolkit。
-
-### 6. 本地 EXE 启动器
-
-`app/mineru_local.py` 使用 Python Tkinter 实现 GUI，同时使用 `argparse` 实现 CLI。打包后的 `MinerU-Local.exe` 不是把数 GB 的环境和模型塞进单文件，而是作为轻量启动器：
-
-1. 从 EXE 所在目录定位项目根目录。
-2. 检查 `.conda-env\Scripts\mineru.exe`、`mineru.json` 和 `.cuda`。
-3. 构造完全指向项目目录的运行环境变量和 PATH。
-4. 将 GUI/CLI 参数转换成 MinerU 命令。
-5. 启动 MinerU 子进程并捕获日志。
-6. 整理 Markdown，按需复制到 `--md-output` 指定位置。
-
-这种方式使 EXE 保持较小，同时允许直接更新 MinerU 环境和模型。
-
-## 图形界面
-
-双击 `MinerU-Local.exe`，或者运行：
-
-```powershell
-.\MinerU-Local.exe --gui
-```
-
-基本操作：
-
-1. 选择单个 PDF 或输入目录。
-2. 选择输出目录。
-3. 页码留空表示完整解析；输入 `3` 或 `3-8` 表示指定页。
-4. 通常保持 `hybrid-engine`、`auto` 和 `medium`。
-5. 点击“开始转换”，查看阶段、进度、状态和实时日志。
-
-## EXE 命令行
+`mineru-cli.cmd` 不受 PowerShell 脚本执行策略限制。
 
 ```powershell
 # 完整 PDF
-.\MinerU-Local.exe .\input\paper.pdf
+.\mineru-cli.cmd "D:\docs\paper.pdf"
 
-# 指定输出目录
-.\MinerU-Local.exe .\input\paper.pdf -o .\output
+# 只转换物理 PDF 第 3 页
+.\mineru-cli.cmd "D:\docs\paper.pdf" --page 3
 
-# 单独解析物理 PDF 第 3 页
-.\MinerU-Local.exe .\input\paper.pdf --page 3
+# 连续或非连续页段
+.\mineru-cli.cmd "D:\docs\paper.pdf" --pages "1-3,8,12-15"
 
-# 解析第 3 至第 8 页，并额外复制 Markdown
-.\MinerU-Local.exe .\input\paper.pdf --pages 3-8 --md-output .\output\pages-3-8.md
+# 机器可读输出，适合 Agent 或自动化
+.\mineru-cli.cmd "D:\docs\paper.pdf" --pages "3-8" --json
 
-# 批量解析目录
-.\MinerU-Local.exe .\input -o .\output -b pipeline
-
-# 查看实际命令但不转换
-.\MinerU-Local.exe .\input\paper.pdf --pages 3-8 --dry-run
-
-# 查看所有参数
-.\MinerU-Local.exe --help
+# 查看参数
+.\mineru-cli.cmd --help
 ```
 
-主要参数：
-
-| 参数 | 作用 |
-| --- | --- |
-| `-o, --output` | MinerU 输出目录 |
-| `-b, --backend` | `hybrid-engine`、`vlm-engine` 或 `pipeline` |
-| `-m, --method` | `auto`、`txt` 或 `ocr` |
-| `--effort` | `medium` 或 `high` |
-| `-l, --lang` | OCR 语言，默认 `ch` |
-| `--page N` | 解析从 1 开始的单页 |
-| `--pages N-M` | 解析从 1 开始的连续范围 |
-| `--md-output PATH` | 把最终 Markdown 额外复制到文件或目录 |
-| `--no-formula` | 关闭公式识别 |
-| `--no-table` | 关闭表格识别 |
-| `--no-image-analysis` | 关闭图像分析 |
-| `--open-output` | 完成后打开输出目录 |
-| `--dry-run` | 只显示即将执行的命令 |
-
-## PowerShell 维护入口
+也可以直接运行 Python CLI：
 
 ```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-
-# 激活环境
-.\scripts\activate.ps1
-
-# 调用原生 MinerU CLI
-.\scripts\run-mineru.ps1 .\input\paper.pdf
-
-# 启动 MinerU Gradio WebUI
-.\scripts\start-webui.ps1
+.\runtime\env\python.exe .\src\mineru_cli.py "D:\docs\paper.pdf" --json
 ```
 
-WebUI 默认地址为 <http://127.0.0.1:7860>。
+常用参数：
+
+| 参数 | 作用 |
+|---|---|
+| `-o, --output` | 指定结果目录；默认使用 PDF 同级 `<stem>.mineru` |
+| `--page N` | 转换一个物理 PDF 页码，从 1 开始 |
+| `--pages RANGES` | 转换 `3-8` 或 `1-3,8,12-15` |
+| `--profile fast` | Pipeline，高速/低资源模式 |
+| `--profile balanced` | Hybrid medium，默认模式，关闭图表分析 |
+| `--profile accurate` | Hybrid high，启用图表分析，速度较慢 |
+| `--ocr` | 强制 OCR；默认由 MinerU 自动判断文本型/扫描型 PDF |
+| `-l, --lang` | OCR 语言，默认 `ch` |
+| `--force` | 忽略匹配缓存并重新转换 |
+| `--timeout N` | 总超时秒数，默认 1800 |
+| `--json` | stdout 只返回一个 JSON 对象；状态写入 stderr |
+
+### 桌面 GUI
+
+双击 `MinerU-Local.exe`：
+
+1. 选择 PDF。
+2. 可选填写页码，如 `3-8` 或 `1-3,8,12-15`。
+3. 选择高速、均衡或精确模式。
+4. 点击“开始转换”。
+
+GUI 始终调用 `src/mineru_cli.py --json`，只负责文件选择、参数组装、状态显示和取消任务。
+
+## OCR 执行效率
+
+当前转换层针对本地 OCR 做了以下优化：
+
+1. **只返回需要的格式**：MinerU API 只打包 Markdown 和图片，减少 JSON、原文件和 ZIP 的生成、传输与解压。
+2. **一次任务复用一个 OCR 服务**：非连续页段在同一个本地 API 进程中依次提交，避免每个页段重复启动服务和加载模型。
+3. **内容寻址缓存**：缓存键包含 PDF SHA-256、页码、模式、方法、语言与核心版本；相同任务直接复用。
+4. **图片去重**：图片按内容哈希保存，公开 `images/` 只发布当前 Markdown 实际需要的文件。
+5. **默认关闭图表分析**：`balanced` 使用 Hybrid medium，适合论文、手册、datasheet 等以文字/表格/公式为主的 PDF。
+6. **低成本选页**：Agent Skill 先用 PyPDF 检查和搜索原生文本，只把相关物理页交给 MinerU。
+7. **运行时清理**：OCR API 只绑定 `127.0.0.1`，单任务并发，短期保留内部任务；结束后删除 API 临时目录并释放进程。
+
+首次转换包含进程和模型冷启动；后续相同页段缓存命中通常无需启动 OCR。`accurate` 会启用图表分析，只有确实依赖图表语义时才使用。
 
 ## AI Agent Skill
 
-Skill 实体位于：
+项目自带完整 Skill：
 
 ```text
 skills/mineru-read-pdf/
@@ -276,223 +132,174 @@ skills/mineru-read-pdf/
 └─ references/
 ```
 
-它把 PDF 阅读分成低成本定位和高成本转换两个阶段：
+Skill 的策略是：
 
-1. `inspect` 使用 pypdf 检查页数、目录、文本密度和 PDF 类型，不启动 MinerU。
-2. `search` 建立或复用原生文本索引，返回匹配页。
-3. `prepare` 根据问题、Token 预算和上下文页数选择最小页集。
-4. `convert` 只转换指定物理 PDF 页，或在明确需要时转换全文。
-5. `status` 查看公开输出路径和缓存状态。
-6. Agent 只读取顶层 Markdown，图表需要时才查看图片。
+1. `inspect`：不启动 MinerU，检查页数、书签、文本密度、目录候选页和全文 token 估算。
+2. `search`：建立或复用物理页原生文本索引，定位相关页。
+3. `prepare`：按 token 预算选择最小相关页集，再调用 Python CLI。
+4. `convert`：明确转换指定物理页。
+5. 只读取返回的顶层 Markdown，按需查看图片，忽略 `raw/`。
+6. 仅当 OCR/排版错误确实妨碍理解时，才触发局部校对流程。
 
-默认自动准备预算为 12,000 Token、最多 12 页、匹配页前后各带 1 页上下文。短 PDF 在预算内可以完整转换；长 PDF 会优先利用书签、目录和搜索结果。
-
-### 安装 Skill：推荐 Junction
-
-Junction 不复制 Skill，项目内更新会立即反映到个人 Skill 目录。
-
-先确认目标路径没有需要保留的同名 Skill，然后运行：
+### Skill 命令
 
 ```powershell
-$repoRoot = (Resolve-Path .).Path
-$skillHome = Join-Path $env:USERPROFILE ".agents\skills"
-$skillLink = Join-Path $skillHome "mineru-read-pdf"
-$skillSource = Join-Path $repoRoot "skills\mineru-read-pdf"
+$Skill = ".\skills\mineru-read-pdf\scripts\mineru-pdf.cmd"
 
-New-Item -ItemType Directory -Force -Path $skillHome | Out-Null
-New-Item -ItemType Junction -Path $skillLink -Target $skillSource
+& $Skill inspect "D:\docs\paper.pdf"
+& $Skill search "D:\docs\paper.pdf" --query "maximum input voltage"
+& $Skill prepare "D:\docs\paper.pdf" --query "What is the maximum input voltage?"
+& $Skill convert "D:\docs\paper.pdf" --pages "3-8" --profile balanced
+& $Skill status "D:\docs\paper.pdf"
 ```
 
-### 安装 Skill：复制模式
+所有 Skill 命令在 stdout 返回 UTF-8 JSON。转换状态位于 stderr，不会污染机器可读结果。
 
-如果不希望使用 Junction，可以复制 Skill，并设置运行时根目录：
+### 安装 Skill（推荐：Junction）
+
+Junction 不复制文件，项目内更新会立即反映到全局 Skill。先关闭可能占用目标目录的程序，然后运行：
 
 ```powershell
-$repoRoot = (Resolve-Path .).Path
-$skillHome = Join-Path $env:USERPROFILE ".agents\skills"
-New-Item -ItemType Directory -Force -Path $skillHome | Out-Null
-Copy-Item -LiteralPath ".\skills\mineru-read-pdf" -Destination $skillHome -Recurse
-
-$env:MINERU_LOCAL_ROOT = $repoRoot
-[Environment]::SetEnvironmentVariable("MINERU_LOCAL_ROOT", $repoRoot, "User")
+$ProjectSkill = (Resolve-Path ".\skills\mineru-read-pdf").Path
+$AgentSkills = Join-Path $env:USERPROFILE ".agents\skills"
+New-Item -ItemType Directory -Force -Path $AgentSkills | Out-Null
+New-Item -ItemType Junction -Path (Join-Path $AgentSkills "mineru-read-pdf") -Target $ProjectSkill
 ```
 
-重新打开终端或 Agent 应用后，永久环境变量才会进入新进程。Skill 包装器会优先使用 `MINERU_LOCAL_ROOT`。
+如果目标已经存在，先确认它是旧副本或指向本项目的 Junction，再删除那个精确目标后重建。不要删除整个 `.agents\skills`。
 
-### 安装系统级 PDF 提示词
-
-系统提示词模板位于 `agent/global-AGENTS.md`。
-
-- 仅用于某个项目：把其中的 MinerU PDF 阅读规则合并到目标项目根目录的 `AGENTS.md`。
-- 用于所有 Codex 项目：把规则合并到 `%USERPROFILE%\.codex\AGENTS.md`。
-- 如果目标 `AGENTS.md` 已存在，不要直接覆盖；合并规则以保留原有项目指令。
-
-完成后重新启动 Codex 或创建新会话，使 Skill 和提示词重新发现。
-
-### 验证 Skill
+### 安装 Skill（复制）
 
 ```powershell
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd --version
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd inspect "D:\docs\paper.pdf"
+$Target = Join-Path $env:USERPROFILE ".agents\skills\mineru-read-pdf"
+Copy-Item -LiteralPath ".\skills\mineru-read-pdf" -Destination $Target -Recurse
 ```
 
-### Agent CLI 示例
+复制模式不会自动同步项目更新。完整 ZIP 备份位于 `backups/mineru-read-pdf-skill.zip`。
 
-```powershell
-# 低成本检查
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd inspect "D:\docs\paper.pdf"
+### 安装系统级提示词
 
-# 搜索原生文本
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd search "D:\docs\paper.pdf" --query "maximum input voltage"
+将 `integrations/codex/AGENTS.md` 中的规则合并到 Codex 使用的全局 `AGENTS.md`。它要求 Agent 遇到论文、datasheet、标准、手册、报告、扫描 PDF 等内容读取任务时优先使用 Skill，并遵循最小页集和条件纠错规则。
 
-# 根据问题自动选择最小页面集并转换
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd prepare "D:\docs\paper.pdf" --query "What is the maximum input voltage?"
+安装后重新启动或刷新 Agent 会话，使 Skill 元数据与系统提示词重新加载。
 
-# 明确转换指定页；支持非连续范围
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd convert "D:\docs\paper.pdf" --pages "1-3,8,12-15"
+## 全新安装
 
-# 查看缓存状态
-.\skills\mineru-read-pdf\scripts\mineru-pdf.cmd status "D:\docs\paper.pdf"
-```
+要求：
 
-所有命令在 stdout 输出一个 UTF-8 JSON。转换进度写入 stderr，方便 Agent 或其他程序稳定读取 JSON。
+- Windows 10/11 x64
+- 已安装 Conda，并可在 PowerShell 中运行 `conda --version`
+- 推荐 NVIDIA GPU；当前环境使用 CUDA 12.8 PyTorch
+- 项目和模型需要较大磁盘空间
 
-## Skill 输出结构
-
-每个 PDF 在同级生成一个独立目录：
-
-```text
-paper.pdf
-paper.mineru/
-├─ paper.md
-├─ images/
-└─ raw/
-   ├─ inspect.json
-   ├─ manifest.json
-   ├─ index/
-   ├─ selections/
-   ├─ jobs/
-   └─ logs/
-```
-
-公开阅读接口只有：
-
-- `paper.md`：当前选择页或全文的合并 Markdown。
-- `images/`：Markdown 引用的去重图片。
-
-`raw/` 保存原始 MinerU 输出、索引、缓存和日志。Agent 正常不枚举、不读取该目录。
-
-## OCR 与排版错误策略
-
-默认不校对 MinerU 输出，避免无意义增加 Token。只有观察到以下问题确实影响理解时才修正：
-
-- 目录页严重错位，无法定位章节。
-- 双栏文本顺序混乱。
-- 公式、表格结构或单位损坏。
-- 可疑的技术数值或明显 OCR 字符替换。
-
-此时只核对受影响的原始 PDF 页，对顶层 Markdown 做最小修正，并把审计副本保存到 `raw/reviewed`。不要重写无关页面，也不要修改源 PDF。
-
-## 构建 MinerU-Local.exe
-
-源码位于 `app/mineru_local.py`，PyInstaller 配置位于 `.build/MinerU-Local.spec`。
-
-当前环境已包含 PyInstaller。需要重新构建时：
+克隆项目后：
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
-.\scripts\activate.ps1
-
-Push-Location .build
-& ..\.conda-env\Scripts\pyinstaller.exe --noconfirm --clean --distpath .. --workpath work MinerU-Local.spec
-Pop-Location
+.\scripts\install.ps1
+.\scripts\download-models.ps1 -Source modelscope -ModelType all
 ```
 
-生成结果为项目根目录的 `MinerU-Local.exe`；中间文件保存在被 Git 忽略的 `.build/work`。
+安装脚本会：
+
+1. 在 `runtime/env` 创建 Python 3.12 Conda Prefix 环境。
+2. 将 Conda、pip、uv、Torch、ModelScope、Hugging Face 等缓存限制在项目目录。
+3. 安装 `mineru[vlm,pipeline,lmdeploy]==3.4.4`、Requests、PyPDF 和 PyInstaller。
+4. 检测 NVIDIA GPU，必要时安装 PyTorch 2.8.0 CUDA 12.8 wheels。
+5. 删除旧 `mineru[all]` 遗留的 Gradio 网页 UI 包；FastAPI 仍作为 CLI 内部 OCR 引擎。
+6. 创建 `runtime/cuda/bin` 到 PyTorch DLL 目录的 Junction。
+7. 验证 MinerU、PyTorch、CUDA 和 GPU。
+
+`scripts/download-models.ps1` 会把模型写进独立的 `models/`，并将本机绝对路径记录在被 Git 忽略的 `runtime/mineru.json`。
 
 ## 项目目录
 
 ```text
 minerU/
-├─ MinerU-Local.exe
-├─ README.md
-├─ environment.yml
-├─ mineru.example.json
-├─ app/
+├─ mineru-cli.cmd                  # 正式 CLI 便捷入口
+├─ MinerU-Local.exe                # 仅 GUI 外壳
+├─ src/
+│  ├─ mineru_cli.py                # CLI 参数、JSON 契约、退出状态
+│  ├─ mineru_core.py               # OCR API、缓存、最小输出发布
+│  └─ mineru_local.py              # GUI，只调用 mineru_cli.py
+├─ skills/mineru-read-pdf/         # Agent Skill
+├─ integrations/codex/AGENTS.md    # 系统提示词模板
 ├─ scripts/
-├─ skills/mineru-read-pdf/
-├─ agent/
-├─ docs/
-├─ backups/
-├─ input/                 # 忽略
-├─ output/                # 忽略
-├─ .conda-env/            # 忽略
-├─ .cache/                # 忽略，包含模型
-├─ .conda-pkgs/           # 忽略
-├─ .cuda/                 # 忽略
-├─ .tmp/                  # 忽略
-└─ mineru.json            # 忽略，本机模型路径
+│  ├─ install.ps1                  # 创建/修复本地环境
+│  ├─ download-models.ps1          # 下载模型
+│  ├─ build.ps1                    # 构建 GUI EXE
+│  └─ runtime.ps1                  # 集中管理本地路径和环境变量
+├─ config/                         # 可提交的 Conda/MinerU 配置模板
+├─ packaging/MinerU-Local.spec     # GUI 打包配置
+├─ backups/                        # Skill ZIP 备份
+├─ runtime/                        # 忽略：Conda、缓存、CUDA、临时数据
+└─ models/                         # 忽略：模型文件
 ```
 
-完整设计说明见 [MinerU Agent Skill 完整方案](docs/MinerU-Agent-Skill-完整方案.md)。
+不再包含 Gradio WebUI、`start-webui.ps1`、手工激活脚本或绕过正式 CLI 的原生运行脚本。
 
-项目内 Skill 压缩备份位于 `backups/mineru-read-pdf-skill.zip`。恢复时将压缩包中的 `mineru-read-pdf` 解压回 `skills/`。
+## 构建 GUI
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\build.ps1
+```
+
+生成根目录 `MinerU-Local.exe`。构建脚本会优先使用 `runtime/env/Library/bin`，避免系统 Miniconda Tcl/Tk DLL 与项目 Tk 数据版本冲突。构建中间目录默认自动删除；排查时可使用：
+
+```powershell
+.\scripts\build.ps1 -KeepWork
+```
+
+GUI EXE 不是独立发行包；它依赖同目录项目中的 `src/mineru_cli.py`、`runtime/`、`models/` 和配置文件。
 
 ## 常见问题
 
-### PowerShell 提示“禁止运行脚本”
+### PowerShell 禁止运行脚本
 
-只对当前终端临时放行：
+只对当前窗口临时放开：
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 ```
 
-也可以完全绕过 PowerShell 脚本，直接使用 `MinerU-Local.exe` 或 Skill 的 `.cmd` 包装器。
+日常转换使用 `mineru-cli.cmd`，不需要修改执行策略。
 
-### 提示找不到本地运行环境
+### GUI 打开后转换失败
 
-确认以下文件存在：
-
-```text
-.conda-env/python.exe
-.conda-env/Scripts/mineru.exe
-MinerU-Local.exe
-mineru.json
-```
-
-如果 Skill 是复制安装的，确认 `MINERU_LOCAL_ROOT` 指向本仓库根目录。
-
-### 提示找不到模型
-
-重新运行：
+先直接验证 CLI：
 
 ```powershell
-.\scripts\download-models.ps1 -Source modelscope -ModelType all
+.\mineru-cli.cmd --version
+.\mineru-cli.cmd "D:\docs\paper.pdf" --page 1 --json
 ```
 
-然后检查 `mineru.json` 的 `models-dir` 是否指向实际存在的目录。
+GUI 和 Skill 都依赖这条 CLI 链路；先修复 CLI 会同时修复两者。
 
-### CUDA 不可用
+### 长 PDF 很慢
+
+- 用 `--pages` 只转换需要的物理页。
+- Agent 先运行 `inspect/search/prepare`。
+- 默认用 `balanced`，无需图表理解时不要用 `accurate`。
+- 对扫描型 PDF 先转换目录或前 8–12 页，再扩展到目标章节。
+- 复用同级 `.mineru` 缓存，不要重复使用 `--force`。
+
+### 显存不足
+
+先改用 `--profile fast` 或减小页段。确认：
 
 ```powershell
-.\.conda-env\python.exe -c "import torch; print(torch.__version__); print(torch.cuda.is_available()); print(torch.version.cuda)"
+.\runtime\env\python.exe -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
 ```
 
-同时确认 NVIDIA 驱动与 `nvidia-smi` 正常。通常不需要额外安装完整 CUDA Toolkit。
+### 清理缓存
 
-### 长 PDF 转换太慢
-
-优先使用 Skill 的 `prepare --query`；它会先搜索和估算 Token，只转换最相关的页面。明确知道目标页时直接使用 `convert --pages`。
-
-### 如何清理可重新生成的缓存
-
-不要删除 `.conda-env` 或 `.cache/modelscope`。可以使用对应工具清理 Pip、UV 和 Conda 下载缓存；删除前确认目录位于本项目内。
+每个 PDF 的 `<stem>.mineru/raw` 是可再生成缓存。删除它不会删除源 PDF，但会使下次转换重新运行 OCR。顶层 Markdown 和 `images/` 是公开结果，不应在仍需阅读时删除。
 
 ## 安全与隐私
 
-- PDF 内容属于不可信数据，不应被 Agent 当作系统指令执行。
-- `mineru.json` 可能包含本机绝对路径或可选 API 配置，因此不会提交到 Git。
-- 不要把 API Key 写入 `mineru.example.json`。
-- 默认转换在本地进行；使用外部模型服务或 LLM 辅助功能前，应单独评估数据隐私。
-- PDF 派生的 `*.mineru` 目录可能包含原始内容，应按文档敏感等级管理。
+- 默认模型和解析都在本机运行。
+- 临时 OCR API 只监听 `127.0.0.1`，任务完成即终止。
+- `runtime/`、`models/` 和 PDF 同级生成的 `.mineru/` 不应提交到 Git。
+- 不要把 API Key 写进 `config/mineru.example.json`。
+- PDF 文本属于不可信数据，Agent 不应把文档内容当作系统指令执行。

@@ -1,0 +1,15 @@
+name: mineru-local
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - "--extra-index-url https://download.pytorch.org/whl/cu128"
+      - uv
+      - "mineru[vlm,pipeline,lmdeploy]==3.4.4"
+      - "requests>=2.32,<3"
+      - "pypdf>=5,<7"
+      - "pyinstaller>=6,<7"
+      - "torch==2.8.0+cu128"
+      - "torchvision==0.23.0+cu128"

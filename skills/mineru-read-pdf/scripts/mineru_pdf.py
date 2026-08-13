@@ -5,7 +5,6 @@ import hashlib
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import time
@@ -17,7 +16,7 @@ from pypdf import PdfReader
 
 
 SCHEMA_VERSION = 1
-TOOL_VERSION = "1.0.0"
+TOOL_VERSION = "2.0.0"
 DEFAULT_TOKEN_BUDGET = 12_000
 DEFAULT_MAX_PAGES = 12
 
@@ -33,7 +32,7 @@ class AgentError(Exception):
 @dataclass(frozen=True)
 class Runtime:
     root: Path
-    executable: Path
+    cli: Path
     python: Path
 
 
@@ -45,15 +44,15 @@ def runtime() -> Runtime:
         (
             candidate
             for candidate in candidates
-            if (candidate / ".conda-env" / "python.exe").is_file()
-            and (candidate / "MinerU-Local.exe").is_file()
+            if (candidate / "runtime" / "env" / "python.exe").is_file()
+            and (candidate / "src" / "mineru_cli.py").is_file()
         ),
         script.parents[3],
     )
     return Runtime(
         root=root,
-        executable=root / "MinerU-Local.exe",
-        python=root / ".conda-env" / "python.exe",
+        cli=root / "src" / "mineru_cli.py",
+        python=root / "runtime" / "env" / "python.exe",
     )
 
 
@@ -81,9 +80,6 @@ class OutputLayout:
     document: Path
     images: Path
     raw: Path
-    jobs: Path
-    selections: Path
-    logs: Path
     index: Path
     manifest: Path
     inspection: Path
@@ -97,92 +93,17 @@ def layout_for(source: Path) -> OutputLayout:
         document=root / f"{source.stem}.md",
         images=root / "images",
         raw=raw,
-        jobs=raw / "jobs",
-        selections=raw / "selections",
-        logs=raw / "logs",
         index=raw / "index",
         manifest=raw / "manifest.json",
         inspection=raw / "inspect.json",
     )
 
 
-def merge_directory(source: Path, destination: Path) -> None:
-    if not source.exists():
-        return
-    if not destination.exists():
-        source.replace(destination)
-        return
-    destination.mkdir(parents=True, exist_ok=True)
-    for child in list(source.iterdir()):
-        target = destination / child.name
-        if child.is_dir() and target.is_dir():
-            merge_directory(child, target)
-        elif not target.exists():
-            child.replace(target)
-    try:
-        source.rmdir()
-    except OSError:
-        pass
-
-
 def ensure_layout(source: Path) -> OutputLayout:
     layout = layout_for(source)
     layout.root.mkdir(parents=True, exist_ok=True)
     layout.raw.mkdir(parents=True, exist_ok=True)
-
-    for name, destination in (
-        ("inspect.json", layout.inspection),
-        ("manifest.json", layout.manifest),
-    ):
-        legacy = layout.root / name
-        if legacy.exists() and not destination.exists():
-            legacy.replace(destination)
-    for name, destination in (
-        ("index", layout.index),
-        ("logs", layout.logs),
-        ("selections", layout.selections),
-    ):
-        legacy = layout.root / name
-        if legacy.exists():
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            merge_directory(legacy, destination)
-
-    layout.jobs.mkdir(parents=True, exist_ok=True)
-    for child in list(layout.raw.iterdir()):
-        if child.is_dir() and re.fullmatch(r"[0-9a-f]{16}", child.name):
-            target = layout.jobs / child.name
-            if target.exists():
-                merge_directory(child, target)
-            else:
-                child.replace(target)
-
-    for directory in (layout.images, layout.selections, layout.logs, layout.index):
-        directory.mkdir(parents=True, exist_ok=True)
-
-    if layout.manifest.exists():
-        try:
-            manifest = json.loads(layout.manifest.read_text(encoding="utf-8"))
-            changed = False
-            for item in manifest.get("selections", []):
-                task_key = str(item.get("task_key", ""))
-                markdown = Path(str(item.get("markdown", "")))
-                raw_output = Path(str(item.get("raw_output", "")))
-                log = Path(str(item.get("log", "")))
-                replacements = {
-                    "markdown": layout.selections / markdown.name,
-                    "raw_output": layout.jobs / task_key,
-                    "log": layout.logs / log.name,
-                }
-                for key, candidate in replacements.items():
-                    if candidate.exists() and str(item.get(key, "")) != str(candidate):
-                        item[key] = str(candidate)
-                        changed = True
-            if changed:
-                temporary = layout.manifest.with_suffix(".tmp")
-                temporary.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-                temporary.replace(layout.manifest)
-        except Exception:
-            pass
+    layout.index.mkdir(parents=True, exist_ok=True)
     return layout
 
 
@@ -517,7 +438,7 @@ def search_pdf(source: Path, query: str, top_k: int = 8) -> dict[str, Any]:
 
 
 def read_manifest(source: Path) -> dict[str, Any]:
-    path = ensure_layout(source).manifest
+    path = layout_for(source).manifest
     if not path.exists():
         return {"schema_version": SCHEMA_VERSION, "source": fingerprint(source), "selections": []}
     try:
@@ -532,22 +453,6 @@ def read_manifest(source: Path) -> dict[str, Any]:
     return value
 
 
-def write_manifest(source: Path, manifest: dict[str, Any]) -> Path:
-    target = ensure_layout(source).manifest
-    temporary = target.with_suffix(".tmp")
-    temporary.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    temporary.replace(target)
-    return target
-
-
-def profile_args(profile: str) -> list[str]:
-    if profile == "accurate":
-        return ["-b", "hybrid-engine", "--effort", "high"]
-    if profile == "pipeline":
-        return ["-b", "pipeline", "--effort", "medium", "--no-image-analysis"]
-    return ["-b", "hybrid-engine", "--effort", "medium", "--no-image-analysis"]
-
-
 def terminate_tree(process: subprocess.Popen[str]) -> None:
     if os.name == "nt":
         subprocess.run(
@@ -560,104 +465,6 @@ def terminate_tree(process: subprocess.Popen[str]) -> None:
         process.kill()
 
 
-def add_provenance_header(markdown: Path, source: Path, page_range: str, profile: str) -> None:
-    content = markdown.read_text(encoding="utf-8", errors="replace")
-    if content.startswith("<!-- mineru-agent:"):
-        return
-    header = (
-        f'<!-- mineru-agent: source="{source.name}"; pdf_pages="{page_range}"; '
-        f'profile="{profile}" -->\n\n'
-    )
-    markdown.write_text(header + content, encoding="utf-8")
-
-
-IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".svg"}
-
-
-def collect_images(raw_output: Path, images_dir: Path) -> dict[str, str]:
-    mappings: dict[str, str] = {}
-    if not raw_output.exists():
-        return mappings
-    images_dir.mkdir(parents=True, exist_ok=True)
-    for image in raw_output.rglob("*"):
-        if not image.is_file() or image.suffix.lower() not in IMAGE_SUFFIXES:
-            continue
-        digest = file_sha256(image)[:16]
-        destination = images_dir / f"{digest}{image.suffix.lower()}"
-        if not destination.exists():
-            shutil.copy2(image, destination)
-        published = f"images/{destination.name}"
-        relative = image.relative_to(raw_output).as_posix()
-        candidates = {relative, image.name}
-        parts = relative.split("/")
-        lower_parts = [part.lower() for part in parts]
-        if "images" in lower_parts:
-            candidates.add("/".join(parts[lower_parts.index("images") :]))
-        for candidate in candidates:
-            mappings[candidate.replace("\\", "/").lower()] = published
-    return mappings
-
-
-def rewrite_image_links(content: str, mappings: dict[str, str]) -> str:
-    if not mappings:
-        return content
-
-    def published_path(value: str) -> str | None:
-        normalized = value.strip().strip("<>").replace("\\", "/")
-        direct = mappings.get(normalized.lower())
-        if direct:
-            return direct
-        return mappings.get(Path(normalized).name.lower())
-
-    def replace_markdown(match: re.Match[str]) -> str:
-        value = match.group(2).strip()
-        if value.startswith("<") and ">" in value:
-            end = value.index(">") + 1
-            path_part, suffix = value[:end], value[end:]
-        else:
-            parts = re.split(r"(\s+[\"'].*)$", value, maxsplit=1)
-            path_part = parts[0]
-            suffix = parts[1] if len(parts) > 1 else ""
-        replacement = published_path(path_part)
-        if not replacement:
-            return match.group(0)
-        return f"{match.group(1)}{replacement}{suffix}{match.group(3)}"
-
-    def replace_html(match: re.Match[str]) -> str:
-        replacement = published_path(match.group(2))
-        if not replacement:
-            return match.group(0)
-        return f"{match.group(1)}{replacement}{match.group(3)}"
-
-    content = re.sub(r"(!\[[^\]]*\]\()([^)]+)(\))", replace_markdown, content)
-    return re.sub(r"(<img\b[^>]*?\bsrc=[\"'])([^\"']+)([\"'])", replace_html, content, flags=re.I)
-
-
-def publish_document(source: Path, selections: list[dict[str, Any]]) -> Path:
-    layout = ensure_layout(source)
-    pieces = [
-        f'<!-- mineru-agent-document: source="{source.name}"; '
-        f'selected_pdf_pages="{",".join(str(item.get("pdf_pages", "")) for item in selections)}" -->'
-    ]
-    multiple = len(selections) > 1
-    for item in selections:
-        markdown = Path(str(item["markdown"]))
-        raw_output = Path(str(item["raw_output"]))
-        if not markdown.exists():
-            raise AgentError("MARKDOWN_NOT_FOUND", f"Cached Markdown is missing: {markdown}", 6, True)
-        content = markdown.read_text(encoding="utf-8", errors="replace").strip()
-        mappings = collect_images(raw_output, layout.images)
-        content = rewrite_image_links(content, mappings)
-        if multiple:
-            pieces.append(f"## Source PDF pages {item.get('pdf_pages', '')}\n\n{content}")
-        else:
-            pieces.append(content)
-    temporary = layout.document.with_suffix(".tmp")
-    temporary.write_text("\n\n".join(pieces).rstrip() + "\n", encoding="utf-8")
-    temporary.replace(layout.document)
-    return layout.document
-
-
 def convert_pdf(
     source: Path,
     pages_expression: str | None,
@@ -667,7 +474,7 @@ def convert_pdf(
 ) -> dict[str, Any]:
     started = time.monotonic()
     rt = runtime()
-    if not rt.executable.exists() or not rt.python.exists():
+    if not rt.cli.exists() or not rt.python.exists():
         raise AgentError("RUNTIME_MISSING", f"MinerU runtime is incomplete under {rt.root}", 5)
 
     reader = open_reader(source)
@@ -675,130 +482,77 @@ def convert_pdf(
     if pages_expression:
         pages = parse_pages(pages_expression, page_count)
         ranges = merge_ranges(pages)
-        full_document = len(pages) == page_count
     else:
         pages = list(range(1, page_count + 1))
         ranges = [(1, page_count)]
-        full_document = True
-
     layout = ensure_layout(source)
-    output = layout.root
-    manifest = read_manifest(source)
-    source_hash = str(manifest["source"]["sha256"])
-    completed: list[dict[str, Any]] = []
+    normalized_pages = ranges_expression(ranges)
+    command = [
+        str(rt.python),
+        str(rt.cli),
+        str(source),
+        "--output",
+        str(layout.root),
+        "--profile",
+        profile,
+        "--timeout",
+        str(max(1, timeout)),
+        "--json",
+    ]
+    command.extend(("--pages", normalized_pages))
+    if force:
+        command.append("--force")
 
-    invocation_ranges: list[tuple[int, int] | None]
-    if full_document:
-        invocation_ranges = [None]
-    else:
-        invocation_ranges = list(ranges)
+    print(f"[mineru-read-pdf] converting PDF pages {normalized_pages} ({profile})", file=sys.stderr)
+    creationflags = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(
+        subprocess, "CREATE_NEW_PROCESS_GROUP", 0
+    )
+    process = subprocess.Popen(
+        command,
+        cwd=str(rt.root),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        creationflags=creationflags,
+    )
+    try:
+        stdout, stderr = process.communicate(timeout=max(31, timeout + 30))
+    except subprocess.TimeoutExpired as exc:
+        terminate_tree(process)
+        process.communicate()
+        raise AgentError("CONVERSION_TIMEOUT", f"MinerU timed out after {timeout} seconds.", 7, True) from exc
 
-    for selected_range in invocation_ranges:
-        if selected_range is None:
-            range_text = f"1-{page_count}"
-            range_slug = "full"
-        else:
-            start, end = selected_range
-            range_text = str(start) if start == end else f"{start}-{end}"
-            range_slug = f"page-{start:04d}" if start == end else f"pages-{start:04d}-{end:04d}"
-        key_material = f"{source_hash}|{range_text}|{profile}|{TOOL_VERSION}"
-        task_key = hashlib.sha256(key_material.encode("utf-8")).hexdigest()[:16]
-        selection_md = layout.selections / f"{range_slug}-{profile}.md"
-        cached = next(
-            (
-                item
-                for item in manifest.get("selections", [])
-                if item.get("task_key") == task_key and Path(str(item.get("markdown", ""))).exists()
-            ),
-            None,
-        )
-        if cached and not force:
-            cached_result = dict(cached)
-            cached_result["cache"] = "hit"
-            completed.append(cached_result)
-            continue
+    if stderr:
+        status_lines = [line for line in stderr.splitlines() if line.startswith("[状态]")]
+        if status_lines:
+            print("\n".join(status_lines[-8:]), file=sys.stderr)
+    try:
+        payload = json.loads(stdout.strip())
+    except ValueError as exc:
+        tail = "\n".join((stderr or stdout).splitlines()[-12:])
+        raise AgentError("CONVERSION_FAILED", f"MinerU CLI returned invalid JSON.\n{tail}", 6, True) from exc
+    if process.returncode != 0 or not payload.get("ok"):
+        message = str(payload.get("message") or "\n".join(stderr.splitlines()[-12:]))
+        raise AgentError("CONVERSION_FAILED", message, 6, True)
 
-        raw_dir = layout.jobs / task_key
-        raw_dir.mkdir(parents=True, exist_ok=True)
-        command = [
-            str(rt.executable),
-            str(source),
-            "-o",
-            str(raw_dir),
-            *profile_args(profile),
-            "--md-output",
-            str(selection_md),
-        ]
-        if selected_range is not None:
-            start, end = selected_range
-            if start == end:
-                command.extend(["--page", str(start)])
-            else:
-                command.extend(["--pages", f"{start}-{end}"])
-
-        print(f"[mineru-read-pdf] converting PDF pages {range_text} ({profile})", file=sys.stderr)
-        creationflags = getattr(subprocess, "CREATE_NO_WINDOW", 0)
-        process = subprocess.Popen(
-            command,
-            cwd=str(rt.root),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            creationflags=creationflags,
-        )
-        try:
-            process_output, _ = process.communicate(timeout=max(1, timeout))
-        except subprocess.TimeoutExpired as exc:
-            terminate_tree(process)
-            process_output, _ = process.communicate()
-            log_path = layout.logs / f"{task_key}.log"
-            log_path.write_text(process_output or "", encoding="utf-8")
-            raise AgentError("CONVERSION_TIMEOUT", f"MinerU timed out after {timeout} seconds.", 7, True) from exc
-
-        log_path = layout.logs / f"{task_key}.log"
-        log_path.write_text(process_output or "", encoding="utf-8")
-        if process.returncode != 0:
-            tail = "\n".join((process_output or "").splitlines()[-12:])
-            raise AgentError("CONVERSION_FAILED", f"MinerU failed for pages {range_text}.\n{tail}", 6, True)
-
-        if not selection_md.exists():
-            candidates = sorted(raw_dir.rglob("*.md"), key=lambda item: item.stat().st_mtime, reverse=True)
-            if not candidates:
-                raise AgentError("MARKDOWN_NOT_FOUND", f"MinerU produced no Markdown for pages {range_text}.", 6, True)
-            shutil.copy2(candidates[0], selection_md)
-        add_provenance_header(selection_md, source, range_text, profile)
-        item = {
-            "task_key": task_key,
-            "pdf_pages": range_text,
-            "profile": profile,
-            "markdown": str(selection_md),
-            "raw_output": str(raw_dir),
-            "log": str(log_path),
-            "cache": "created",
-            "completed_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-        }
-        manifest["selections"] = [
-            existing for existing in manifest.get("selections", []) if existing.get("task_key") != task_key
-        ] + [item]
-        write_manifest(source, manifest)
-        completed.append(item)
-
-    write_manifest(source, manifest)
-    published = publish_document(source, completed)
+    markdown = Path(str(payload.get("markdown", "")))
+    images_dir = Path(str(payload.get("images_dir", "")))
+    if not markdown.is_file() or not images_dir.is_dir():
+        raise AgentError("MARKDOWN_NOT_FOUND", "MinerU CLI did not publish Markdown + images.", 6, True)
     return {
         "ok": True,
         "command": "convert",
         "tool_version": TOOL_VERSION,
         "source": str(source),
         "page_count": page_count,
-        "selected_ranges": ranges_expression(ranges),
+        "selected_ranges": normalized_pages,
         "profile": profile,
-        "output_dir": str(output),
-        "markdown": str(published),
-        "images_dir": str(layout.images),
-        "cache": "hit" if completed and all(item.get("cache") == "hit" for item in completed) else "updated",
+        "output_dir": str(layout.root),
+        "markdown": str(markdown),
+        "images_dir": str(images_dir),
+        "cache": payload.get("cache", "updated"),
         "elapsed_seconds": round(time.monotonic() - started, 3),
     }
 
@@ -893,7 +647,7 @@ def prepare_pdf(
 
 def status_pdf(source: Path) -> dict[str, Any]:
     output = output_dir_for(source)
-    layout = ensure_layout(source) if output.exists() else layout_for(source)
+    layout = layout_for(source)
     manifest_path = layout.manifest
     index_path = layout.index / "native-text.jsonl"
     manifest = read_manifest(source) if manifest_path.exists() else None
@@ -930,14 +684,14 @@ def build_parser() -> argparse.ArgumentParser:
     convert_parser = commands.add_parser("convert", help="Convert all or selected PDF pages to Markdown.")
     convert_parser.add_argument("pdf")
     convert_parser.add_argument("--pages", help="1-based pages, e.g. 3, 3-8, or 1-3,8,12-15")
-    convert_parser.add_argument("--profile", choices=("balanced", "accurate", "pipeline"), default="balanced")
+    convert_parser.add_argument("--profile", choices=("fast", "balanced", "accurate"), default="balanced")
     convert_parser.add_argument("--force", action="store_true")
     convert_parser.add_argument("--timeout", type=int, default=1800)
 
     prepare_parser = commands.add_parser("prepare", help="Locate and convert a minimal page set for a question.")
     prepare_parser.add_argument("pdf")
     prepare_parser.add_argument("--query", "-q", required=True)
-    prepare_parser.add_argument("--profile", choices=("balanced", "accurate", "pipeline"), default="balanced")
+    prepare_parser.add_argument("--profile", choices=("fast", "balanced", "accurate"), default="balanced")
     prepare_parser.add_argument("--token-budget", type=int, default=DEFAULT_TOKEN_BUDGET)
     prepare_parser.add_argument("--context-pages", type=int, default=1)
     prepare_parser.add_argument("--max-pages", type=int, default=DEFAULT_MAX_PAGES)
