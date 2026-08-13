@@ -40,8 +40,6 @@ def build_icon() -> Image.Image:
     draw.polygon(((638, 82), (638, 306), (862, 306)), fill=paper)
     draw.line(((638, 82), (862, 306)), fill=ink, width=48)
     draw.line(((638, 82), (638, 306), (862, 306)), fill=ink, width=48, joint="curve")
-    rounded_line(draw, ((862, 306), (862, 846)), fill=ink, width=48)
-
     # The hash is deliberately heavy enough to stay legible at 16–24 px.
     rounded_line(draw, ((424, 395), (386, 718)), fill=ink, width=62)
     rounded_line(draw, ((609, 395), (571, 718)), fill=ink, width=62)
