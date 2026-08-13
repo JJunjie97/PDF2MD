@@ -61,6 +61,6 @@ if ((Test-Path $TorchLibraryPath) -and -not (Test-Path $CudaBinPath)) {
 
 Write-Host "Verifying installation..." -ForegroundColor Cyan
 & $Python -c "import mineru, torch; print('PDF2MD engine:', getattr(mineru, '__version__', 'installed')); print('PyTorch:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA runtime:', torch.version.cuda); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU only')"
-& (Join-Path $Paths.Environment "Scripts\mineru.exe") --version
+& $Python -m mineru.cli.client --version
 
 Write-Host "Installation complete. Download models with: .\scripts\download-models.ps1" -ForegroundColor Green

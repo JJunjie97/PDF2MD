@@ -9,14 +9,14 @@ param(
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "runtime.ps1")
 $Paths = Initialize-PDF2MDRuntime -CreateConfig
-$Downloader = Join-Path $Paths.Environment "Scripts\mineru-models-download.exe"
-if (-not (Test-Path $Downloader)) {
+$Python = Join-Path $Paths.Environment "python.exe"
+if (-not (Test-Path $Python)) {
     throw "PDF2MD environment is missing. Run .\scripts\install.ps1 first."
 }
 
 # Models are stored under models/ and machine-specific paths are written to
 # runtime/pdf2md.json.
-& $Downloader --source $Source --model_type $ModelType
+& $Python -m mineru.cli.models_download --source $Source --model_type $ModelType
 if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }

@@ -19,7 +19,7 @@ import requests
 from pypdf import PdfReader
 
 
-CORE_VERSION = "2.1.0"
+CORE_VERSION = "2.1.1"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
@@ -46,7 +46,7 @@ class RuntimePaths:
     root: Path
     runtime: Path
     environment: Path
-    api: Path
+    python: Path
     config: Path
     cuda: Path
     cache: Path
@@ -112,7 +112,7 @@ def runtime_paths() -> RuntimePaths:
         root=root,
         runtime=runtime,
         environment=environment,
-        api=environment / "Scripts" / "mineru-api.exe",
+        python=environment / "python.exe",
         config=runtime / "pdf2md.json",
         cuda=runtime / "cuda",
         cache=runtime / "cache",
@@ -129,7 +129,7 @@ def validate_runtime() -> RuntimePaths:
     legacy_config = paths.runtime / "mineru.json"
     if not paths.config.exists() and legacy_config.is_file():
         legacy_config.replace(paths.config)
-    required = (paths.api, paths.config, paths.cuda, paths.condarc)
+    required = (paths.python, paths.config, paths.cuda, paths.condarc)
     missing = [str(path) for path in required if not path.exists()]
     if missing:
         details = "\n".join(f"- {path}" for path in missing)
@@ -429,7 +429,9 @@ class OCRService:
         port = self._free_port()
         self.base_url = f"http://127.0.0.1:{port}"
         command = [
-            str(self.paths.api),
+            str(self.paths.python),
+            "-m",
+            "mineru.cli.fast_api",
             "--host",
             "127.0.0.1",
             "--port",
@@ -455,14 +457,21 @@ class OCRService:
             bufsize=1,
             creationflags=creation_flags,
         )
-        threading.Thread(target=self._read_logs, daemon=True).start()
+        log_reader = threading.Thread(target=self._read_logs, daemon=True)
+        log_reader.start()
         deadline = time.monotonic() + timeout
         last_error = ""
         while time.monotonic() < deadline:
             self._check_cancelled()
             if self.process.poll() is not None:
+                # Drain the final traceback before constructing the
+                # user-facing startup error.
+                log_reader.join(timeout=1)
                 tail = "\n".join(self.log_lines[-20:])
-                raise ConversionError(f"PDF2MD OCR 引擎启动失败。\n{tail}")
+                details = f"\n{tail}" if tail else ""
+                raise ConversionError(
+                    f"PDF2MD OCR 引擎启动失败（退出码 {self.process.returncode}）。{details}"
+                )
             try:
                 response = self.session.get(f"{self.base_url}/health", timeout=3)
                 if response.status_code == 200:
