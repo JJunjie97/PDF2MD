@@ -328,8 +328,9 @@ def _match_entry(entry: TocEntry, headings: list[Heading]) -> Heading | None:
 
 
 def _assign_anchors(headings: list[Heading]) -> None:
-    for index, heading in enumerate(headings, start=1):
-        heading.anchor = f"p2m-{index}"
+    """Assign compact anchors only to headings referenced by the source TOC."""
+    for index, heading in enumerate(sorted(headings, key=lambda item: item.line_index), start=1):
+        heading.anchor = str(index)
 
 
 def _escape_link_text(title: str) -> str:
@@ -347,11 +348,11 @@ def enhance_document_navigation(content: str) -> str:
     if len(entries) < 2:
         return content
     headings = _collect_headings(lines, ranges, entries)
-    _assign_anchors(headings)
     for entry in entries:
         entry.target = _match_entry(entry, headings)
 
     matched_headings = {id(entry.target): entry.target for entry in entries if entry.target}
+    _assign_anchors(list(matched_headings.values()))
     entry_replacements: dict[int, list[str]] = {}
     removed_lines: set[int] = set()
     for entry in entries:
@@ -360,9 +361,7 @@ def enhance_document_navigation(content: str) -> str:
             label = f"[{_escape_link_text(title)}](#{entry.target.anchor})"
         else:
             label = title
-        entry_replacements.setdefault(entry.line_start, []).append(
-            f"{'  ' * entry.depth}- {label} — {entry.page}"
-        )
+        entry_replacements.setdefault(entry.line_start, []).append(f"{'  ' * entry.depth}- {label}")
         removed_lines.update(range(entry.line_start + 1, entry.line_end + 1))
 
     heading_replacements: dict[int, tuple[str, str]] = {}

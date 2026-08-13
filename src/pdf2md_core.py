@@ -22,7 +22,7 @@ from pdf2md_markdown import convert_html_tables
 from pdf2md_toc import enhance_document_navigation
 
 
-CORE_VERSION = "2.5.0"
+CORE_VERSION = "2.6.0"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
