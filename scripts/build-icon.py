@@ -48,10 +48,10 @@ def build_icon() -> Image.Image:
 
     draw = ImageDraw.Draw(canvas)
     # The hash is deliberately heavy enough to stay legible at 16–24 px.
-    rounded_line(draw, ((424, 395), (386, 718)), fill=ink, width=62)
-    rounded_line(draw, ((609, 395), (571, 718)), fill=ink, width=62)
-    rounded_line(draw, ((344, 495), (662, 495)), fill=ink, width=60)
-    rounded_line(draw, ((329, 620), (647, 620)), fill=ink, width=60)
+    rounded_line(draw, ((424, 351), (386, 674)), fill=ink, width=62)
+    rounded_line(draw, ((609, 351), (571, 674)), fill=ink, width=62)
+    rounded_line(draw, ((344, 451), (662, 451)), fill=ink, width=60)
+    rounded_line(draw, ((329, 576), (647, 576)), fill=ink, width=60)
     return canvas
 
 
