@@ -18,8 +18,10 @@ from typing import Callable
 import requests
 from pypdf import PdfReader
 
+from pdf2md_toc import enhance_document_navigation
 
-CORE_VERSION = "2.3.0"
+
+CORE_VERSION = "2.4.0"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
@@ -764,8 +766,10 @@ def _publish_document(layout: OutputLayout, selected: list[dict[str, object]]) -
                 os.link(source_image, target_image)
             except OSError:
                 shutil.copy2(source_image, target_image)
+    content = "\n\n".join(pieces).rstrip() + "\n"
+    content = enhance_document_navigation(content)
     temporary = layout.markdown.with_suffix(".md.tmp")
-    temporary.write_text("\n\n".join(pieces).rstrip() + "\n", encoding="utf-8")
+    temporary.write_text(content, encoding="utf-8")
     temporary.replace(layout.markdown)
 
 

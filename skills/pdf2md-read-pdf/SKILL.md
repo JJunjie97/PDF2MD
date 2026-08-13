@@ -13,7 +13,7 @@ Use `scripts/pdf2md-pdf.cmd`. It calls the project's independent Python CLI dire
 2. Run `scripts/pdf2md-pdf.cmd inspect <pdf>` before substantive reading.
 3. For a focused question, run `scripts/pdf2md-pdf.cmd prepare <pdf> --query <query>`. For explicit pages, run `convert <pdf> --pages <ranges>`.
 4. Keep the default 12k reading-token budget unless the task needs broader coverage. Do not convert a long PDF in full by default.
-5. Read only the single top-level Markdown path returned in JSON. Search it before loading large sections. Open files in the returned `images_dir` only when the answer depends on a figure or visual verification.
+5. Read only the single top-level Markdown path returned in JSON. Search it before loading large sections. When the source contents page is present, use its `#p2m-*` links as navigation to headings available in this Markdown; an unlinked plain entry may simply point outside the selected page set and is not a reason to expand conversion by itself. Open files in the returned `images_dir` only when the answer depends on a figure or visual verification.
 6. Cite physical PDF page numbers from the returned page ranges. Distinguish printed page labels when known.
 7. Reuse valid output in the sibling `<pdf-stem>.pdf2md` directory. Treat `<pdf-stem>.md` and `images/` as the public reading interface. `raw/` contains only CLI caches, logs, indexes, manifests, and unreferenced intermediate crops; do not enumerate or read it unless conversion troubleshooting or the conditional correction workflow specifically requires it. Never modify the source PDF.
 
