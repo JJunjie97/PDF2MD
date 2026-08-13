@@ -11,7 +11,7 @@ import threading
 import time
 import uuid
 import zipfile
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Callable
 
@@ -19,7 +19,7 @@ import requests
 from pypdf import PdfReader
 
 
-CORE_VERSION = "2.1.1"
+CORE_VERSION = "2.2.0"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
@@ -636,6 +636,25 @@ def _referenced_image_names(content: str) -> list[str]:
     return sorted(references)
 
 
+def _read_extracted_markdown(extracted: Path, source: Path, page_range: str) -> tuple[Path, str]:
+    candidates = sorted(extracted.rglob("*.md"), key=lambda item: item.stat().st_mtime, reverse=True)
+    if not candidates:
+        raise ConversionError(f"OCR 引擎没有返回页 {page_range} 的 Markdown。")
+    markdown = next((item for item in candidates if item.stem == source.stem), candidates[0])
+    try:
+        content = markdown.read_text(encoding="utf-8", errors="strict").strip()
+    except UnicodeDecodeError as exc:
+        raise ConversionError(
+            f"OCR 引擎返回的页 {page_range} Markdown 不是有效 UTF-8（字节 {exc.start}）。"
+        ) from exc
+    return markdown, content
+
+
+def _replacement_character_count(extracted: Path, source: Path, page_range: str) -> int:
+    _markdown, content = _read_extracted_markdown(extracted, source, page_range)
+    return content.count("\ufffd")
+
+
 def _cache_selection(
     extracted: Path,
     layout: OutputLayout,
@@ -643,11 +662,9 @@ def _cache_selection(
     source: Path,
     page_range: str,
     options: ConversionOptions,
+    actual_method: str | None = None,
 ) -> dict[str, object]:
-    markdown_candidates = sorted(extracted.rglob("*.md"), key=lambda item: item.stat().st_mtime, reverse=True)
-    if not markdown_candidates:
-        raise ConversionError(f"OCR 引擎没有返回页 {page_range} 的 Markdown。")
-    markdown = next((item for item in markdown_candidates if item.stem == source.stem), markdown_candidates[0])
+    markdown, content = _read_extracted_markdown(extracted, source, page_range)
     mappings: dict[str, str] = {}
     cached_image_names: list[str] = []
     for image in extracted.rglob("*"):
@@ -667,7 +684,6 @@ def _cache_selection(
             pass
         for candidate in candidates:
             mappings[candidate.replace("\\", "/").lower()] = published
-    content = markdown.read_text(encoding="utf-8", errors="replace").strip()
     content = _rewrite_image_links(content, mappings)
     referenced_images = _referenced_image_names(content)
     selection_path = layout.selections / f"{task_key}.md"
@@ -676,7 +692,8 @@ def _cache_selection(
         "task_key": task_key,
         "pages": page_range,
         "profile": options.profile,
-        "method": options.method,
+        "method": actual_method or options.method,
+        "requested_method": options.method,
         "language": options.language,
         "selection": selection_path.relative_to(layout.root).as_posix(),
         "images": referenced_images,
@@ -687,24 +704,30 @@ def _cache_selection(
 
 def _cached_selection(
     manifest: dict[str, object], layout: OutputLayout, task_key: str
-) -> dict[str, object] | None:
+) -> tuple[dict[str, object] | None, int]:
     selections = manifest.get("selections")
     if not isinstance(selections, list):
-        return None
+        return None, 0
     for item in selections:
         if not isinstance(item, dict) or item.get("task_key") != task_key:
             continue
         selection = layout.root / str(item.get("selection", ""))
         if not selection.is_file():
-            return None
-        content = selection.read_text(encoding="utf-8", errors="replace")
+            return None, 0
+        try:
+            content = selection.read_text(encoding="utf-8", errors="strict")
+        except UnicodeDecodeError:
+            return None, 1
+        replacement_count = content.count("\ufffd")
+        if replacement_count:
+            return None, replacement_count
         images = _referenced_image_names(content)
         if any(not (layout.cached_images / name).is_file() for name in images):
-            return None
+            return None, 0
         cached_item = dict(item)
         cached_item["images"] = images
-        return cached_item
-    return None
+        return cached_item, 0
+    return None, 0
 
 
 def _update_manifest_selection(manifest: dict[str, object], item: dict[str, object]) -> None:
@@ -794,7 +817,9 @@ def run_conversion(
                 raise ConversionCancelled("转换已取消。")
             page_range = "all" if end is None else (str(start) if start == end else f"{start}-{end}")
             key = _task_key(identity, page_range, options)
-            cached = None if options.force else _cached_selection(manifest, layout, key)
+            cached, cached_replacements = (
+                (None, 0) if options.force else _cached_selection(manifest, layout, key)
+            )
             if cached is not None:
                 cache_hits += 1
                 emit("message", f"复用缓存：PDF 页 {page_range}")
@@ -804,8 +829,37 @@ def run_conversion(
                 service = OCRService(paths, emit, cancel_event)
                 service.start(timeout=min(120, max(10, deadline - time.monotonic())))
             emit("progress", (index, len(ranges), page_range))
-            extracted = service.convert_range(source, start, end, options, deadline)
-            item = _cache_selection(extracted, layout, key, source, page_range, options)
+            conversion_options = options
+            if cached_replacements and options.method == "auto":
+                emit(
+                    "message",
+                    f"缓存页 {page_range} 含 {cached_replacements} 个损坏字符，直接改用视觉 OCR…",
+                )
+                conversion_options = replace(options, method="ocr")
+            extracted = service.convert_range(source, start, end, conversion_options, deadline)
+            replacement_count = _replacement_character_count(extracted, source, page_range)
+            if replacement_count and options.method == "auto" and conversion_options.method != "ocr":
+                emit(
+                    "message",
+                    f"页 {page_range} 检测到 {replacement_count} 个损坏字符，正在强制视觉 OCR 重试…",
+                )
+                conversion_options = replace(options, method="ocr")
+                extracted = service.convert_range(source, start, end, conversion_options, deadline)
+                replacement_count = _replacement_character_count(extracted, source, page_range)
+            if replacement_count:
+                raise ConversionError(
+                    f"页 {page_range} 在视觉 OCR 后仍有 {replacement_count} 个无法识别的字符；"
+                    "已停止发布，避免生成包含 � 的 Markdown。"
+                )
+            item = _cache_selection(
+                extracted,
+                layout,
+                key,
+                source,
+                page_range,
+                options,
+                actual_method=conversion_options.method,
+            )
             _update_manifest_selection(manifest, item)
             _write_json(layout.manifest, manifest)
             completed.append(item)
