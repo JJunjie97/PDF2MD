@@ -11,7 +11,7 @@ import threading
 import time
 import uuid
 import zipfile
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
@@ -19,7 +19,7 @@ import requests
 from pypdf import PdfReader
 
 
-CORE_VERSION = "2.2.0"
+CORE_VERSION = "2.3.0"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
@@ -47,6 +47,7 @@ class RuntimePaths:
     runtime: Path
     environment: Path
     python: Path
+    engine: Path
     config: Path
     cuda: Path
     cache: Path
@@ -113,6 +114,7 @@ def runtime_paths() -> RuntimePaths:
         runtime=runtime,
         environment=environment,
         python=environment / "python.exe",
+        engine=root / "src" / "pdf2md_engine.py",
         config=runtime / "pdf2md.json",
         cuda=runtime / "cuda",
         cache=runtime / "cache",
@@ -129,7 +131,7 @@ def validate_runtime() -> RuntimePaths:
     legacy_config = paths.runtime / "mineru.json"
     if not paths.config.exists() and legacy_config.is_file():
         legacy_config.replace(paths.config)
-    required = (paths.python, paths.config, paths.cuda, paths.condarc)
+    required = (paths.python, paths.engine, paths.config, paths.cuda, paths.condarc)
     missing = [str(path) for path in required if not path.exists()]
     if missing:
         details = "\n".join(f"- {path}" for path in missing)
@@ -430,8 +432,7 @@ class OCRService:
         self.base_url = f"http://127.0.0.1:{port}"
         command = [
             str(self.paths.python),
-            "-m",
-            "mineru.cli.fast_api",
+            str(self.paths.engine),
             "--host",
             "127.0.0.1",
             "--port",
@@ -829,27 +830,17 @@ def run_conversion(
                 service = OCRService(paths, emit, cancel_event)
                 service.start(timeout=min(120, max(10, deadline - time.monotonic())))
             emit("progress", (index, len(ranges), page_range))
-            conversion_options = options
-            if cached_replacements and options.method == "auto":
+            if cached_replacements:
                 emit(
                     "message",
-                    f"缓存页 {page_range} 含 {cached_replacements} 个损坏字符，直接改用视觉 OCR…",
+                    f"缓存页 {page_range} 含 {cached_replacements} 个损坏字符，正在用局部修复引擎重建…",
                 )
-                conversion_options = replace(options, method="ocr")
-            extracted = service.convert_range(source, start, end, conversion_options, deadline)
+            extracted = service.convert_range(source, start, end, options, deadline)
             replacement_count = _replacement_character_count(extracted, source, page_range)
-            if replacement_count and options.method == "auto" and conversion_options.method != "ocr":
-                emit(
-                    "message",
-                    f"页 {page_range} 检测到 {replacement_count} 个损坏字符，正在强制视觉 OCR 重试…",
-                )
-                conversion_options = replace(options, method="ocr")
-                extracted = service.convert_range(source, start, end, conversion_options, deadline)
-                replacement_count = _replacement_character_count(extracted, source, page_range)
             if replacement_count:
                 raise ConversionError(
-                    f"页 {page_range} 在视觉 OCR 后仍有 {replacement_count} 个无法识别的字符；"
-                    "已停止发布，避免生成包含 � 的 Markdown。"
+                    f"页 {page_range} 在 span 级局部修复后仍有 {replacement_count} 个无法识别的字符；"
+                    "已停止发布。可针对该小页段显式使用 --ocr。"
                 )
             item = _cache_selection(
                 extracted,
@@ -858,7 +849,7 @@ def run_conversion(
                 source,
                 page_range,
                 options,
-                actual_method=conversion_options.method,
+                actual_method=options.method,
             )
             _update_manifest_selection(manifest, item)
             _write_json(layout.manifest, manifest)
