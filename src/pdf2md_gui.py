@@ -14,7 +14,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
 APP_NAME = "PDF2MD"
-APP_VERSION = "2.4.0"
+APP_VERSION = "2.5.0"
 
 BG = "#0C1118"
 SURFACE = "#121923"

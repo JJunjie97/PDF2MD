@@ -18,10 +18,11 @@ from typing import Callable
 import requests
 from pypdf import PdfReader
 
+from pdf2md_markdown import convert_html_tables
 from pdf2md_toc import enhance_document_navigation
 
 
-CORE_VERSION = "2.4.0"
+CORE_VERSION = "2.5.0"
 # Keep compatibility with selections created by the 2.0 core. Public-output
 # filtering does not change OCR content, so those expensive results remain valid.
 CACHE_VERSION = "2.0.0"
@@ -639,6 +640,27 @@ def _referenced_image_names(content: str) -> list[str]:
     return sorted(references)
 
 
+def _referenced_image_names_in_order(content: str) -> list[str]:
+    matches: list[tuple[int, str]] = []
+    patterns = (
+        r"!\[[^\]]*\]\(\s*<?images/([^\s\)>]+)",
+        r"<img\b[^>]*?\bsrc=[\"']images/([^\"']+)[\"']",
+    )
+    for pattern in patterns:
+        for match in re.finditer(pattern, content, flags=re.I):
+            name = Path(match.group(1).replace("\\", "/")).name
+            if name:
+                matches.append((match.start(), name))
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for _position, name in sorted(matches, key=lambda item: item[0]):
+        key = name.casefold()
+        if key not in seen:
+            seen.add(key)
+            ordered.append(name)
+    return ordered
+
+
 def _read_extracted_markdown(extracted: Path, source: Path, page_range: str) -> tuple[Path, str]:
     candidates = sorted(extracted.rglob("*.md"), key=lambda item: item.stat().st_mtime, reverse=True)
     if not candidates:
@@ -757,16 +779,22 @@ def _publish_document(layout: OutputLayout, selected: list[dict[str, object]]) -
             pieces.append(f"## PDF pages {item['pages']}\n\n{content}")
         else:
             pieces.append(content)
-        for name in _referenced_image_names(content):
-            source_image = layout.cached_images / name
-            target_image = layout.images / name
-            if target_image.exists():
-                continue
-            try:
-                os.link(source_image, target_image)
-            except OSError:
-                shutil.copy2(source_image, target_image)
     content = "\n\n".join(pieces).rstrip() + "\n"
+    content = convert_html_tables(content)
+    image_mappings: dict[str, str] = {}
+    for index, name in enumerate(_referenced_image_names_in_order(content), start=1):
+        suffix = Path(name).suffix.lower()
+        public_name = f"{index}{suffix}"
+        public_path = f"images/{public_name}"
+        image_mappings[name.casefold()] = public_path
+        image_mappings[f"images/{name}".casefold()] = public_path
+        source_image = layout.cached_images / name
+        target_image = layout.images / public_name
+        try:
+            os.link(source_image, target_image)
+        except OSError:
+            shutil.copy2(source_image, target_image)
+    content = _rewrite_image_links(content, image_mappings)
     content = enhance_document_navigation(content)
     temporary = layout.markdown.with_suffix(".md.tmp")
     temporary.write_text(content, encoding="utf-8")
