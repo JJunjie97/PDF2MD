@@ -1,0 +1,4 @@
+interface:
+  display_name: "MinerU PDF Reader"
+  short_description: "Convert and read papers, datasheets, manuals, and scanned PDFs"
+  default_prompt: "Use $mineru-read-pdf to locate and read the relevant PDF pages with minimal token use."

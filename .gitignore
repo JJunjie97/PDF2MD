@@ -1,0 +1,14 @@
+/.conda-env/
+/.conda-envs/
+/.conda-pkgs/
+/.cache/
+/.build/*
+!/.build/MinerU-Local.spec
+/.cuda/
+/.tmp/
+/.tools/
+/input/
+/output/
+/mineru.json
+__pycache__/
+*.pyc
