@@ -112,6 +112,74 @@ def native_error(message: str) -> None:
     print(message, file=sys.stderr)
 
 
+class _WindowRect(ctypes.Structure):
+    _fields_ = [
+        ("left", ctypes.c_long),
+        ("top", ctypes.c_long),
+        ("right", ctypes.c_long),
+        ("bottom", ctypes.c_long),
+    ]
+
+
+def _native_window_handle(window: webview.Window) -> int | None:
+    native = getattr(window, "native", None)
+    handle = getattr(native, "Handle", None)
+    if handle is None:
+        return None
+    try:
+        return int(handle.ToInt64())
+    except AttributeError:
+        try:
+            return int(handle)
+        except (TypeError, ValueError):
+            return None
+
+
+def apply_windows_rounded_frame(window: webview.Window, logical_radius: int = 10) -> None:
+    """Clip the real Win32 window so no rectangular WebView background shows."""
+    if os.name != "nt":
+        return
+    hwnd = _native_window_handle(window)
+    if not hwnd:
+        return
+    try:
+        user32 = ctypes.windll.user32
+        gdi32 = ctypes.windll.gdi32
+        dwm = ctypes.windll.dwmapi
+
+        # Ask DWM for its native rounded treatment on Windows 11. Windows 10
+        # ignores this attribute and uses the region below.
+        preference = ctypes.c_int(2)
+        dwm.DwmSetWindowAttribute(
+            ctypes.c_void_p(hwnd),
+            33,
+            ctypes.byref(preference),
+            ctypes.sizeof(preference),
+        )
+
+        if user32.IsZoomed(ctypes.c_void_p(hwnd)):
+            user32.SetWindowRgn(ctypes.c_void_p(hwnd), None, True)
+            return
+
+        rect = _WindowRect()
+        if not user32.GetWindowRect(ctypes.c_void_p(hwnd), ctypes.byref(rect)):
+            return
+        width = max(1, rect.right - rect.left)
+        height = max(1, rect.bottom - rect.top)
+        try:
+            dpi = int(user32.GetDpiForWindow(ctypes.c_void_p(hwnd))) or 96
+        except Exception:
+            dpi = 96
+        radius = max(8, round(logical_radius * dpi / 96))
+        region = gdi32.CreateRoundRectRgn(0, 0, width + 1, height + 1, radius * 2, radius * 2)
+        if not region:
+            return
+        if not user32.SetWindowRgn(ctypes.c_void_p(hwnd), ctypes.c_void_p(region), True):
+            gdi32.DeleteObject(ctypes.c_void_p(region))
+    except Exception:
+        pass
+
+
 class PDF2MDBridge:
     def __init__(self) -> None:
         # Keep the native Window private. pywebview exposes public JS API
@@ -397,6 +465,7 @@ class PDF2MDBridge:
         else:
             self._window.maximize()
         self._maximized = not self._maximized
+        threading.Timer(0.08, apply_windows_rounded_frame, args=(self._window,)).start()
         return {"ok": True, "maximized": self._maximized}
 
     def _stop_active_process(self) -> None:
@@ -431,16 +500,14 @@ def gui_main() -> int:
         APP_NAME,
         url=html.as_uri(),
         js_api=bridge,
-        width=920,
-        height=700,
-        min_size=(780, 620),
+        width=860,
+        height=620,
+        min_size=(760, 560),
         resizable=True,
         frameless=True,
         easy_drag=False,
         shadow=True,
-        background_color="#E8EBF2",
-        # WebView2 transparent composition can clip the child surface on
-        # some Windows/GPU combinations. The CSS still provides the glass UI.
+        background_color="#F3F4F6",
         transparent=False,
         text_select=True,
     )
@@ -449,6 +516,11 @@ def gui_main() -> int:
         return 1
     bridge.attach_window(window)
     window.events.closing += bridge.on_closing
+    refresh_frame = lambda *_args, **_kwargs: apply_windows_rounded_frame(window)
+    window.events.shown += refresh_frame
+    window.events.maximized += refresh_frame
+    window.events.restored += refresh_frame
+    window.events.resized += refresh_frame
     storage = project_root() / "runtime" / "cache" / "webview"
     storage.mkdir(parents=True, exist_ok=True)
     try:

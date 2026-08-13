@@ -155,7 +155,7 @@
         method: controls.method.value,
         language: controls.language.value,
         timeout: controls.timeout.value,
-        force: controls.force.checked,
+        force: controls.force.value === "yes",
       });
     } catch (error) {
       document.body.dataset.state = "error";

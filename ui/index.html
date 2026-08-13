@@ -11,7 +11,6 @@
   <div class="app-frame">
     <header class="titlebar">
       <div class="brand-drag pywebview-drag-region" id="drag-region">
-        <img src="../assets/pdf2md-icon.png" class="brand-icon" alt="">
         <span class="brand-name">PDF2MD</span>
       </div>
       <div class="window-actions" aria-label="窗口控制">
@@ -28,19 +27,7 @@
     </header>
 
     <main class="content">
-      <section class="glass-card file-card" aria-labelledby="file-heading">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">PDF → MARKDOWN</span>
-            <h1 id="file-heading">选择文档</h1>
-          </div>
-          <div class="format-rail" aria-hidden="true">
-            <span class="format-node pdf-node">PDF</span>
-            <span class="rail-line"><i></i></span>
-            <span class="format-node md-node">MD</span>
-          </div>
-        </div>
-
+      <section class="panel file-card" aria-label="文档">
         <div class="path-stack">
           <label class="field-label" for="source-path">PDF 文件</label>
           <div class="path-control">
@@ -50,8 +37,6 @@
               <span>选择文件</span>
             </button>
           </div>
-
-          <div class="path-connector" aria-hidden="true"><span></span></div>
 
           <label class="field-label" for="output-path">输出目录</label>
           <div class="path-control">
@@ -64,7 +49,7 @@
         </div>
       </section>
 
-      <section class="glass-card settings-card" aria-labelledby="settings-heading">
+      <section class="panel settings-card" aria-labelledby="settings-heading">
         <div class="compact-heading">
           <h2 id="settings-heading">转换设置</h2>
         </div>
@@ -106,15 +91,17 @@
               <option value="7200">120 分钟</option>
             </select>
           </label>
-          <label class="toggle-field" for="force">
-            <span class="toggle-copy">忽略缓存</span>
-            <input id="force" type="checkbox">
-            <span class="toggle" aria-hidden="true"><i></i></span>
+          <label class="setting-field">
+            <span>忽略缓存</span>
+            <select id="force">
+              <option value="no" selected>否</option>
+              <option value="yes">是</option>
+            </select>
           </label>
         </div>
       </section>
 
-      <section class="glass-card progress-card" aria-live="polite">
+      <section class="panel progress-card" aria-live="polite">
         <div class="progress-head">
           <div class="status">
             <span class="status-dot" id="status-dot"></span>
@@ -152,4 +139,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-

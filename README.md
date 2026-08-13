@@ -125,7 +125,7 @@ PDF2MD 的公开命令、文件名、界面和 Skill 均使用 `PDF2MD` 品牌�
 4. 可直接设置转换模式、解析方式、OCR 语言、超时和是否忽略缓存。
 5. 点击“开始转换”。
 
-GUI 使用浅色毛玻璃视觉，所有按钮和表单控件保持统一尺寸，提供确定型百分比进度和精简阶段文字。它由本地 `ui/index.html`、`styles.css`、`app.js` 构成，通过系统 WebView2 显示；不会启动本地网页服务器，也不会访问远程页面。Python 只桥接文件选择、窗口控制、任务状态与 `src/pdf2md_cli.py --json`。
+GUI 使用紧凑的 Windows 原生视觉，统一按钮和表单控件尺寸，提供确定型百分比进度和精简阶段文字；窗口直接使用 Win32 圆角边界，不在外围叠加装饰背景。它由本地 `ui/index.html`、`styles.css`、`app.js` 构成，通过系统 WebView2 显示；不会启动本地网页服务器，也不会访问远程页面。Python 只桥接文件选择、窗口控制、任务状态与 `src/pdf2md_cli.py --json`。
 
 ## OCR 执行效率
 
@@ -254,7 +254,7 @@ Set-ExecutionPolicy -Scope Process Bypass
 PDF2MD/
 ├─ pdf2md.cmd                  # 正式 CLI 便捷入口
 ├─ PDF2MD.exe                  # 仅 GUI 外壳
-├─ assets/                     # 程序 PNG/ICO 图标
+├─ assets/                     # 透明背景的程序 PNG/ICO 图标
 ├─ ui/                         # 本地 HTML/CSS/JavaScript 桌面界面
 ├─ src/
 │  ├─ pdf2md_cli.py                # CLI 参数、JSON 契约、退出状态

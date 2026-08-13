@@ -20,7 +20,6 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('../assets/pdf2md-icon.png', 'assets'),
         ('../assets/pdf2md-icon.ico', 'assets'),
         ('../ui', 'ui'),
     ],
