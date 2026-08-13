@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF2MD Reader"
+  short_description: "Convert and read papers, datasheets, manuals, and scanned PDFs"
+  default_prompt: "Use $pdf2md-read-pdf to locate and read the relevant PDF pages with minimal token use."

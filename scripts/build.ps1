@@ -5,10 +5,10 @@ param(
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "runtime.ps1")
 
-$Paths = Initialize-MinerURuntime -CreateConfig
+$Paths = Initialize-PDF2MDRuntime -CreateConfig
 $Python = Join-Path $Paths.Environment "python.exe"
 if (-not (Test-Path $Python)) {
-    throw "MinerU environment is missing. Run .\scripts\install.ps1 first."
+    throw "PDF2MD environment is missing. Run .\scripts\install.ps1 first."
 }
 
 # Keep the project environment first so PyInstaller resolves Tcl/Tk and
@@ -21,7 +21,7 @@ $env:PATH = @(
     $env:PATH
 ) -join [System.IO.Path]::PathSeparator
 
-$Spec = Join-Path $Paths.ProjectRoot "packaging\MinerU-Local.spec"
+$Spec = Join-Path $Paths.ProjectRoot "packaging\PDF2MD.spec"
 $Work = Join-Path $Paths.Runtime "build"
 Push-Location (Split-Path -Parent $Spec)
 try {
@@ -37,4 +37,4 @@ if (-not $KeepWork -and (Test-Path $Work)) {
     Remove-Item -LiteralPath $Work -Recurse -Force
 }
 
-Write-Host "Built: $($Paths.ProjectRoot)\MinerU-Local.exe" -ForegroundColor Green
+Write-Host "Built: $($Paths.ProjectRoot)\PDF2MD.exe" -ForegroundColor Green

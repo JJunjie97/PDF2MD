@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 . (Join-Path $PSScriptRoot "runtime.ps1")
 
-$Paths = Initialize-MinerURuntime -CreateConfig
+$Paths = Initialize-PDF2MDRuntime -CreateConfig
 if (-not (Test-Path (Join-Path $Paths.Environment "python.exe"))) {
     Write-Host "Creating local Python 3.12 environment..." -ForegroundColor Cyan
     conda create --prefix $Paths.Environment --yes --no-default-packages --override-channels --channel conda-forge python=3.12 pip
@@ -10,7 +10,7 @@ if (-not (Test-Path (Join-Path $Paths.Environment "python.exe"))) {
     }
 }
 
-$CondaEnvironmentVariables = foreach ($name in $script:MinerURuntimeVariableNames) {
+$CondaEnvironmentVariables = foreach ($name in $script:PDF2MDRuntimeVariableNames) {
     "$name=$([Environment]::GetEnvironmentVariable($name, 'Process'))"
 }
 conda env config vars set --prefix $Paths.Environment @CondaEnvironmentVariables | Out-Null
@@ -19,14 +19,14 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 $Python = Join-Path $Paths.Environment "python.exe"
-Write-Host "Installing MinerU 3.4.4 CLI/OCR components..." -ForegroundColor Cyan
+Write-Host "Installing PDF2MD OCR components..." -ForegroundColor Cyan
 & $Python -m pip install --upgrade pip uv
 if ($LASTEXITCODE -ne 0) {
     throw "pip/uv installation failed with exit code $LASTEXITCODE."
 }
 & $Python -m uv pip install --python $Python --upgrade "mineru[vlm,pipeline,lmdeploy]==3.4.4" "requests>=2.32,<3" "pypdf>=5,<7" "pyinstaller>=6,<7"
 if ($LASTEXITCODE -ne 0) {
-    throw "MinerU installation failed with exit code $LASTEXITCODE."
+    throw "PDF2MD engine installation failed with exit code $LASTEXITCODE."
 }
 
 $NvidiaGpu = Get-Command nvidia-smi -ErrorAction SilentlyContinue
@@ -60,7 +60,7 @@ if ((Test-Path $TorchLibraryPath) -and -not (Test-Path $CudaBinPath)) {
 }
 
 Write-Host "Verifying installation..." -ForegroundColor Cyan
-& $Python -c "import mineru, torch; print('MinerU:', getattr(mineru, '__version__', 'installed')); print('PyTorch:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA runtime:', torch.version.cuda); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU only')"
+& $Python -c "import mineru, torch; print('PDF2MD engine:', getattr(mineru, '__version__', 'installed')); print('PyTorch:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('CUDA runtime:', torch.version.cuda); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU only')"
 & (Join-Path $Paths.Environment "Scripts\mineru.exe") --version
 
 Write-Host "Installation complete. Download models with: .\scripts\download-models.ps1" -ForegroundColor Green

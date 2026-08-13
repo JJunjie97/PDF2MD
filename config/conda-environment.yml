@@ -1,4 +1,4 @@
-name: mineru-local
+name: pdf2md-local
 channels:
   - conda-forge
 dependencies:

@@ -3,5 +3,7 @@
 /packaging/work/
 /packaging/dist/
 /.tools/
+*.pdf2md/
+*.mineru/
 __pycache__/
 *.pyc
