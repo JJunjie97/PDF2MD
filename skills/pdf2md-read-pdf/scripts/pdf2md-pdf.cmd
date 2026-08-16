@@ -33,5 +33,8 @@ if not exist "%PDF2MD_AGENT_PYTHON%" (
   echo {"ok":false,"error_code":"RUNTIME_MISSING","message":"Local PDF2MD Python environment was not found."}
   exit /b 5
 )
+rem Publish the discovered project root to the Python skill process.  A copied
+rem global skill lives under .agents, so its own file location is not the root.
+set "PDF2MD_ROOT=%PDF2MD_AGENT_ROOT%"
 "%PDF2MD_AGENT_PYTHON%" "%PDF2MD_SKILL_SCRIPTS%pdf2md_pdf.py" %*
 exit /b %errorlevel%

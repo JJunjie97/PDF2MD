@@ -181,13 +181,21 @@ $Skill = ".\skills\pdf2md-read-pdf\scripts\pdf2md-pdf.cmd"
 
 ### 安装 Skill（推荐：复制）
 
-复制安装不依赖项目根目录的当前名称，因此把本地文件夹从 `minerU` 改成 `PDF2MD` 后仍可继续使用。先确认目标不是需要保留的自定义 Skill，再运行：
+复制安装的包装器会发现本地 PDF2MD 项目，并把实际项目根目录传给 Skill 的 Python 进程，因此不会把全局 `.agents` 目录误当成运行时目录。项目位于桌面时，根目录可以改名；项目位于其他位置时，可设置 `PDF2MD_ROOT` 指向项目根目录。先确认目标不是需要保留的自定义 Skill，再运行：
 
 ```powershell
 $Target = Join-Path $env:USERPROFILE ".agents\skills\pdf2md-read-pdf"
 if (Test-Path -LiteralPath $Target) { Remove-Item -LiteralPath $Target -Recurse }
 Copy-Item -LiteralPath ".\skills\pdf2md-read-pdf" -Destination $Target -Recurse
 ```
+
+如果项目不在桌面，复制安装后执行一次：
+
+```powershell
+[Environment]::SetEnvironmentVariable("PDF2MD_ROOT", (Resolve-Path ".").Path, "User")
+```
+
+新开的终端和 Agent 会话会读取该路径；当前 PowerShell 可同时运行 `$env:PDF2MD_ROOT = (Resolve-Path ".").Path` 立即生效。
 
 完整 ZIP 备份位于 `backups/pdf2md-read-pdf-skill.zip`。
 

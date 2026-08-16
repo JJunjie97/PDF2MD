@@ -38,8 +38,12 @@ class Runtime:
 
 def runtime() -> Runtime:
     script = Path(__file__).resolve()
-    configured_root = os.getenv("PDF2MD_ROOT")
-    candidates = ([Path(configured_root).expanduser().resolve()] if configured_root else []) + list(script.parents)
+    configured_roots = [
+        value
+        for value in (os.getenv("PDF2MD_ROOT"), os.getenv("PDF2MD_AGENT_ROOT"))
+        if value
+    ]
+    candidates = [Path(value).expanduser().resolve() for value in configured_roots] + list(script.parents)
     root = next(
         (
             candidate
