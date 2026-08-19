@@ -3,6 +3,8 @@
 /packaging/work/
 /packaging/dist/
 /.tools/
+/paper/
+/tmp/
 *.pdf2md/
 *.mineru/
 __pycache__/

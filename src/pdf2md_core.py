@@ -831,7 +831,12 @@ def _update_manifest_selection(manifest: dict[str, object], item: dict[str, obje
     selections.append(item)
 
 
-def _publish_document(layout: OutputLayout, selected: list[dict[str, object]]) -> None:
+def _publish_document(
+    layout: OutputLayout,
+    selected: list[dict[str, object]],
+    source: Path | None = None,
+    refresh_frontmatter: bool = False,
+) -> None:
     if layout.images.exists():
         shutil.rmtree(layout.images)
     layout.images.mkdir(parents=True, exist_ok=True)
@@ -860,7 +865,16 @@ def _publish_document(layout: OutputLayout, selected: list[dict[str, object]]) -
         except OSError:
             shutil.copy2(source_image, target_image)
     content = _rewrite_image_links(content, image_mappings)
-    content = enhance_document_navigation(content)
+    full_document = (
+        len(selected) == 1
+        and str(selected[0].get("pages", "")).casefold() == "all"
+    )
+    content = enhance_document_navigation(
+        content,
+        source=source if full_document else None,
+        frontmatter_cache=(layout.cache / "frontmatter-v6.json") if full_document else None,
+        force_frontmatter=refresh_frontmatter and full_document,
+    )
     temporary = layout.markdown.with_suffix(".md.tmp")
     temporary.write_text(content, encoding="utf-8")
     temporary.replace(layout.markdown)
@@ -971,7 +985,12 @@ def run_conversion(
     _write_json(layout.manifest, manifest)
     emit("message", "整理输出")
     _emit_progress(emit, 94, "整理输出")
-    _publish_document(layout, completed)
+    _publish_document(
+        layout,
+        completed,
+        source=source,
+        refresh_frontmatter=options.force,
+    )
     elapsed = time.monotonic() - started
     emit("message", "完成")
     _emit_progress(emit, 100, "完成")
