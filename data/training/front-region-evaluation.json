@@ -1,0 +1,6002 @@
+{
+  "body_start": {
+    "comparable_documents": 5,
+    "exact": 5,
+    "exact_accuracy": 0.5,
+    "gold_documents": 10,
+    "mae": 0.0,
+    "missing_predictions": 5,
+    "predicted_documents": 5
+  },
+  "classifier": {
+    "fingerprint": "d2661036b2ed350ca40b07eb5b824ee5a29121f7b25c69128690e03264814e47",
+    "mode": "rules-only",
+    "model_fingerprints": {
+      "layout": null,
+      "text": null
+    },
+    "models_approved": false,
+    "rules_version": "front-region-rules-10",
+    "unresolved_pages": "abstain",
+    "version": "front-region-cascade-2"
+  },
+  "confusion": {
+    "abstract": {
+      "abstract": 4
+    },
+    "acknowledgements": {
+      "acknowledgements": 1
+    },
+    "body_start": {
+      "__abstain__": 5,
+      "body_start": 5
+    },
+    "contents": {
+      "contents": 14
+    },
+    "cover": {
+      "__abstain__": 2
+    },
+    "legal": {
+      "legal": 1
+    },
+    "list_of_figures": {
+      "list_of_figures": 3
+    },
+    "list_of_tables": {
+      "__abstain__": 1,
+      "list_of_tables": 1
+    }
+  },
+  "documents": {
+    "adi-ad7606b-datasheet": {
+      "abstained": 1,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 0.5,
+      "overall_accuracy": 0.5,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "body_start",
+          "page": 4,
+          "predicted": "__abstain__"
+        }
+      ],
+      "source_sha256": "c4b8a6bdf46cd28eefa417a22902b85bbe3f82f9e4a439c82881d700c53a8288",
+      "total_samples": 2
+    },
+    "adi-ad7792-7793-datasheet-zh": {
+      "abstained": 1,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 0.5,
+      "overall_accuracy": 0.5,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "body_start",
+          "page": 3,
+          "predicted": "__abstain__"
+        }
+      ],
+      "source_sha256": "dbf157a64d1a902f29a903de536175fed6c4d40a8b828324fb9e08cb5e9f6de6",
+      "total_samples": 2
+    },
+    "adi-ad8628-30-datasheet-zh": {
+      "abstained": 1,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 0.5,
+      "overall_accuracy": 0.5,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "body_start",
+          "page": 3,
+          "predicted": "__abstain__"
+        }
+      ],
+      "source_sha256": "edece70a83ae3e67c367d3425e6a4ec4936e00087272cc003d02b0227bc55057",
+      "total_samples": 2
+    },
+    "adi-adxl345-datasheet": {
+      "abstained": 1,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 0.5,
+      "overall_accuracy": 0.5,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "body_start",
+          "page": 3,
+          "predicted": "__abstain__"
+        }
+      ],
+      "source_sha256": "87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6",
+      "total_samples": 2
+    },
+    "adi-adxl354-355-datasheet": {
+      "abstained": 1,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 0.5,
+      "overall_accuracy": 0.5,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "body_start",
+          "page": 4,
+          "predicted": "__abstain__"
+        }
+      ],
+      "source_sha256": "d54235c1db7ffea74ee9c4a361294204eb8927c20657484aefb935eafb29e56c",
+      "total_samples": 2
+    },
+    "arxiv-attention-1706-03762": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "body_start",
+          "page": 2,
+          "predicted": "body_start"
+        }
+      ],
+      "source_sha256": "bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+      "total_samples": 1
+    },
+    "arxiv-yin-2024-heisenberg-metrology-v2": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 1,
+          "predicted": "contents"
+        }
+      ],
+      "source_sha256": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+      "total_samples": 1
+    },
+    "espressif-esp32-trm-zh": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "list_of_figures",
+          "page": 27,
+          "predicted": "list_of_figures"
+        }
+      ],
+      "source_sha256": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+      "total_samples": 1
+    },
+    "harvard-wang-2025-dual-species-arrays-thesis": {
+      "abstained": 1,
+      "accepted": 4,
+      "accepted_accuracy": 1.0,
+      "correct": 4,
+      "coverage": 0.8,
+      "overall_accuracy": 0.8,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "legal",
+          "page": 1,
+          "predicted": "legal"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 7,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "list_of_figures",
+          "page": 11,
+          "predicted": "list_of_figures"
+        },
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "list_of_tables",
+          "page": 13,
+          "predicted": "__abstain__"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "body_start",
+          "page": 20,
+          "predicted": "body_start"
+        }
+      ],
+      "source_sha256": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+      "total_samples": 5
+    },
+    "lmu-tao-2025-strontium-tweezer-thesis": {
+      "abstained": 1,
+      "accepted": 5,
+      "accepted_accuracy": 1.0,
+      "correct": 5,
+      "coverage": 0.833333,
+      "overall_accuracy": 0.833333,
+      "samples": [
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "cover",
+          "page": 1,
+          "predicted": "__abstain__"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 5,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "list_of_figures",
+          "page": 8,
+          "predicted": "list_of_figures"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "list_of_tables",
+          "page": 9,
+          "predicted": "list_of_tables"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "abstract",
+          "page": 13,
+          "predicted": "abstract"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "body_start",
+          "page": 15,
+          "predicted": "body_start"
+        }
+      ],
+      "source_sha256": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+      "total_samples": 6
+    },
+    "mee-contaminated-site-remediation-guide-2014-zh": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 3,
+          "predicted": "contents"
+        }
+      ],
+      "source_sha256": "dace41a81f18946fc6e1ff8b330253dc9ad78f1f5f5b075685df9d7f24a044a7",
+      "total_samples": 1
+    },
+    "nist-ai-rmf-100-1": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 4,
+          "predicted": "contents"
+        }
+      ],
+      "source_sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+      "total_samples": 1
+    },
+    "raspberrypi-rp2040-datasheet": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 3,
+          "predicted": "contents"
+        }
+      ],
+      "source_sha256": "be56fbb75ba0ae9e26558a73c93ac3e75c2ad4e6878d3b6703de2a76d886ea8c",
+      "total_samples": 1
+    },
+    "scipost-fazio-2025-many-body-open-quantum-systems": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "abstract",
+          "page": 1,
+          "predicted": "abstract"
+        }
+      ],
+      "source_sha256": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+      "total_samples": 1
+    },
+    "scipost-girvin-2023-quantum-error-correction": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        }
+      ],
+      "source_sha256": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+      "total_samples": 1
+    },
+    "scipost-mbeng-2024-quantum-ising-chain": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "abstract",
+          "page": 1,
+          "predicted": "abstract"
+        }
+      ],
+      "source_sha256": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+      "total_samples": 1
+    },
+    "ti-ads1115-datasheet": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 2,
+          "predicted": "contents"
+        }
+      ],
+      "source_sha256": "5fe00cf9509daba7ca311cd0a461debc563dd57598c5de3bf9c31903dc2238da",
+      "total_samples": 1
+    },
+    "ucl-palmer-2020-rydberg-interferometry-thesis": {
+      "abstained": 1,
+      "accepted": 4,
+      "accepted_accuracy": 1.0,
+      "correct": 4,
+      "coverage": 0.8,
+      "overall_accuracy": 0.8,
+      "samples": [
+        {
+          "abstain_reason": "model_unavailable",
+          "accepted": false,
+          "decision_source": "abstain",
+          "gold": "cover",
+          "page": 1,
+          "predicted": "__abstain__"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "abstract",
+          "page": 4,
+          "predicted": "abstract"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "acknowledgements",
+          "page": 8,
+          "predicted": "acknowledgements"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "contents",
+          "page": 9,
+          "predicted": "contents"
+        },
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "body_start",
+          "page": 12,
+          "predicted": "body_start"
+        }
+      ],
+      "source_sha256": "54f031d492a6672deb7c9e642c39a83635d0807df2326e904cb63b2c20420a70",
+      "total_samples": 5
+    },
+    "wch-ch32v307-eval-zh": {
+      "abstained": 0,
+      "accepted": 1,
+      "accepted_accuracy": 1.0,
+      "correct": 1,
+      "coverage": 1.0,
+      "overall_accuracy": 1.0,
+      "samples": [
+        {
+          "abstain_reason": null,
+          "accepted": true,
+          "decision_source": "rule",
+          "gold": "body_start",
+          "page": 1,
+          "predicted": "body_start"
+        }
+      ],
+      "source_sha256": "aff702357b03ee78a774a2571829908885b4a3c7d7b8b685d8e08e2dcc40af20",
+      "total_samples": 1
+    }
+  },
+  "evaluation_policy": {
+    "abstain_is_correct": false,
+    "labels": "human-verified-only",
+    "navigation_presence": "independent-explicit-binary-labels",
+    "ocr": "disabled",
+    "page_numbering": "physical-1-based",
+    "primary_page_kind": "mutually-exclusive",
+    "scope": "annotated-pages-only",
+    "unlabelled_navigation": "unknown-not-negative"
+  },
+  "inputs": {
+    "annotations_sha256": "a0207e8338c55256ae48a08518faacfccaa3410789797ea2a188d185d44a5341",
+    "content_list_sha256": [
+      "0cf62248aabba372403c52e44cbe62a4b87762b4552c07d46eaa3973e15fcd05",
+      "103dabcba20ceb673417d780aa3727c4491fd681339ad8e80ded1d447a7ba5d2",
+      "29cac47e14cb2ac700dcfc23e586a9ca242c362aa9671140c705c6126a4d2657",
+      "2d86acd707cda744c965bf5679dea0b819d9af270011faee503f9daaac4056b3",
+      "2e55cf07380af20f9865968e86a98ce9c7072faddce467121aaf3a10bc2b7934",
+      "3ad36cc77add86228f8c12d874fca248de5423835cb489a8776e91d81e929335",
+      "46cbf831605d6bdb894a2c69cd811f5924993e5a6a421d25140356fb67879dd4",
+      "54051e268f35ce6350418d8d2b41a196fb72ff483999f2ad2a897ad167dfd420",
+      "5845889eadedf9ba8865568204c0aa10ebc7538d57ad3919f03fb7614192d80f",
+      "65f8a28786e0c51f7a09ca8ced291a67a10957614e627e64e9335ab80c10ad04",
+      "74063a9a31c115b79453b39fc277cafc400ebd2d0676dba563acc2419644ff15",
+      "77b541e2d65b4de2e0fb42911d2f3d8c6be64b4292e8e8611a55824267e43185",
+      "8a6b4f2c9a6a4178e73b5a2e10f5a0886e79b50ef99251a70ab97e7245fb11c2",
+      "95de92172ce70376a95cdd567a9794fcb28f8d862ad3c2e9db35f015e5588163",
+      "9710a704e37e56196cd3cc7a1c11e0cb5fee964e41ae1b82661aad49e9c6a43a",
+      "b4f4f09567a906e0ae28d48e50b57c41abcda167a8a9b40fff664654e77f0be8",
+      "c94d772bd3a740f670bf833455bdfb91a2e5c2e882ee919f0f526e49d5b3f13d",
+      "dbca401105710fe65f88c4d8ce455bfedbfcff7d14e9501c4431e32f008f094c",
+      "f0e53be46ec01a0540e751fb03e5769a1352e001ff03aabd562875e0328c9e43"
+    ],
+    "corpus_sha256": "0282f3d08f74f0e0ac5f004d2a6b4b652c9d91e8670c85b223374d412ae587c5",
+    "navigation": {
+      "annotations_sha256": "23c78a15f5d5a74f645143eed16261c239bfb93ce82c8afdcdaaea4644b45e87",
+      "content_list_sha256": [
+        "0cf62248aabba372403c52e44cbe62a4b87762b4552c07d46eaa3973e15fcd05",
+        "2e55cf07380af20f9865968e86a98ce9c7072faddce467121aaf3a10bc2b7934",
+        "54051e268f35ce6350418d8d2b41a196fb72ff483999f2ad2a897ad167dfd420",
+        "77b541e2d65b4de2e0fb42911d2f3d8c6be64b4292e8e8611a55824267e43185",
+        "95de92172ce70376a95cdd567a9794fcb28f8d862ad3c2e9db35f015e5588163",
+        "9710a704e37e56196cd3cc7a1c11e0cb5fee964e41ae1b82661aad49e9c6a43a",
+        "f0e53be46ec01a0540e751fb03e5769a1352e001ff03aabd562875e0328c9e43"
+      ],
+      "manifest_sha256": [
+        "13879f43614de969c483fcedf433bb49ec522d284f49b298cb5332f09a176aa5",
+        "2f40371e5f18f60d82143aa7e6e7e8a0756776a0e31b4812e2d2cfca63ac395d",
+        "4c5e02bf14535c1774caeb76da5d48d14b38bf39cde6f9956241d5e8f1c9c023",
+        "ad79e20723eb5c4d7760172491e2ee5f6ec3cdb7316471201838576175a3fa12",
+        "af34ea5245981a676d9c200ddd21869ce79979c973e0b560a3a206442e5d7a30",
+        "bf20227dccdf14815d7327afcd28d6d0c6c9e206f199eb73ea7688e95ecb95f8",
+        "e0441469e0c8c6ca29255122c8f9b649dabee7b69f88e3d97888f750d8727e09"
+      ]
+    },
+    "selection": {
+      "accepted_ranges": "all-or-contiguous",
+      "overlap_resolution": "smallest-covering-range-then-manifest-order",
+      "page_numbering": "physical-1-based",
+      "schema": "pdf2md.training-cache-selection.v1"
+    },
+    "source_sha256": {
+      "adi-ad7606b-datasheet": "c4b8a6bdf46cd28eefa417a22902b85bbe3f82f9e4a439c82881d700c53a8288",
+      "adi-ad7792-7793-datasheet-zh": "dbf157a64d1a902f29a903de536175fed6c4d40a8b828324fb9e08cb5e9f6de6",
+      "adi-ad8628-30-datasheet-zh": "edece70a83ae3e67c367d3425e6a4ec4936e00087272cc003d02b0227bc55057",
+      "adi-adxl345-datasheet": "87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6",
+      "adi-adxl354-355-datasheet": "d54235c1db7ffea74ee9c4a361294204eb8927c20657484aefb935eafb29e56c",
+      "arxiv-attention-1706-03762": "bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+      "arxiv-yin-2024-heisenberg-metrology-v2": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+      "espressif-esp32-trm-zh": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+      "harvard-wang-2025-dual-species-arrays-thesis": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+      "lmu-tao-2025-strontium-tweezer-thesis": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+      "mee-contaminated-site-remediation-guide-2014-zh": "dace41a81f18946fc6e1ff8b330253dc9ad78f1f5f5b075685df9d7f24a044a7",
+      "nist-ai-rmf-100-1": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+      "raspberrypi-rp2040-datasheet": "be56fbb75ba0ae9e26558a73c93ac3e75c2ad4e6878d3b6703de2a76d886ea8c",
+      "scipost-fazio-2025-many-body-open-quantum-systems": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+      "scipost-girvin-2023-quantum-error-correction": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+      "scipost-mbeng-2024-quantum-ising-chain": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+      "ti-ads1115-datasheet": "5fe00cf9509daba7ca311cd0a461debc563dd57598c5de3bf9c31903dc2238da",
+      "ucl-palmer-2020-rydberg-interferometry-thesis": "54f031d492a6672deb7c9e642c39a83635d0807df2326e904cb63b2c20420a70",
+      "wch-ch32v307-eval-zh": "aff702357b03ee78a774a2571829908885b4a3c7d7b8b685d8e08e2dcc40af20"
+    }
+  },
+  "navigation_presence": {
+    "annotation_summary": {
+      "absent": 18,
+      "fully_annotated_pages": 9,
+      "present": 9,
+      "verified_documents": 7,
+      "verified_labels": 27,
+      "verified_pages": 9
+    },
+    "confusion": {
+      "contents": {
+        "absent": {
+          "__abstain__": 1,
+          "absent": 4,
+          "present": 0
+        },
+        "present": {
+          "__abstain__": 0,
+          "absent": 0,
+          "present": 4
+        }
+      },
+      "list_of_figures": {
+        "absent": {
+          "__abstain__": 1,
+          "absent": 5,
+          "present": 0
+        },
+        "present": {
+          "__abstain__": 0,
+          "absent": 0,
+          "present": 3
+        }
+      },
+      "list_of_tables": {
+        "absent": {
+          "__abstain__": 0,
+          "absent": 7,
+          "present": 0
+        },
+        "present": {
+          "__abstain__": 1,
+          "absent": 0,
+          "present": 1
+        }
+      }
+    },
+    "documents": {
+      "arxiv-yin-2024-heisenberg-metrology-v2": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 1,
+          "exact_accuracy": 1.0,
+          "fully_annotated_pages": 1,
+          "non_abstained_pages": 1
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [],
+            "value": null
+          },
+          "f1": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "precision": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": null,
+            "negative_abstain": 0,
+            "negative_recall": null,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 0,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 0,
+            "support_absent_documents": 0,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 1,
+            "true_negative": 0,
+            "true_positive": 1
+          },
+          "list_of_figures": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          },
+          "list_of_tables": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "contents",
+            "page": 1,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_figures",
+            "page": 1,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 1,
+            "predicted": "absent"
+          }
+        ],
+        "source_sha256": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+        "summary": {
+          "abstained": 0,
+          "accepted": 3,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 3,
+          "coverage": 1.0,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 1.0,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 2,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 2,
+          "support_absent_documents": 1,
+          "support_present": 1,
+          "support_present_documents": 1,
+          "total_samples": 3,
+          "true_negative": 2,
+          "true_positive": 1
+        }
+      },
+      "espressif-esp32-trm-zh": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 1,
+          "exact_accuracy": 1.0,
+          "fully_annotated_pages": 1,
+          "non_abstained_pages": 1
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [],
+            "value": null
+          },
+          "f1": {
+            "eligible_kinds": [
+              "list_of_figures"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "contents",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "list_of_figures"
+            ],
+            "value": 1.0
+          },
+          "precision": {
+            "eligible_kinds": [
+              "list_of_figures"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          },
+          "list_of_figures": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": null,
+            "negative_abstain": 0,
+            "negative_recall": null,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 0,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 0,
+            "support_absent_documents": 0,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 1,
+            "true_negative": 0,
+            "true_positive": 1
+          },
+          "list_of_tables": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "contents",
+            "page": 27,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "list_of_figures",
+            "page": 27,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 27,
+            "predicted": "absent"
+          }
+        ],
+        "source_sha256": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+        "summary": {
+          "abstained": 0,
+          "accepted": 3,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 3,
+          "coverage": 1.0,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 1.0,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 2,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 2,
+          "support_absent_documents": 1,
+          "support_present": 1,
+          "support_present_documents": 1,
+          "total_samples": 3,
+          "true_negative": 2,
+          "true_positive": 1
+        }
+      },
+      "harvard-wang-2025-dual-species-arrays-thesis": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 1,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 1,
+              "absent": 0,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 1,
+              "absent": 0,
+              "present": 0
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 1,
+          "exact_accuracy": 0.5,
+          "fully_annotated_pages": 2,
+          "non_abstained_pages": 1
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 0.5
+          },
+          "f1": {
+            "eligible_kinds": [
+              "list_of_figures"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "contents",
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 0.5
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 0.5
+          },
+          "precision": {
+            "eligible_kinds": [
+              "list_of_figures"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 1,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 0.5,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 1,
+            "negative_recall": 0.5,
+            "overall_accuracy": 0.5,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 2,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 2,
+            "true_negative": 1,
+            "true_positive": 0
+          },
+          "list_of_figures": {
+            "abstained": 1,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": 0.5,
+            "class_complete": true,
+            "correct": 1,
+            "coverage": 0.5,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 1,
+            "negative_recall": 0.0,
+            "overall_accuracy": 0.5,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 0,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 2,
+            "true_negative": 0,
+            "true_positive": 1
+          },
+          "list_of_tables": {
+            "abstained": 1,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": 0.5,
+            "class_complete": true,
+            "correct": 1,
+            "coverage": 0.5,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": 1.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 0.5,
+            "positive_abstain": 1,
+            "positive_recall": 0.0,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 2,
+            "true_negative": 1,
+            "true_positive": 0
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "contents",
+            "page": 11,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "list_of_figures",
+            "page": 11,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 11,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": "model_unavailable",
+            "accepted": false,
+            "decision_source": "abstain",
+            "gold": "absent",
+            "kind": "contents",
+            "page": 13,
+            "predicted": "__abstain__"
+          },
+          {
+            "abstain_reason": "model_unavailable",
+            "accepted": false,
+            "decision_source": "abstain",
+            "gold": "absent",
+            "kind": "list_of_figures",
+            "page": 13,
+            "predicted": "__abstain__"
+          },
+          {
+            "abstain_reason": "model_unavailable",
+            "accepted": false,
+            "decision_source": "abstain",
+            "gold": "present",
+            "kind": "list_of_tables",
+            "page": 13,
+            "predicted": "__abstain__"
+          }
+        ],
+        "source_sha256": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+        "summary": {
+          "abstained": 3,
+          "accepted": 3,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 3,
+          "coverage": 0.5,
+          "f1": 0.666667,
+          "false_negative": 0,
+          "false_negative_rate": 0.5,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 2,
+          "negative_recall": 0.5,
+          "overall_accuracy": 0.5,
+          "positive_abstain": 1,
+          "positive_recall": 0.5,
+          "precision": 1.0,
+          "predicted_absent": 2,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 4,
+          "support_absent_documents": 1,
+          "support_present": 2,
+          "support_present_documents": 1,
+          "total_samples": 6,
+          "true_negative": 2,
+          "true_positive": 1
+        }
+      },
+      "lmu-tao-2025-strontium-tweezer-thesis": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 2,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 2,
+          "exact_accuracy": 1.0,
+          "fully_annotated_pages": 2,
+          "non_abstained_pages": 2
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "f1": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "contents",
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "precision": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 0,
+            "accepted": 2,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 2,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 2,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 2,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 2,
+            "true_negative": 2,
+            "true_positive": 0
+          },
+          "list_of_figures": {
+            "abstained": 0,
+            "accepted": 2,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "class_complete": true,
+            "correct": 2,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 1,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 2,
+            "true_negative": 1,
+            "true_positive": 1
+          },
+          "list_of_tables": {
+            "abstained": 0,
+            "accepted": 2,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": 1.0,
+            "class_complete": true,
+            "correct": 2,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 1,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 2,
+            "true_negative": 1,
+            "true_positive": 1
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "contents",
+            "page": 8,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "list_of_figures",
+            "page": 8,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 8,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "contents",
+            "page": 9,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_figures",
+            "page": 9,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "list_of_tables",
+            "page": 9,
+            "predicted": "present"
+          }
+        ],
+        "source_sha256": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+        "summary": {
+          "abstained": 0,
+          "accepted": 6,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 6,
+          "coverage": 1.0,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 1.0,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 4,
+          "predicted_present": 2,
+          "release_gate_eligible": false,
+          "support_absent": 4,
+          "support_absent_documents": 1,
+          "support_present": 2,
+          "support_present_documents": 1,
+          "total_samples": 6,
+          "true_negative": 4,
+          "true_positive": 2
+        }
+      },
+      "scipost-fazio-2025-many-body-open-quantum-systems": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 1,
+          "exact_accuracy": 1.0,
+          "fully_annotated_pages": 1,
+          "non_abstained_pages": 1
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [],
+            "value": null
+          },
+          "f1": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "precision": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": null,
+            "negative_abstain": 0,
+            "negative_recall": null,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 0,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 0,
+            "support_absent_documents": 0,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 1,
+            "true_negative": 0,
+            "true_positive": 1
+          },
+          "list_of_figures": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          },
+          "list_of_tables": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "contents",
+            "page": 1,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_figures",
+            "page": 1,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 1,
+            "predicted": "absent"
+          }
+        ],
+        "source_sha256": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+        "summary": {
+          "abstained": 0,
+          "accepted": 3,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 3,
+          "coverage": 1.0,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 1.0,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 2,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 2,
+          "support_absent_documents": 1,
+          "support_present": 1,
+          "support_present_documents": 1,
+          "total_samples": 3,
+          "true_negative": 2,
+          "true_positive": 1
+        }
+      },
+      "scipost-girvin-2023-quantum-error-correction": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 1,
+          "exact_accuracy": 1.0,
+          "fully_annotated_pages": 1,
+          "non_abstained_pages": 1
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [],
+            "value": null
+          },
+          "f1": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "precision": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": null,
+            "negative_abstain": 0,
+            "negative_recall": null,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 0,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 0,
+            "support_absent_documents": 0,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 1,
+            "true_negative": 0,
+            "true_positive": 1
+          },
+          "list_of_figures": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          },
+          "list_of_tables": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "contents",
+            "page": 2,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_figures",
+            "page": 2,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 2,
+            "predicted": "absent"
+          }
+        ],
+        "source_sha256": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+        "summary": {
+          "abstained": 0,
+          "accepted": 3,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 3,
+          "coverage": 1.0,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 1.0,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 2,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 2,
+          "support_absent_documents": 1,
+          "support_present": 1,
+          "support_present_documents": 1,
+          "total_samples": 3,
+          "true_negative": 2,
+          "true_positive": 1
+        }
+      },
+      "scipost-mbeng-2024-quantum-ising-chain": {
+        "confusion": {
+          "contents": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 1
+            }
+          },
+          "list_of_figures": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          },
+          "list_of_tables": {
+            "absent": {
+              "__abstain__": 0,
+              "absent": 1,
+              "present": 0
+            },
+            "present": {
+              "__abstain__": 0,
+              "absent": 0,
+              "present": 0
+            }
+          }
+        },
+        "exact_set": {
+          "exact": 1,
+          "exact_accuracy": 1.0,
+          "fully_annotated_pages": 1,
+          "non_abstained_pages": 1
+        },
+        "macro": {
+          "balanced_accuracy": {
+            "eligible_kinds": [],
+            "value": null
+          },
+          "f1": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "negative_recall": {
+            "eligible_kinds": [
+              "list_of_figures",
+              "list_of_tables"
+            ],
+            "value": 1.0
+          },
+          "positive_recall": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          },
+          "precision": {
+            "eligible_kinds": [
+              "contents"
+            ],
+            "value": 1.0
+          }
+        },
+        "per_kind": {
+          "contents": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": null,
+            "negative_abstain": 0,
+            "negative_recall": null,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 0,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 0,
+            "support_absent_documents": 0,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 1,
+            "true_negative": 0,
+            "true_positive": 1
+          },
+          "list_of_figures": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          },
+          "list_of_tables": {
+            "abstained": 0,
+            "accepted": 1,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": false,
+            "correct": 1,
+            "coverage": 1.0,
+            "f1": null,
+            "false_negative": 0,
+            "false_negative_rate": null,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": null,
+            "precision": null,
+            "predicted_absent": 1,
+            "predicted_present": 0,
+            "release_gate_eligible": false,
+            "support_absent": 1,
+            "support_absent_documents": 1,
+            "support_present": 0,
+            "support_present_documents": 0,
+            "total_samples": 1,
+            "true_negative": 1,
+            "true_positive": 0
+          }
+        },
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "present",
+            "kind": "contents",
+            "page": 1,
+            "predicted": "present"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_figures",
+            "page": 1,
+            "predicted": "absent"
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "absent",
+            "kind": "list_of_tables",
+            "page": 1,
+            "predicted": "absent"
+          }
+        ],
+        "source_sha256": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+        "summary": {
+          "abstained": 0,
+          "accepted": 3,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": null,
+          "class_complete": true,
+          "class_support_complete": false,
+          "correct": 3,
+          "coverage": 1.0,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 1.0,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 2,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 2,
+          "support_absent_documents": 1,
+          "support_present": 1,
+          "support_present_documents": 1,
+          "total_samples": 3,
+          "true_negative": 2,
+          "true_positive": 1
+        }
+      }
+    },
+    "exact_set": {
+      "exact": 8,
+      "exact_accuracy": 0.888889,
+      "fully_annotated_pages": 9,
+      "non_abstained_pages": 8
+    },
+    "gate_requirements": {
+      "minimum_absent_documents_per_kind": 5,
+      "minimum_absent_per_kind": 20,
+      "minimum_present_documents_per_kind": 5,
+      "minimum_present_per_kind": 20
+    },
+    "macro": {
+      "balanced_accuracy": {
+        "eligible_kinds": [
+          "contents",
+          "list_of_figures",
+          "list_of_tables"
+        ],
+        "value": 0.855556
+      },
+      "f1": {
+        "eligible_kinds": [
+          "contents",
+          "list_of_figures",
+          "list_of_tables"
+        ],
+        "value": 0.888889
+      },
+      "negative_recall": {
+        "eligible_kinds": [
+          "contents",
+          "list_of_figures",
+          "list_of_tables"
+        ],
+        "value": 0.877778
+      },
+      "positive_recall": {
+        "eligible_kinds": [
+          "contents",
+          "list_of_figures",
+          "list_of_tables"
+        ],
+        "value": 0.833333
+      },
+      "precision": {
+        "eligible_kinds": [
+          "contents",
+          "list_of_figures",
+          "list_of_tables"
+        ],
+        "value": 1.0
+      }
+    },
+    "per_kind": {
+      "contents": {
+        "abstained": 1,
+        "accepted": 8,
+        "accepted_accuracy": 1.0,
+        "balanced_accuracy": 0.9,
+        "class_complete": true,
+        "correct": 8,
+        "coverage": 0.888889,
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_negative_rate": 0.0,
+        "false_positive": 0,
+        "false_positive_rate": 0.0,
+        "negative_abstain": 1,
+        "negative_recall": 0.8,
+        "overall_accuracy": 0.888889,
+        "positive_abstain": 0,
+        "positive_recall": 1.0,
+        "precision": 1.0,
+        "predicted_absent": 4,
+        "predicted_present": 4,
+        "release_gate_eligible": false,
+        "support_absent": 5,
+        "support_absent_documents": 3,
+        "support_present": 4,
+        "support_present_documents": 4,
+        "total_samples": 9,
+        "true_negative": 4,
+        "true_positive": 4
+      },
+      "list_of_figures": {
+        "abstained": 1,
+        "accepted": 8,
+        "accepted_accuracy": 1.0,
+        "balanced_accuracy": 0.916667,
+        "class_complete": true,
+        "correct": 8,
+        "coverage": 0.888889,
+        "f1": 1.0,
+        "false_negative": 0,
+        "false_negative_rate": 0.0,
+        "false_positive": 0,
+        "false_positive_rate": 0.0,
+        "negative_abstain": 1,
+        "negative_recall": 0.833333,
+        "overall_accuracy": 0.888889,
+        "positive_abstain": 0,
+        "positive_recall": 1.0,
+        "precision": 1.0,
+        "predicted_absent": 5,
+        "predicted_present": 3,
+        "release_gate_eligible": false,
+        "support_absent": 6,
+        "support_absent_documents": 6,
+        "support_present": 3,
+        "support_present_documents": 3,
+        "total_samples": 9,
+        "true_negative": 5,
+        "true_positive": 3
+      },
+      "list_of_tables": {
+        "abstained": 1,
+        "accepted": 8,
+        "accepted_accuracy": 1.0,
+        "balanced_accuracy": 0.75,
+        "class_complete": true,
+        "correct": 8,
+        "coverage": 0.888889,
+        "f1": 0.666667,
+        "false_negative": 0,
+        "false_negative_rate": 0.5,
+        "false_positive": 0,
+        "false_positive_rate": 0.0,
+        "negative_abstain": 0,
+        "negative_recall": 1.0,
+        "overall_accuracy": 0.888889,
+        "positive_abstain": 1,
+        "positive_recall": 0.5,
+        "precision": 1.0,
+        "predicted_absent": 7,
+        "predicted_present": 1,
+        "release_gate_eligible": false,
+        "support_absent": 7,
+        "support_absent_documents": 7,
+        "support_present": 2,
+        "support_present_documents": 2,
+        "total_samples": 9,
+        "true_negative": 7,
+        "true_positive": 1
+      }
+    },
+    "policy": {
+      "abstain_is_correct": false,
+      "labels": "human-verified-explicit-presence-only",
+      "page_numbering": "physical-1-based",
+      "prediction": "production-v1-projection-after-primary-acceptance",
+      "raw_navigation_candidates": "ignored",
+      "unlabelled_page_kind_pairs": "unknown-not-negative"
+    },
+    "schema": "pdf2md.front-navigation-evaluation.v1",
+    "status": "evaluated",
+    "summary": {
+      "abstained": 3,
+      "accepted": 24,
+      "accepted_accuracy": 1.0,
+      "balanced_accuracy": 0.888889,
+      "class_complete": true,
+      "class_support_complete": true,
+      "correct": 24,
+      "coverage": 0.888889,
+      "f1": 0.941177,
+      "false_negative": 0,
+      "false_negative_rate": 0.111111,
+      "false_positive": 0,
+      "false_positive_rate": 0.0,
+      "negative_abstain": 2,
+      "negative_recall": 0.888889,
+      "overall_accuracy": 0.888889,
+      "positive_abstain": 1,
+      "positive_recall": 0.888889,
+      "precision": 1.0,
+      "predicted_absent": 16,
+      "predicted_present": 8,
+      "release_gate_eligible": false,
+      "support_absent": 18,
+      "support_absent_documents": 7,
+      "support_present": 9,
+      "support_present_documents": 7,
+      "total_samples": 27,
+      "true_negative": 16,
+      "true_positive": 8
+    }
+  },
+  "per_class": {
+    "abbreviations": {
+      "f1": null,
+      "precision": null,
+      "predicted": 0,
+      "recall": null,
+      "support": 0,
+      "true_positive": 0
+    },
+    "abstract": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "predicted": 4,
+      "recall": 1.0,
+      "support": 4,
+      "true_positive": 4
+    },
+    "acknowledgements": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "support": 1,
+      "true_positive": 1
+    },
+    "body_start": {
+      "f1": 0.666667,
+      "precision": 1.0,
+      "predicted": 5,
+      "recall": 0.5,
+      "support": 10,
+      "true_positive": 5
+    },
+    "contents": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "predicted": 14,
+      "recall": 1.0,
+      "support": 14,
+      "true_positive": 14
+    },
+    "cover": {
+      "f1": null,
+      "precision": null,
+      "predicted": 0,
+      "recall": 0.0,
+      "support": 2,
+      "true_positive": 0
+    },
+    "legal": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 1.0,
+      "support": 1,
+      "true_positive": 1
+    },
+    "list_of_figures": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "predicted": 3,
+      "recall": 1.0,
+      "support": 3,
+      "true_positive": 3
+    },
+    "list_of_tables": {
+      "f1": 0.666667,
+      "precision": 1.0,
+      "predicted": 1,
+      "recall": 0.5,
+      "support": 2,
+      "true_positive": 1
+    },
+    "nomenclature": {
+      "f1": null,
+      "precision": null,
+      "predicted": 0,
+      "recall": null,
+      "support": 0,
+      "true_positive": 0
+    },
+    "other_front": {
+      "f1": null,
+      "precision": null,
+      "predicted": 0,
+      "recall": null,
+      "support": 0,
+      "true_positive": 0
+    },
+    "preface": {
+      "f1": null,
+      "precision": null,
+      "predicted": 0,
+      "recall": null,
+      "support": 0,
+      "true_positive": 0
+    },
+    "revision_history": {
+      "f1": null,
+      "precision": null,
+      "predicted": 0,
+      "recall": null,
+      "support": 0,
+      "true_positive": 0
+    }
+  },
+  "production_context": {
+    "body_start": {
+      "comparable_documents": 10,
+      "exact": 10,
+      "exact_accuracy": 1.0,
+      "gold_documents": 10,
+      "mae": 0.0,
+      "missing_predictions": 0,
+      "predicted_documents": 10
+    },
+    "classifier_fingerprint": "d2661036b2ed350ca40b07eb5b824ee5a29121f7b25c69128690e03264814e47",
+    "comparability": {
+      "coverage": 0.945946,
+      "isolated_fallback_documents": 2,
+      "reasons": {
+        "only_single_page_cached_selection": 2
+      },
+      "scored_documents": 17,
+      "scored_samples": 35,
+      "unavailable_documents": 0,
+      "unscored_documents": 2,
+      "unscored_samples": 2,
+      "verified_documents": 19,
+      "verified_samples": 37
+    },
+    "confusion": {
+      "abstract": {
+        "abstract": 4
+      },
+      "acknowledgements": {
+        "acknowledgements": 1
+      },
+      "body_start": {
+        "body_start": 10
+      },
+      "contents": {
+        "contents": 13
+      },
+      "cover": {
+        "__abstain__": 2
+      },
+      "legal": {
+        "legal": 1
+      },
+      "list_of_figures": {
+        "list_of_figures": 2
+      },
+      "list_of_tables": {
+        "__abstain__": 1,
+        "list_of_tables": 1
+      }
+    },
+    "documents": {
+      "adi-ad7606b-datasheet": {
+        "abstained": 0,
+        "accepted": 2,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2,
+          4
+        ],
+        "correct": 2,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "a7ed486474873f95c40d111ee43579e413e62859b16e4764a5a4c71fc6c84f00",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 4,
+            "page_content_sha256": "ecda742d0fb895a4331c2e4f551fed60401c36dd2c7058af52df22da110181db",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 3
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "8a6b4f2c9a6a4178e73b5a2e10f5a0886e79b50ef99251a70ab97e7245fb11c2",
+          "context_end_page": 4,
+          "context_page_count": 4,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "cda425e98f5fcbf10c580c093446134b62247a7d2e2277376b7ea5253ec651c1",
+          "pages": "1-6",
+          "selection_end_page": 6,
+          "selection_page_count": 6,
+          "selection_start_page": 1
+        },
+        "source_sha256": "c4b8a6bdf46cd28eefa417a22902b85bbe3f82f9e4a439c82881d700c53a8288",
+        "status": "scored",
+        "total_samples": 2
+      },
+      "adi-ad7792-7793-datasheet-zh": {
+        "abstained": 0,
+        "accepted": 2,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2,
+          3
+        ],
+        "correct": 2,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "7c59c7456650a800c83c5fd55c3cfdd3a6f8f9a87e6bbb2fb9a9ecd90f6db456",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 3,
+            "page_content_sha256": "d46f7b0fefc9749e5bbe0579592df26313a045912786f60a3bcb148543dc14aa",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 2
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "5845889eadedf9ba8865568204c0aa10ebc7538d57ad3919f03fb7614192d80f",
+          "context_end_page": 3,
+          "context_page_count": 3,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "c2ab8d3078f993ac17a2d20f71fc59c5aa628d1915a70d8be2f319bc47cba747",
+          "pages": "1-5",
+          "selection_end_page": 5,
+          "selection_page_count": 5,
+          "selection_start_page": 1
+        },
+        "source_sha256": "dbf157a64d1a902f29a903de536175fed6c4d40a8b828324fb9e08cb5e9f6de6",
+        "status": "scored",
+        "total_samples": 2
+      },
+      "adi-ad8628-30-datasheet-zh": {
+        "abstained": 0,
+        "accepted": 2,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2,
+          3
+        ],
+        "correct": 2,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "408f3d1d85bbefc48bef532d0c9b808afcbd6e19cc2c55d418a375ae500fe935",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 3,
+            "page_content_sha256": "b83ab90f283d58aece759e65c034a9fd2c060a74ee586d800b0e54eeada222a0",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 2
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "29cac47e14cb2ac700dcfc23e586a9ca242c362aa9671140c705c6126a4d2657",
+          "context_end_page": 3,
+          "context_page_count": 3,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "dbd5e1ac7c93a2f8cd5baa8dcd179d81eba49c11919895acdd1135f69a07cc27",
+          "pages": "1-5",
+          "selection_end_page": 5,
+          "selection_page_count": 5,
+          "selection_start_page": 1
+        },
+        "source_sha256": "edece70a83ae3e67c367d3425e6a4ec4936e00087272cc003d02b0227bc55057",
+        "status": "scored",
+        "total_samples": 2
+      },
+      "adi-adxl345-datasheet": {
+        "abstained": 0,
+        "accepted": 2,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2,
+          3
+        ],
+        "correct": 2,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "3e28e69174579f699f3ee42a9046881115d68563e6bacfa9a4852874bb6ae456",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 3,
+            "page_content_sha256": "d8ca0cab79cfe3e2fd77bb50996d80125fdb32b92a4e50207e5df85a75579169",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 2
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "46cbf831605d6bdb894a2c69cd811f5924993e5a6a421d25140356fb67879dd4",
+          "context_end_page": 3,
+          "context_page_count": 3,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "8272a52396fc6aad38cf6074b39cdb4df7fd4f5454d4f02351dca6318dd70ff7",
+          "pages": "1-6",
+          "selection_end_page": 6,
+          "selection_page_count": 6,
+          "selection_start_page": 1
+        },
+        "source_sha256": "87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6",
+        "status": "scored",
+        "total_samples": 2
+      },
+      "adi-adxl354-355-datasheet": {
+        "abstained": 0,
+        "accepted": 2,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2,
+          4
+        ],
+        "correct": 2,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "3d8f53f6b743adf8877fa28fd81aa7e54427989f186c31ef0897ecdba7fefded",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 4,
+            "page_content_sha256": "213584a38c7f028bc7e21e753f3c6fa5407ba24a986c8d0723b480752fdb0f44",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 3
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "dbca401105710fe65f88c4d8ce455bfedbfcff7d14e9501c4431e32f008f094c",
+          "context_end_page": 4,
+          "context_page_count": 4,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "112f44954eb722c8b5ba62b22f0ff84020ffb076628fbe05f5a4a0c1de43b965",
+          "pages": "1-6",
+          "selection_end_page": 6,
+          "selection_page_count": 6,
+          "selection_start_page": 1
+        },
+        "source_sha256": "d54235c1db7ffea74ee9c4a361294204eb8927c20657484aefb935eafb29e56c",
+        "status": "scored",
+        "total_samples": 2
+      },
+      "arxiv-attention-1706-03762": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 2,
+            "page_content_sha256": "aa9f18bb89aa0ba758de27518a6ab03c9ac8ce0dc849e00c76861f4513524f6a",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 1
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "1c4a3bde061e1d5b999312d62b8a088962f03d18fc746f1e5b2952fac35a6438",
+          "context_end_page": 2,
+          "context_page_count": 2,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "95bb52414d416ace76c11580a70816ab005d212957d4c08ea20052a1ccf60c58",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "arxiv-yin-2024-heisenberg-metrology-v2": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 1,
+            "page_content_sha256": "9c8442d5afe5ee68b67bb61ba0c58900d7afd5d433c00edfa85e2912cc5c79f4",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 0
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "0cf62248aabba372403c52e44cbe62a4b87762b4552c07d46eaa3973e15fcd05",
+          "context_end_page": 1,
+          "context_page_count": 1,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "4c5e02bf14535c1774caeb76da5d48d14b38bf39cde6f9956241d5e8f1c9c023",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "espressif-esp32-trm-zh": {
+        "annotated_pages": [
+          27
+        ],
+        "reason": "only_single_page_cached_selection",
+        "samples": [
+          {
+            "fallback": "isolated",
+            "gold": "list_of_figures",
+            "page": 27,
+            "page_content_sha256": "72e015d630eec8c03f822342a6c883bbbad38afcb8eb1f5b8a58d90ae92c548d",
+            "reason": "only_single_page_cached_selection",
+            "scored": false,
+            "selection_offset": 0
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "2e55cf07380af20f9865968e86a98ce9c7072faddce467121aaf3a10bc2b7934",
+          "context_end_page": 27,
+          "context_page_count": 1,
+          "context_start_page": 27,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "bf20227dccdf14815d7327afcd28d6d0c6c9e206f199eb73ea7688e95ecb95f8",
+          "pages": "27",
+          "selection_end_page": 27,
+          "selection_page_count": 1,
+          "selection_start_page": 27
+        },
+        "source_sha256": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+        "status": "isolated_fallback"
+      },
+      "harvard-wang-2025-dual-species-arrays-thesis": {
+        "abstained": 1,
+        "accepted": 4,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1,
+          7,
+          11,
+          13,
+          20
+        ],
+        "correct": 4,
+        "coverage": 0.8,
+        "overall_accuracy": 0.8,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "legal",
+            "page": 1,
+            "page_content_sha256": "fca484f1c4e1394ffdcf28d520dabfc532ef321918966e57f7f3aa1319188d7e",
+            "predicted": "legal",
+            "scored": true,
+            "selection_offset": 0
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 7,
+            "page_content_sha256": "13ffb868821e6d86e6c46c2eba3a41a71f922a2eb876e7c95a5e1ed157adcd9e",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 6
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "list_of_figures",
+            "page": 11,
+            "page_content_sha256": "f56c3814daf5899cf870767c7fa0c0c196aae21750c43b7aeda87b31972eddbf",
+            "predicted": "list_of_figures",
+            "scored": true,
+            "selection_offset": 10
+          },
+          {
+            "abstain_reason": "model_unavailable",
+            "accepted": false,
+            "decision_source": "abstain",
+            "gold": "list_of_tables",
+            "page": 13,
+            "page_content_sha256": "f2278b15bfa377d6aa8c4b8a7ef3bda06b46bcaa470266ff4171c846cc7945d3",
+            "predicted": "__abstain__",
+            "scored": true,
+            "selection_offset": 12
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 20,
+            "page_content_sha256": "3df394eca990c22ffc98388dc08e1b31350091dd27aa34d1fb49c4a22740e578",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 19
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "54051e268f35ce6350418d8d2b41a196fb72ff483999f2ad2a897ad167dfd420",
+          "context_end_page": 20,
+          "context_page_count": 20,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "e0441469e0c8c6ca29255122c8f9b649dabee7b69f88e3d97888f750d8727e09",
+          "pages": "1-20",
+          "selection_end_page": 20,
+          "selection_page_count": 20,
+          "selection_start_page": 1
+        },
+        "source_sha256": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+        "status": "scored",
+        "total_samples": 5
+      },
+      "lmu-tao-2025-strontium-tweezer-thesis": {
+        "abstained": 1,
+        "accepted": 5,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1,
+          5,
+          8,
+          9,
+          13,
+          15
+        ],
+        "correct": 5,
+        "coverage": 0.833333,
+        "overall_accuracy": 0.833333,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": "model_unavailable",
+            "accepted": false,
+            "decision_source": "abstain",
+            "gold": "cover",
+            "page": 1,
+            "page_content_sha256": "0f55ba2562f63914c326710055dffaff6f63d475c394fc08851d3ecd57c59a7f",
+            "predicted": "__abstain__",
+            "scored": true,
+            "selection_offset": 0
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 5,
+            "page_content_sha256": "e82e3f29f83db9cc6539be304dd021382b0398899600ed83057010b585f8c5e8",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 4
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "list_of_figures",
+            "page": 8,
+            "page_content_sha256": "57a3bf454ed710a167a68c2ff3f36d15f57a08b8505a87fb8a8a041ebebc5893",
+            "predicted": "list_of_figures",
+            "scored": true,
+            "selection_offset": 7
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "list_of_tables",
+            "page": 9,
+            "page_content_sha256": "db31c97c6b68c19d503234df8cb45de8894080443eef7fff1d9e6936171e949e",
+            "predicted": "list_of_tables",
+            "scored": true,
+            "selection_offset": 8
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "abstract",
+            "page": 13,
+            "page_content_sha256": "8504b409b71a85dc971e1415431f9e4258925230176897eb5c4f44ad3b251969",
+            "predicted": "abstract",
+            "scored": true,
+            "selection_offset": 12
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 15,
+            "page_content_sha256": "530f70eec4ef47fc5931f842538da20fd7e363cdc118769af3b3ebb3e5d67613",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 14
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "f0e53be46ec01a0540e751fb03e5769a1352e001ff03aabd562875e0328c9e43",
+          "context_end_page": 15,
+          "context_page_count": 15,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "13879f43614de969c483fcedf433bb49ec522d284f49b298cb5332f09a176aa5",
+          "pages": "1-20",
+          "selection_end_page": 20,
+          "selection_page_count": 20,
+          "selection_start_page": 1
+        },
+        "source_sha256": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+        "status": "scored",
+        "total_samples": 6
+      },
+      "mee-contaminated-site-remediation-guide-2014-zh": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          3
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 3,
+            "page_content_sha256": "fb3542b69728ee323f11b569bf5dec37f8aa326d974c604beb77692a3228fdf5",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 2
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "d6110c9ca692196b1d9b3a1e99a2230bddd875104439d94879b730a4b36a9266",
+          "context_end_page": 3,
+          "context_page_count": 3,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "103012b73541f914cc41785ee6352a6482ceefb19a0bc76631e91ed09b5fa42a",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "dace41a81f18946fc6e1ff8b330253dc9ad78f1f5f5b075685df9d7f24a044a7",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "nist-ai-rmf-100-1": {
+        "annotated_pages": [
+          4
+        ],
+        "reason": "only_single_page_cached_selection",
+        "samples": [
+          {
+            "fallback": "isolated",
+            "gold": "contents",
+            "page": 4,
+            "page_content_sha256": "45332310ba7fb09417f9a0566a54e460bd5da19f338f5a7bd4ffec6a35dcd077",
+            "reason": "only_single_page_cached_selection",
+            "scored": false,
+            "selection_offset": 0
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "b4f4f09567a906e0ae28d48e50b57c41abcda167a8a9b40fff664654e77f0be8",
+          "context_end_page": 4,
+          "context_page_count": 1,
+          "context_start_page": 4,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 1,
+          "manifest_sha256": "f10a0c0b793b083d7dcc3766f79750b9865c661e8cafe51ce687f9cdc58fbda3",
+          "pages": "4",
+          "selection_end_page": 4,
+          "selection_page_count": 1,
+          "selection_start_page": 4
+        },
+        "source_sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+        "status": "isolated_fallback"
+      },
+      "raspberrypi-rp2040-datasheet": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          3
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 3,
+            "page_content_sha256": "91d420a3106b43aa631886c8c6479823dcf841a5e14b759cc44f7ffe7dd0cc43",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 2
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "307ffbf935699c5ce994b3206f53791dfa56aaab776b32536328b6e07a1b573d",
+          "context_end_page": 3,
+          "context_page_count": 3,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "52370b4d0abe21294f0ec13a0abacd4f148c32947cd70abd5b81c491b03cb187",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "be56fbb75ba0ae9e26558a73c93ac3e75c2ad4e6878d3b6703de2a76d886ea8c",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "scipost-fazio-2025-many-body-open-quantum-systems": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "abstract",
+            "page": 1,
+            "page_content_sha256": "7fc204caaf5783fe96e67ca04d08e084fc4fd2b9e1974f55b14e3b218b87fb29",
+            "predicted": "abstract",
+            "scored": true,
+            "selection_offset": 0
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "9710a704e37e56196cd3cc7a1c11e0cb5fee964e41ae1b82661aad49e9c6a43a",
+          "context_end_page": 1,
+          "context_page_count": 1,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "2f40371e5f18f60d82143aa7e6e7e8a0756776a0e31b4812e2d2cfca63ac395d",
+          "pages": "1-4",
+          "selection_end_page": 4,
+          "selection_page_count": 4,
+          "selection_start_page": 1
+        },
+        "source_sha256": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "scipost-girvin-2023-quantum-error-correction": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "06760ed66a5ac63d6edc864b1fbd057ad16db3116233f51a8f4013ae24425e06",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "77b541e2d65b4de2e0fb42911d2f3d8c6be64b4292e8e8611a55824267e43185",
+          "context_end_page": 2,
+          "context_page_count": 2,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "ad79e20723eb5c4d7760172491e2ee5f6ec3cdb7316471201838576175a3fa12",
+          "pages": "1-4",
+          "selection_end_page": 4,
+          "selection_page_count": 4,
+          "selection_start_page": 1
+        },
+        "source_sha256": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "scipost-mbeng-2024-quantum-ising-chain": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "abstract",
+            "page": 1,
+            "page_content_sha256": "1559c9cdeaeb84029e0fb6050ed1c786be9649636897a5d5a9dab9c2f93bb462",
+            "predicted": "abstract",
+            "scored": true,
+            "selection_offset": 0
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "95de92172ce70376a95cdd567a9794fcb28f8d862ad3c2e9db35f015e5588163",
+          "context_end_page": 1,
+          "context_page_count": 1,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "af34ea5245981a676d9c200ddd21869ce79979c973e0b560a3a206442e5d7a30",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "ti-ads1115-datasheet": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          2
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 2,
+            "page_content_sha256": "6583e8cf00b4272fdd38c5d9c5be3353bb825bc3a4dc2b6cd063b7ed4ff1a8d7",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 1
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "0a060593a22cb56d79147d5858e043a2ad2f238281553de98aebf585876237f3",
+          "context_end_page": 2,
+          "context_page_count": 2,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "ffe7e8186d80584ac63783c84e0b16014d81ab4fa043e72f05af2b2a00cc3269",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "5fe00cf9509daba7ca311cd0a461debc563dd57598c5de3bf9c31903dc2238da",
+        "status": "scored",
+        "total_samples": 1
+      },
+      "ucl-palmer-2020-rydberg-interferometry-thesis": {
+        "abstained": 1,
+        "accepted": 4,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1,
+          4,
+          8,
+          9,
+          12
+        ],
+        "correct": 4,
+        "coverage": 0.8,
+        "overall_accuracy": 0.8,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": "model_unavailable",
+            "accepted": false,
+            "decision_source": "abstain",
+            "gold": "cover",
+            "page": 1,
+            "page_content_sha256": "24f62a92a64344967c345aefd6f4da9b4f0864cd05a26b55194c15d3a78bf9ee",
+            "predicted": "__abstain__",
+            "scored": true,
+            "selection_offset": 0
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "abstract",
+            "page": 4,
+            "page_content_sha256": "8d6d1dc27dd20fa85f730e0de031b79ca99e760b245dfa808d5eaabea784d73e",
+            "predicted": "abstract",
+            "scored": true,
+            "selection_offset": 3
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "acknowledgements",
+            "page": 8,
+            "page_content_sha256": "3916b64526f9b445b134ac84734268f51c88abc8ddd23650dd9455ef40c02590",
+            "predicted": "acknowledgements",
+            "scored": true,
+            "selection_offset": 7
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "contents",
+            "page": 9,
+            "page_content_sha256": "2e9f4c2eb049b5afdb697153b9b31fd94ffeeb324f0ebb9de82efe51ce396ba6",
+            "predicted": "contents",
+            "scored": true,
+            "selection_offset": 8
+          },
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 12,
+            "page_content_sha256": "4da88124f5e3e0793b8cb35c410f4e240ac424c437c7d3aa4cbbab8b17bbce5d",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 11
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "65f8a28786e0c51f7a09ca8ced291a67a10957614e627e64e9335ab80c10ad04",
+          "context_end_page": 12,
+          "context_page_count": 12,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "en",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "5bb083717e0e0680bc58156d8a3e133ceedda4180c13dba2525eab41a748cac8",
+          "pages": "1-20",
+          "selection_end_page": 20,
+          "selection_page_count": 20,
+          "selection_start_page": 1
+        },
+        "source_sha256": "54f031d492a6672deb7c9e642c39a83635d0807df2326e904cb63b2c20420a70",
+        "status": "scored",
+        "total_samples": 5
+      },
+      "wch-ch32v307-eval-zh": {
+        "abstained": 0,
+        "accepted": 1,
+        "accepted_accuracy": 1.0,
+        "annotated_pages": [
+          1
+        ],
+        "correct": 1,
+        "coverage": 1.0,
+        "overall_accuracy": 1.0,
+        "reason": null,
+        "samples": [
+          {
+            "abstain_reason": null,
+            "accepted": true,
+            "decision_source": "rule",
+            "gold": "body_start",
+            "page": 1,
+            "page_content_sha256": "9b6aa84f260935dd7862d42c21ab2c40a24e9e4e83ab58ff615a90fa680861e9",
+            "predicted": "body_start",
+            "scored": true,
+            "selection_offset": 0
+          }
+        ],
+        "selection": {
+          "content_list_sha256": "e5a2876c72ae601ebf1d22a1dcbd4e5ee72c65584e88939f6cce766b6c674f6f",
+          "context_end_page": 1,
+          "context_page_count": 1,
+          "context_start_page": 1,
+          "conversion": {
+            "language": "ch",
+            "method": "auto",
+            "profile": "balanced",
+            "requested_method": "auto"
+          },
+          "manifest_index": 0,
+          "manifest_sha256": "dbc0670ef6db83325030e7810096b9bfb05655409421c3deabe69ec2b66922fc",
+          "pages": "1-3",
+          "selection_end_page": 3,
+          "selection_page_count": 3,
+          "selection_start_page": 1
+        },
+        "source_sha256": "aff702357b03ee78a774a2571829908885b4a3c7d7b8b685d8e08e2dcc40af20",
+        "status": "scored",
+        "total_samples": 1
+      }
+    },
+    "inputs": {
+      "content_list_sha256": [
+        "0a060593a22cb56d79147d5858e043a2ad2f238281553de98aebf585876237f3",
+        "0cf62248aabba372403c52e44cbe62a4b87762b4552c07d46eaa3973e15fcd05",
+        "1c4a3bde061e1d5b999312d62b8a088962f03d18fc746f1e5b2952fac35a6438",
+        "29cac47e14cb2ac700dcfc23e586a9ca242c362aa9671140c705c6126a4d2657",
+        "2e55cf07380af20f9865968e86a98ce9c7072faddce467121aaf3a10bc2b7934",
+        "307ffbf935699c5ce994b3206f53791dfa56aaab776b32536328b6e07a1b573d",
+        "46cbf831605d6bdb894a2c69cd811f5924993e5a6a421d25140356fb67879dd4",
+        "54051e268f35ce6350418d8d2b41a196fb72ff483999f2ad2a897ad167dfd420",
+        "5845889eadedf9ba8865568204c0aa10ebc7538d57ad3919f03fb7614192d80f",
+        "65f8a28786e0c51f7a09ca8ced291a67a10957614e627e64e9335ab80c10ad04",
+        "77b541e2d65b4de2e0fb42911d2f3d8c6be64b4292e8e8611a55824267e43185",
+        "8a6b4f2c9a6a4178e73b5a2e10f5a0886e79b50ef99251a70ab97e7245fb11c2",
+        "95de92172ce70376a95cdd567a9794fcb28f8d862ad3c2e9db35f015e5588163",
+        "9710a704e37e56196cd3cc7a1c11e0cb5fee964e41ae1b82661aad49e9c6a43a",
+        "b4f4f09567a906e0ae28d48e50b57c41abcda167a8a9b40fff664654e77f0be8",
+        "d6110c9ca692196b1d9b3a1e99a2230bddd875104439d94879b730a4b36a9266",
+        "dbca401105710fe65f88c4d8ce455bfedbfcff7d14e9501c4431e32f008f094c",
+        "e5a2876c72ae601ebf1d22a1dcbd4e5ee72c65584e88939f6cce766b6c674f6f",
+        "f0e53be46ec01a0540e751fb03e5769a1352e001ff03aabd562875e0328c9e43"
+      ],
+      "manifest_sha256": [
+        "103012b73541f914cc41785ee6352a6482ceefb19a0bc76631e91ed09b5fa42a",
+        "112f44954eb722c8b5ba62b22f0ff84020ffb076628fbe05f5a4a0c1de43b965",
+        "13879f43614de969c483fcedf433bb49ec522d284f49b298cb5332f09a176aa5",
+        "2f40371e5f18f60d82143aa7e6e7e8a0756776a0e31b4812e2d2cfca63ac395d",
+        "4c5e02bf14535c1774caeb76da5d48d14b38bf39cde6f9956241d5e8f1c9c023",
+        "52370b4d0abe21294f0ec13a0abacd4f148c32947cd70abd5b81c491b03cb187",
+        "5bb083717e0e0680bc58156d8a3e133ceedda4180c13dba2525eab41a748cac8",
+        "8272a52396fc6aad38cf6074b39cdb4df7fd4f5454d4f02351dca6318dd70ff7",
+        "95bb52414d416ace76c11580a70816ab005d212957d4c08ea20052a1ccf60c58",
+        "ad79e20723eb5c4d7760172491e2ee5f6ec3cdb7316471201838576175a3fa12",
+        "af34ea5245981a676d9c200ddd21869ce79979c973e0b560a3a206442e5d7a30",
+        "bf20227dccdf14815d7327afcd28d6d0c6c9e206f199eb73ea7688e95ecb95f8",
+        "c2ab8d3078f993ac17a2d20f71fc59c5aa628d1915a70d8be2f319bc47cba747",
+        "cda425e98f5fcbf10c580c093446134b62247a7d2e2277376b7ea5253ec651c1",
+        "dbc0670ef6db83325030e7810096b9bfb05655409421c3deabe69ec2b66922fc",
+        "dbd5e1ac7c93a2f8cd5baa8dcd179d81eba49c11919895acdd1135f69a07cc27",
+        "e0441469e0c8c6ca29255122c8f9b649dabee7b69f88e3d97888f750d8727e09",
+        "f10a0c0b793b083d7dcc3766f79750b9865c661e8cafe51ce687f9cdc58fbda3",
+        "ffe7e8186d80584ac63783c84e0b16014d81ab4fa043e72f05af2b2a00cc3269"
+      ],
+      "source_sha256": {
+        "adi-ad7606b-datasheet": "c4b8a6bdf46cd28eefa417a22902b85bbe3f82f9e4a439c82881d700c53a8288",
+        "adi-ad7792-7793-datasheet-zh": "dbf157a64d1a902f29a903de536175fed6c4d40a8b828324fb9e08cb5e9f6de6",
+        "adi-ad8628-30-datasheet-zh": "edece70a83ae3e67c367d3425e6a4ec4936e00087272cc003d02b0227bc55057",
+        "adi-adxl345-datasheet": "87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6",
+        "adi-adxl354-355-datasheet": "d54235c1db7ffea74ee9c4a361294204eb8927c20657484aefb935eafb29e56c",
+        "arxiv-attention-1706-03762": "bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+        "arxiv-yin-2024-heisenberg-metrology-v2": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+        "espressif-esp32-trm-zh": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+        "harvard-wang-2025-dual-species-arrays-thesis": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+        "lmu-tao-2025-strontium-tweezer-thesis": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+        "mee-contaminated-site-remediation-guide-2014-zh": "dace41a81f18946fc6e1ff8b330253dc9ad78f1f5f5b075685df9d7f24a044a7",
+        "nist-ai-rmf-100-1": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+        "raspberrypi-rp2040-datasheet": "be56fbb75ba0ae9e26558a73c93ac3e75c2ad4e6878d3b6703de2a76d886ea8c",
+        "scipost-fazio-2025-many-body-open-quantum-systems": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+        "scipost-girvin-2023-quantum-error-correction": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+        "scipost-mbeng-2024-quantum-ising-chain": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+        "ti-ads1115-datasheet": "5fe00cf9509daba7ca311cd0a461debc563dd57598c5de3bf9c31903dc2238da",
+        "ucl-palmer-2020-rydberg-interferometry-thesis": "54f031d492a6672deb7c9e642c39a83635d0807df2326e904cb63b2c20420a70",
+        "wch-ch32v307-eval-zh": "aff702357b03ee78a774a2571829908885b4a3c7d7b8b685d8e08e2dcc40af20"
+      }
+    },
+    "navigation_presence": {
+      "annotation_summary": {
+        "absent": 18,
+        "fully_annotated_pages": 9,
+        "present": 9,
+        "verified_documents": 7,
+        "verified_labels": 27,
+        "verified_pages": 9
+      },
+      "comparability": {
+        "coverage": 0.888889,
+        "isolated_fallback_documents": 1,
+        "reasons": {
+          "only_single_page_cached_selection": 1
+        },
+        "scored_documents": 6,
+        "scored_pages": 8,
+        "scored_samples": 24,
+        "unavailable_documents": 0,
+        "unscored_documents": 1,
+        "unscored_samples": 3,
+        "verified_documents": 7,
+        "verified_pages": 9,
+        "verified_samples": 27
+      },
+      "confusion": {
+        "contents": {
+          "absent": {
+            "__abstain__": 1,
+            "absent": 3,
+            "present": 0
+          },
+          "present": {
+            "__abstain__": 0,
+            "absent": 0,
+            "present": 4
+          }
+        },
+        "list_of_figures": {
+          "absent": {
+            "__abstain__": 1,
+            "absent": 5,
+            "present": 0
+          },
+          "present": {
+            "__abstain__": 0,
+            "absent": 0,
+            "present": 2
+          }
+        },
+        "list_of_tables": {
+          "absent": {
+            "__abstain__": 0,
+            "absent": 6,
+            "present": 0
+          },
+          "present": {
+            "__abstain__": 1,
+            "absent": 0,
+            "present": 1
+          }
+        }
+      },
+      "documents": {
+        "arxiv-yin-2024-heisenberg-metrology-v2": {
+          "annotated_pages": [
+            1
+          ],
+          "confusion": {
+            "contents": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            },
+            "list_of_figures": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            },
+            "list_of_tables": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            }
+          },
+          "exact_set": {
+            "exact": 1,
+            "exact_accuracy": 1.0,
+            "fully_annotated_pages": 1,
+            "non_abstained_pages": 1
+          },
+          "macro": {
+            "balanced_accuracy": {
+              "eligible_kinds": [],
+              "value": null
+            },
+            "f1": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "negative_recall": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "positive_recall": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "precision": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            }
+          },
+          "per_kind": {
+            "contents": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": null,
+              "negative_abstain": 0,
+              "negative_recall": null,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 0,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 0,
+              "support_absent_documents": 0,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 1,
+              "true_negative": 0,
+              "true_positive": 1
+            },
+            "list_of_figures": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            },
+            "list_of_tables": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            }
+          },
+          "reason": null,
+          "samples": [
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "contents",
+              "page": 1,
+              "page_content_sha256": "9c8442d5afe5ee68b67bb61ba0c58900d7afd5d433c00edfa85e2912cc5c79f4",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 0
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_figures",
+              "page": 1,
+              "page_content_sha256": "9c8442d5afe5ee68b67bb61ba0c58900d7afd5d433c00edfa85e2912cc5c79f4",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 0
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 1,
+              "page_content_sha256": "9c8442d5afe5ee68b67bb61ba0c58900d7afd5d433c00edfa85e2912cc5c79f4",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 0
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "0cf62248aabba372403c52e44cbe62a4b87762b4552c07d46eaa3973e15fcd05",
+            "context_end_page": 1,
+            "context_page_count": 1,
+            "context_start_page": 1,
+            "conversion": {
+              "language": "en",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "4c5e02bf14535c1774caeb76da5d48d14b38bf39cde6f9956241d5e8f1c9c023",
+            "pages": "1-3",
+            "selection_end_page": 3,
+            "selection_page_count": 3,
+            "selection_start_page": 1
+          },
+          "source_sha256": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+          "status": "scored",
+          "summary": {
+            "abstained": 0,
+            "accepted": 3,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": true,
+            "class_support_complete": false,
+            "correct": 3,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 2,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 2,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 3,
+            "true_negative": 2,
+            "true_positive": 1
+          }
+        },
+        "espressif-esp32-trm-zh": {
+          "annotated_pages": [
+            27
+          ],
+          "reason": "only_single_page_cached_selection",
+          "samples": [
+            {
+              "fallback": "isolated",
+              "gold": "absent",
+              "kind": "contents",
+              "page": 27,
+              "page_content_sha256": "72e015d630eec8c03f822342a6c883bbbad38afcb8eb1f5b8a58d90ae92c548d",
+              "reason": "only_single_page_cached_selection",
+              "scored": false,
+              "selection_offset": 0
+            },
+            {
+              "fallback": "isolated",
+              "gold": "present",
+              "kind": "list_of_figures",
+              "page": 27,
+              "page_content_sha256": "72e015d630eec8c03f822342a6c883bbbad38afcb8eb1f5b8a58d90ae92c548d",
+              "reason": "only_single_page_cached_selection",
+              "scored": false,
+              "selection_offset": 0
+            },
+            {
+              "fallback": "isolated",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 27,
+              "page_content_sha256": "72e015d630eec8c03f822342a6c883bbbad38afcb8eb1f5b8a58d90ae92c548d",
+              "reason": "only_single_page_cached_selection",
+              "scored": false,
+              "selection_offset": 0
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "2e55cf07380af20f9865968e86a98ce9c7072faddce467121aaf3a10bc2b7934",
+            "context_end_page": 27,
+            "context_page_count": 1,
+            "context_start_page": 27,
+            "conversion": {
+              "language": "ch",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "bf20227dccdf14815d7327afcd28d6d0c6c9e206f199eb73ea7688e95ecb95f8",
+            "pages": "27",
+            "selection_end_page": 27,
+            "selection_page_count": 1,
+            "selection_start_page": 27
+          },
+          "source_sha256": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+          "status": "isolated_fallback"
+        },
+        "harvard-wang-2025-dual-species-arrays-thesis": {
+          "annotated_pages": [
+            11,
+            13
+          ],
+          "confusion": {
+            "contents": {
+              "absent": {
+                "__abstain__": 1,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            },
+            "list_of_figures": {
+              "absent": {
+                "__abstain__": 1,
+                "absent": 0,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            },
+            "list_of_tables": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 1,
+                "absent": 0,
+                "present": 0
+              }
+            }
+          },
+          "exact_set": {
+            "exact": 1,
+            "exact_accuracy": 0.5,
+            "fully_annotated_pages": 2,
+            "non_abstained_pages": 1
+          },
+          "macro": {
+            "balanced_accuracy": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 0.5
+            },
+            "f1": {
+              "eligible_kinds": [
+                "list_of_figures"
+              ],
+              "value": 1.0
+            },
+            "negative_recall": {
+              "eligible_kinds": [
+                "contents",
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 0.5
+            },
+            "positive_recall": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 0.5
+            },
+            "precision": {
+              "eligible_kinds": [
+                "list_of_figures"
+              ],
+              "value": 1.0
+            }
+          },
+          "per_kind": {
+            "contents": {
+              "abstained": 1,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 0.5,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 1,
+              "negative_recall": 0.5,
+              "overall_accuracy": 0.5,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 2,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 2,
+              "true_negative": 1,
+              "true_positive": 0
+            },
+            "list_of_figures": {
+              "abstained": 1,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": 0.5,
+              "class_complete": true,
+              "correct": 1,
+              "coverage": 0.5,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 1,
+              "negative_recall": 0.0,
+              "overall_accuracy": 0.5,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 0,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 2,
+              "true_negative": 0,
+              "true_positive": 1
+            },
+            "list_of_tables": {
+              "abstained": 1,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": 0.5,
+              "class_complete": true,
+              "correct": 1,
+              "coverage": 0.5,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": 1.0,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 0.5,
+              "positive_abstain": 1,
+              "positive_recall": 0.0,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 2,
+              "true_negative": 1,
+              "true_positive": 0
+            }
+          },
+          "reason": null,
+          "samples": [
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "contents",
+              "page": 11,
+              "page_content_sha256": "f56c3814daf5899cf870767c7fa0c0c196aae21750c43b7aeda87b31972eddbf",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 10
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "list_of_figures",
+              "page": 11,
+              "page_content_sha256": "f56c3814daf5899cf870767c7fa0c0c196aae21750c43b7aeda87b31972eddbf",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 10
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 11,
+              "page_content_sha256": "f56c3814daf5899cf870767c7fa0c0c196aae21750c43b7aeda87b31972eddbf",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 10
+            },
+            {
+              "abstain_reason": "model_unavailable",
+              "accepted": false,
+              "decision_source": "abstain",
+              "gold": "absent",
+              "kind": "contents",
+              "page": 13,
+              "page_content_sha256": "f2278b15bfa377d6aa8c4b8a7ef3bda06b46bcaa470266ff4171c846cc7945d3",
+              "predicted": "__abstain__",
+              "scored": true,
+              "selection_offset": 12
+            },
+            {
+              "abstain_reason": "model_unavailable",
+              "accepted": false,
+              "decision_source": "abstain",
+              "gold": "absent",
+              "kind": "list_of_figures",
+              "page": 13,
+              "page_content_sha256": "f2278b15bfa377d6aa8c4b8a7ef3bda06b46bcaa470266ff4171c846cc7945d3",
+              "predicted": "__abstain__",
+              "scored": true,
+              "selection_offset": 12
+            },
+            {
+              "abstain_reason": "model_unavailable",
+              "accepted": false,
+              "decision_source": "abstain",
+              "gold": "present",
+              "kind": "list_of_tables",
+              "page": 13,
+              "page_content_sha256": "f2278b15bfa377d6aa8c4b8a7ef3bda06b46bcaa470266ff4171c846cc7945d3",
+              "predicted": "__abstain__",
+              "scored": true,
+              "selection_offset": 12
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "54051e268f35ce6350418d8d2b41a196fb72ff483999f2ad2a897ad167dfd420",
+            "context_end_page": 13,
+            "context_page_count": 13,
+            "context_start_page": 1,
+            "conversion": {
+              "language": "en",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "e0441469e0c8c6ca29255122c8f9b649dabee7b69f88e3d97888f750d8727e09",
+            "pages": "1-20",
+            "selection_end_page": 20,
+            "selection_page_count": 20,
+            "selection_start_page": 1
+          },
+          "source_sha256": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+          "status": "scored",
+          "summary": {
+            "abstained": 3,
+            "accepted": 3,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": true,
+            "class_support_complete": false,
+            "correct": 3,
+            "coverage": 0.5,
+            "f1": 0.666667,
+            "false_negative": 0,
+            "false_negative_rate": 0.5,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 2,
+            "negative_recall": 0.5,
+            "overall_accuracy": 0.5,
+            "positive_abstain": 1,
+            "positive_recall": 0.5,
+            "precision": 1.0,
+            "predicted_absent": 2,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 4,
+            "support_absent_documents": 1,
+            "support_present": 2,
+            "support_present_documents": 1,
+            "total_samples": 6,
+            "true_negative": 2,
+            "true_positive": 1
+          }
+        },
+        "lmu-tao-2025-strontium-tweezer-thesis": {
+          "annotated_pages": [
+            8,
+            9
+          ],
+          "confusion": {
+            "contents": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 2,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            },
+            "list_of_figures": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            },
+            "list_of_tables": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            }
+          },
+          "exact_set": {
+            "exact": 2,
+            "exact_accuracy": 1.0,
+            "fully_annotated_pages": 2,
+            "non_abstained_pages": 2
+          },
+          "macro": {
+            "balanced_accuracy": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "f1": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "negative_recall": {
+              "eligible_kinds": [
+                "contents",
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "positive_recall": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "precision": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            }
+          },
+          "per_kind": {
+            "contents": {
+              "abstained": 0,
+              "accepted": 2,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 2,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 2,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 2,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 2,
+              "true_negative": 2,
+              "true_positive": 0
+            },
+            "list_of_figures": {
+              "abstained": 0,
+              "accepted": 2,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": 1.0,
+              "class_complete": true,
+              "correct": 2,
+              "coverage": 1.0,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 1,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 2,
+              "true_negative": 1,
+              "true_positive": 1
+            },
+            "list_of_tables": {
+              "abstained": 0,
+              "accepted": 2,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": 1.0,
+              "class_complete": true,
+              "correct": 2,
+              "coverage": 1.0,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 1,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 2,
+              "true_negative": 1,
+              "true_positive": 1
+            }
+          },
+          "reason": null,
+          "samples": [
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "contents",
+              "page": 8,
+              "page_content_sha256": "57a3bf454ed710a167a68c2ff3f36d15f57a08b8505a87fb8a8a041ebebc5893",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 7
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "list_of_figures",
+              "page": 8,
+              "page_content_sha256": "57a3bf454ed710a167a68c2ff3f36d15f57a08b8505a87fb8a8a041ebebc5893",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 7
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 8,
+              "page_content_sha256": "57a3bf454ed710a167a68c2ff3f36d15f57a08b8505a87fb8a8a041ebebc5893",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 7
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "contents",
+              "page": 9,
+              "page_content_sha256": "db31c97c6b68c19d503234df8cb45de8894080443eef7fff1d9e6936171e949e",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 8
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_figures",
+              "page": 9,
+              "page_content_sha256": "db31c97c6b68c19d503234df8cb45de8894080443eef7fff1d9e6936171e949e",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 8
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "list_of_tables",
+              "page": 9,
+              "page_content_sha256": "db31c97c6b68c19d503234df8cb45de8894080443eef7fff1d9e6936171e949e",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 8
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "f0e53be46ec01a0540e751fb03e5769a1352e001ff03aabd562875e0328c9e43",
+            "context_end_page": 9,
+            "context_page_count": 9,
+            "context_start_page": 1,
+            "conversion": {
+              "language": "en",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "13879f43614de969c483fcedf433bb49ec522d284f49b298cb5332f09a176aa5",
+            "pages": "1-20",
+            "selection_end_page": 20,
+            "selection_page_count": 20,
+            "selection_start_page": 1
+          },
+          "source_sha256": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+          "status": "scored",
+          "summary": {
+            "abstained": 0,
+            "accepted": 6,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": true,
+            "class_support_complete": false,
+            "correct": 6,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 4,
+            "predicted_present": 2,
+            "release_gate_eligible": false,
+            "support_absent": 4,
+            "support_absent_documents": 1,
+            "support_present": 2,
+            "support_present_documents": 1,
+            "total_samples": 6,
+            "true_negative": 4,
+            "true_positive": 2
+          }
+        },
+        "scipost-fazio-2025-many-body-open-quantum-systems": {
+          "annotated_pages": [
+            1
+          ],
+          "confusion": {
+            "contents": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            },
+            "list_of_figures": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            },
+            "list_of_tables": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            }
+          },
+          "exact_set": {
+            "exact": 1,
+            "exact_accuracy": 1.0,
+            "fully_annotated_pages": 1,
+            "non_abstained_pages": 1
+          },
+          "macro": {
+            "balanced_accuracy": {
+              "eligible_kinds": [],
+              "value": null
+            },
+            "f1": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "negative_recall": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "positive_recall": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "precision": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            }
+          },
+          "per_kind": {
+            "contents": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": null,
+              "negative_abstain": 0,
+              "negative_recall": null,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 0,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 0,
+              "support_absent_documents": 0,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 1,
+              "true_negative": 0,
+              "true_positive": 1
+            },
+            "list_of_figures": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            },
+            "list_of_tables": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            }
+          },
+          "reason": null,
+          "samples": [
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "contents",
+              "page": 1,
+              "page_content_sha256": "7fc204caaf5783fe96e67ca04d08e084fc4fd2b9e1974f55b14e3b218b87fb29",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 0
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_figures",
+              "page": 1,
+              "page_content_sha256": "7fc204caaf5783fe96e67ca04d08e084fc4fd2b9e1974f55b14e3b218b87fb29",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 0
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 1,
+              "page_content_sha256": "7fc204caaf5783fe96e67ca04d08e084fc4fd2b9e1974f55b14e3b218b87fb29",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 0
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "9710a704e37e56196cd3cc7a1c11e0cb5fee964e41ae1b82661aad49e9c6a43a",
+            "context_end_page": 1,
+            "context_page_count": 1,
+            "context_start_page": 1,
+            "conversion": {
+              "language": "en",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "2f40371e5f18f60d82143aa7e6e7e8a0756776a0e31b4812e2d2cfca63ac395d",
+            "pages": "1-4",
+            "selection_end_page": 4,
+            "selection_page_count": 4,
+            "selection_start_page": 1
+          },
+          "source_sha256": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+          "status": "scored",
+          "summary": {
+            "abstained": 0,
+            "accepted": 3,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": true,
+            "class_support_complete": false,
+            "correct": 3,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 2,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 2,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 3,
+            "true_negative": 2,
+            "true_positive": 1
+          }
+        },
+        "scipost-girvin-2023-quantum-error-correction": {
+          "annotated_pages": [
+            2
+          ],
+          "confusion": {
+            "contents": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            },
+            "list_of_figures": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            },
+            "list_of_tables": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            }
+          },
+          "exact_set": {
+            "exact": 1,
+            "exact_accuracy": 1.0,
+            "fully_annotated_pages": 1,
+            "non_abstained_pages": 1
+          },
+          "macro": {
+            "balanced_accuracy": {
+              "eligible_kinds": [],
+              "value": null
+            },
+            "f1": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "negative_recall": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "positive_recall": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "precision": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            }
+          },
+          "per_kind": {
+            "contents": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": null,
+              "negative_abstain": 0,
+              "negative_recall": null,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 0,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 0,
+              "support_absent_documents": 0,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 1,
+              "true_negative": 0,
+              "true_positive": 1
+            },
+            "list_of_figures": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            },
+            "list_of_tables": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            }
+          },
+          "reason": null,
+          "samples": [
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "contents",
+              "page": 2,
+              "page_content_sha256": "06760ed66a5ac63d6edc864b1fbd057ad16db3116233f51a8f4013ae24425e06",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 1
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_figures",
+              "page": 2,
+              "page_content_sha256": "06760ed66a5ac63d6edc864b1fbd057ad16db3116233f51a8f4013ae24425e06",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 1
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 2,
+              "page_content_sha256": "06760ed66a5ac63d6edc864b1fbd057ad16db3116233f51a8f4013ae24425e06",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 1
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "77b541e2d65b4de2e0fb42911d2f3d8c6be64b4292e8e8611a55824267e43185",
+            "context_end_page": 2,
+            "context_page_count": 2,
+            "context_start_page": 1,
+            "conversion": {
+              "language": "en",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "ad79e20723eb5c4d7760172491e2ee5f6ec3cdb7316471201838576175a3fa12",
+            "pages": "1-4",
+            "selection_end_page": 4,
+            "selection_page_count": 4,
+            "selection_start_page": 1
+          },
+          "source_sha256": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+          "status": "scored",
+          "summary": {
+            "abstained": 0,
+            "accepted": 3,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": true,
+            "class_support_complete": false,
+            "correct": 3,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 2,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 2,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 3,
+            "true_negative": 2,
+            "true_positive": 1
+          }
+        },
+        "scipost-mbeng-2024-quantum-ising-chain": {
+          "annotated_pages": [
+            1
+          ],
+          "confusion": {
+            "contents": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 1
+              }
+            },
+            "list_of_figures": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            },
+            "list_of_tables": {
+              "absent": {
+                "__abstain__": 0,
+                "absent": 1,
+                "present": 0
+              },
+              "present": {
+                "__abstain__": 0,
+                "absent": 0,
+                "present": 0
+              }
+            }
+          },
+          "exact_set": {
+            "exact": 1,
+            "exact_accuracy": 1.0,
+            "fully_annotated_pages": 1,
+            "non_abstained_pages": 1
+          },
+          "macro": {
+            "balanced_accuracy": {
+              "eligible_kinds": [],
+              "value": null
+            },
+            "f1": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "negative_recall": {
+              "eligible_kinds": [
+                "list_of_figures",
+                "list_of_tables"
+              ],
+              "value": 1.0
+            },
+            "positive_recall": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            },
+            "precision": {
+              "eligible_kinds": [
+                "contents"
+              ],
+              "value": 1.0
+            }
+          },
+          "per_kind": {
+            "contents": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": 1.0,
+              "false_negative": 0,
+              "false_negative_rate": 0.0,
+              "false_positive": 0,
+              "false_positive_rate": null,
+              "negative_abstain": 0,
+              "negative_recall": null,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": 1.0,
+              "precision": 1.0,
+              "predicted_absent": 0,
+              "predicted_present": 1,
+              "release_gate_eligible": false,
+              "support_absent": 0,
+              "support_absent_documents": 0,
+              "support_present": 1,
+              "support_present_documents": 1,
+              "total_samples": 1,
+              "true_negative": 0,
+              "true_positive": 1
+            },
+            "list_of_figures": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            },
+            "list_of_tables": {
+              "abstained": 0,
+              "accepted": 1,
+              "accepted_accuracy": 1.0,
+              "balanced_accuracy": null,
+              "class_complete": false,
+              "correct": 1,
+              "coverage": 1.0,
+              "f1": null,
+              "false_negative": 0,
+              "false_negative_rate": null,
+              "false_positive": 0,
+              "false_positive_rate": 0.0,
+              "negative_abstain": 0,
+              "negative_recall": 1.0,
+              "overall_accuracy": 1.0,
+              "positive_abstain": 0,
+              "positive_recall": null,
+              "precision": null,
+              "predicted_absent": 1,
+              "predicted_present": 0,
+              "release_gate_eligible": false,
+              "support_absent": 1,
+              "support_absent_documents": 1,
+              "support_present": 0,
+              "support_present_documents": 0,
+              "total_samples": 1,
+              "true_negative": 1,
+              "true_positive": 0
+            }
+          },
+          "reason": null,
+          "samples": [
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "present",
+              "kind": "contents",
+              "page": 1,
+              "page_content_sha256": "1559c9cdeaeb84029e0fb6050ed1c786be9649636897a5d5a9dab9c2f93bb462",
+              "predicted": "present",
+              "scored": true,
+              "selection_offset": 0
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_figures",
+              "page": 1,
+              "page_content_sha256": "1559c9cdeaeb84029e0fb6050ed1c786be9649636897a5d5a9dab9c2f93bb462",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 0
+            },
+            {
+              "abstain_reason": null,
+              "accepted": true,
+              "decision_source": "rule",
+              "gold": "absent",
+              "kind": "list_of_tables",
+              "page": 1,
+              "page_content_sha256": "1559c9cdeaeb84029e0fb6050ed1c786be9649636897a5d5a9dab9c2f93bb462",
+              "predicted": "absent",
+              "scored": true,
+              "selection_offset": 0
+            }
+          ],
+          "selection": {
+            "content_list_sha256": "95de92172ce70376a95cdd567a9794fcb28f8d862ad3c2e9db35f015e5588163",
+            "context_end_page": 1,
+            "context_page_count": 1,
+            "context_start_page": 1,
+            "conversion": {
+              "language": "en",
+              "method": "auto",
+              "profile": "balanced",
+              "requested_method": "auto"
+            },
+            "manifest_index": 0,
+            "manifest_sha256": "af34ea5245981a676d9c200ddd21869ce79979c973e0b560a3a206442e5d7a30",
+            "pages": "1-3",
+            "selection_end_page": 3,
+            "selection_page_count": 3,
+            "selection_start_page": 1
+          },
+          "source_sha256": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+          "status": "scored",
+          "summary": {
+            "abstained": 0,
+            "accepted": 3,
+            "accepted_accuracy": 1.0,
+            "balanced_accuracy": null,
+            "class_complete": true,
+            "class_support_complete": false,
+            "correct": 3,
+            "coverage": 1.0,
+            "f1": 1.0,
+            "false_negative": 0,
+            "false_negative_rate": 0.0,
+            "false_positive": 0,
+            "false_positive_rate": 0.0,
+            "negative_abstain": 0,
+            "negative_recall": 1.0,
+            "overall_accuracy": 1.0,
+            "positive_abstain": 0,
+            "positive_recall": 1.0,
+            "precision": 1.0,
+            "predicted_absent": 2,
+            "predicted_present": 1,
+            "release_gate_eligible": false,
+            "support_absent": 2,
+            "support_absent_documents": 1,
+            "support_present": 1,
+            "support_present_documents": 1,
+            "total_samples": 3,
+            "true_negative": 2,
+            "true_positive": 1
+          }
+        }
+      },
+      "exact_set": {
+        "exact": 7,
+        "exact_accuracy": 0.875,
+        "fully_annotated_pages": 8,
+        "non_abstained_pages": 7
+      },
+      "gate_requirements": {
+        "minimum_absent_documents_per_kind": 5,
+        "minimum_absent_per_kind": 20,
+        "minimum_present_documents_per_kind": 5,
+        "minimum_present_per_kind": 20
+      },
+      "macro": {
+        "balanced_accuracy": {
+          "eligible_kinds": [
+            "contents",
+            "list_of_figures",
+            "list_of_tables"
+          ],
+          "value": 0.847222
+        },
+        "f1": {
+          "eligible_kinds": [
+            "contents",
+            "list_of_figures",
+            "list_of_tables"
+          ],
+          "value": 0.888889
+        },
+        "negative_recall": {
+          "eligible_kinds": [
+            "contents",
+            "list_of_figures",
+            "list_of_tables"
+          ],
+          "value": 0.861111
+        },
+        "positive_recall": {
+          "eligible_kinds": [
+            "contents",
+            "list_of_figures",
+            "list_of_tables"
+          ],
+          "value": 0.833333
+        },
+        "precision": {
+          "eligible_kinds": [
+            "contents",
+            "list_of_figures",
+            "list_of_tables"
+          ],
+          "value": 1.0
+        }
+      },
+      "per_kind": {
+        "contents": {
+          "abstained": 1,
+          "accepted": 7,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": 0.875,
+          "class_complete": true,
+          "correct": 7,
+          "coverage": 0.875,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 1,
+          "negative_recall": 0.75,
+          "overall_accuracy": 0.875,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 3,
+          "predicted_present": 4,
+          "release_gate_eligible": false,
+          "support_absent": 4,
+          "support_absent_documents": 2,
+          "support_present": 4,
+          "support_present_documents": 4,
+          "total_samples": 8,
+          "true_negative": 3,
+          "true_positive": 4
+        },
+        "list_of_figures": {
+          "abstained": 1,
+          "accepted": 7,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": 0.916667,
+          "class_complete": true,
+          "correct": 7,
+          "coverage": 0.875,
+          "f1": 1.0,
+          "false_negative": 0,
+          "false_negative_rate": 0.0,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 1,
+          "negative_recall": 0.833333,
+          "overall_accuracy": 0.875,
+          "positive_abstain": 0,
+          "positive_recall": 1.0,
+          "precision": 1.0,
+          "predicted_absent": 5,
+          "predicted_present": 2,
+          "release_gate_eligible": false,
+          "support_absent": 6,
+          "support_absent_documents": 6,
+          "support_present": 2,
+          "support_present_documents": 2,
+          "total_samples": 8,
+          "true_negative": 5,
+          "true_positive": 2
+        },
+        "list_of_tables": {
+          "abstained": 1,
+          "accepted": 7,
+          "accepted_accuracy": 1.0,
+          "balanced_accuracy": 0.75,
+          "class_complete": true,
+          "correct": 7,
+          "coverage": 0.875,
+          "f1": 0.666667,
+          "false_negative": 0,
+          "false_negative_rate": 0.5,
+          "false_positive": 0,
+          "false_positive_rate": 0.0,
+          "negative_abstain": 0,
+          "negative_recall": 1.0,
+          "overall_accuracy": 0.875,
+          "positive_abstain": 1,
+          "positive_recall": 0.5,
+          "precision": 1.0,
+          "predicted_absent": 6,
+          "predicted_present": 1,
+          "release_gate_eligible": false,
+          "support_absent": 6,
+          "support_absent_documents": 6,
+          "support_present": 2,
+          "support_present_documents": 2,
+          "total_samples": 8,
+          "true_negative": 6,
+          "true_positive": 1
+        }
+      },
+      "policy": {
+        "abstain_is_correct": false,
+        "context_selection": "one-contiguous-cache-per-document",
+        "labels": "human-verified-explicit-presence-only",
+        "page_numbering": "physical-1-based",
+        "prediction": "production-v1-projection-after-primary-acceptance",
+        "raw_navigation_candidates": "ignored",
+        "single_page_cache": "isolated-fallback-not-context-scored",
+        "unlabelled_page_kind_pairs": "unknown-not-negative",
+        "unlabelled_pages": "classified-in-memory-not-scored-or-serialized"
+      },
+      "provenance": {
+        "content_list_sha256": [
+          "0cf62248aabba372403c52e44cbe62a4b87762b4552c07d46eaa3973e15fcd05",
+          "2e55cf07380af20f9865968e86a98ce9c7072faddce467121aaf3a10bc2b7934",
+          "54051e268f35ce6350418d8d2b41a196fb72ff483999f2ad2a897ad167dfd420",
+          "77b541e2d65b4de2e0fb42911d2f3d8c6be64b4292e8e8611a55824267e43185",
+          "95de92172ce70376a95cdd567a9794fcb28f8d862ad3c2e9db35f015e5588163",
+          "9710a704e37e56196cd3cc7a1c11e0cb5fee964e41ae1b82661aad49e9c6a43a",
+          "f0e53be46ec01a0540e751fb03e5769a1352e001ff03aabd562875e0328c9e43"
+        ],
+        "manifest_sha256": [
+          "13879f43614de969c483fcedf433bb49ec522d284f49b298cb5332f09a176aa5",
+          "2f40371e5f18f60d82143aa7e6e7e8a0756776a0e31b4812e2d2cfca63ac395d",
+          "4c5e02bf14535c1774caeb76da5d48d14b38bf39cde6f9956241d5e8f1c9c023",
+          "ad79e20723eb5c4d7760172491e2ee5f6ec3cdb7316471201838576175a3fa12",
+          "af34ea5245981a676d9c200ddd21869ce79979c973e0b560a3a206442e5d7a30",
+          "bf20227dccdf14815d7327afcd28d6d0c6c9e206f199eb73ea7688e95ecb95f8",
+          "e0441469e0c8c6ca29255122c8f9b649dabee7b69f88e3d97888f750d8727e09"
+        ]
+      },
+      "schema": "pdf2md.front-navigation-evaluation.v1",
+      "status": "evaluated",
+      "summary": {
+        "abstained": 3,
+        "accepted": 21,
+        "accepted_accuracy": 1.0,
+        "balanced_accuracy": 0.875,
+        "class_complete": true,
+        "class_support_complete": true,
+        "correct": 21,
+        "coverage": 0.875,
+        "f1": 0.933333,
+        "false_negative": 0,
+        "false_negative_rate": 0.125,
+        "false_positive": 0,
+        "false_positive_rate": 0.0,
+        "negative_abstain": 2,
+        "negative_recall": 0.875,
+        "overall_accuracy": 0.875,
+        "positive_abstain": 1,
+        "positive_recall": 0.875,
+        "precision": 1.0,
+        "predicted_absent": 14,
+        "predicted_present": 7,
+        "release_gate_eligible": false,
+        "support_absent": 16,
+        "support_absent_documents": 6,
+        "support_present": 8,
+        "support_present_documents": 6,
+        "total_samples": 24,
+        "true_negative": 14,
+        "true_positive": 7
+      }
+    },
+    "per_class": {
+      "abbreviations": {
+        "f1": null,
+        "precision": null,
+        "predicted": 0,
+        "recall": null,
+        "support": 0,
+        "true_positive": 0
+      },
+      "abstract": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "predicted": 4,
+        "recall": 1.0,
+        "support": 4,
+        "true_positive": 4
+      },
+      "acknowledgements": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "predicted": 1,
+        "recall": 1.0,
+        "support": 1,
+        "true_positive": 1
+      },
+      "body_start": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "predicted": 10,
+        "recall": 1.0,
+        "support": 10,
+        "true_positive": 10
+      },
+      "contents": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "predicted": 13,
+        "recall": 1.0,
+        "support": 13,
+        "true_positive": 13
+      },
+      "cover": {
+        "f1": null,
+        "precision": null,
+        "predicted": 0,
+        "recall": 0.0,
+        "support": 2,
+        "true_positive": 0
+      },
+      "legal": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "predicted": 1,
+        "recall": 1.0,
+        "support": 1,
+        "true_positive": 1
+      },
+      "list_of_figures": {
+        "f1": 1.0,
+        "precision": 1.0,
+        "predicted": 2,
+        "recall": 1.0,
+        "support": 2,
+        "true_positive": 2
+      },
+      "list_of_tables": {
+        "f1": 0.666667,
+        "precision": 1.0,
+        "predicted": 1,
+        "recall": 0.5,
+        "support": 2,
+        "true_positive": 1
+      },
+      "nomenclature": {
+        "f1": null,
+        "precision": null,
+        "predicted": 0,
+        "recall": null,
+        "support": 0,
+        "true_positive": 0
+      },
+      "other_front": {
+        "f1": null,
+        "precision": null,
+        "predicted": 0,
+        "recall": null,
+        "support": 0,
+        "true_positive": 0
+      },
+      "preface": {
+        "f1": null,
+        "precision": null,
+        "predicted": 0,
+        "recall": null,
+        "support": 0,
+        "true_positive": 0
+      },
+      "revision_history": {
+        "f1": null,
+        "precision": null,
+        "predicted": 0,
+        "recall": null,
+        "support": 0,
+        "true_positive": 0
+      }
+    },
+    "policy": {
+      "abstain_is_correct": false,
+      "classification_calls": "once-per-scored-document",
+      "context_window": "selection-start-through-last-verified-page",
+      "disjoint_selections": "never-joined",
+      "labels": "human-verified-only",
+      "mode": "production-like-context",
+      "ocr": "disabled",
+      "page_numbering": "physical-1-based",
+      "scoring_scope": "verified-pages-only",
+      "selection_resolution": "one-covering-selection; prefer-safe-predecessor; then-smallest-range; then-manifest-order",
+      "single_page_selection": "isolated-fallback-not-context-scored",
+      "unlabelled_pages": "classified-in-memory-not-scored-or-serialized"
+    },
+    "summary": {
+      "abstained": 3,
+      "accepted": 32,
+      "accepted_accuracy": 1.0,
+      "correct": 32,
+      "coverage": 0.914286,
+      "overall_accuracy": 0.914286,
+      "total_samples": 35
+    }
+  },
+  "schema": "pdf2md.front-region-evaluation.v1",
+  "summary": {
+    "abstained": 8,
+    "accepted": 29,
+    "accepted_accuracy": 1.0,
+    "correct": 29,
+    "coverage": 0.783784,
+    "overall_accuracy": 0.783784,
+    "total_samples": 37
+  }
+}

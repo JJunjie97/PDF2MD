@@ -1,10 +1,16 @@
 /runtime/
 /models/
+/archive/experiments/
 /packaging/work/
 /packaging/dist/
 /.tools/
-/paper/
 /tmp/
+/data/**/*.pdf
+/data/**/*.PDF
+/data/**/*.part
+/data/local-state.json
+/data/training/local/
+/data/training/generated/
 *.pdf2md/
 *.mineru/
 __pycache__/

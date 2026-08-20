@@ -1,0 +1,2089 @@
+{
+  "schema": "pdf2md.front-eval-plan.v1",
+  "page_numbering": "physical-pdf-1-based",
+  "document_count": 98,
+  "skipped_count": 11,
+  "documents": [
+    {
+      "id": "adi-ad7606-datasheet-zh",
+      "sha256": "366cded807108a366a3b11bae3ec03062cc5c788e194068ee790bd36f411cbaa",
+      "page_count": 36,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "adi-ad7606b-datasheet",
+      "sha256": "c4b8a6bdf46cd28eefa417a22902b85bbe3f82f9e4a439c82881d700c53a8288",
+      "page_count": 74,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2,
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "adi-ad7792-7793-datasheet-zh",
+      "sha256": "dbf157a64d1a902f29a903de536175fed6c4d40a8b828324fb9e08cb5e9f6de6",
+      "page_count": 32,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "adi-ad8137-datasheet-zh",
+      "sha256": "207992158636426428789d92136d1164ebde9a73ef0eb0eb6052b57c6af9d83f",
+      "page_count": 28,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "adi-ad8628-30-datasheet-zh",
+      "sha256": "edece70a83ae3e67c367d3425e6a4ec4936e00087272cc003d02b0227bc55057",
+      "page_count": 24,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "adi-aducm355-user-guide",
+      "sha256": "051a04e1abfb3992979e98a3cd5a8549c450c60e214c38257d5e213205851375",
+      "page_count": 314,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 16
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "adi-adxl345-datasheet",
+      "sha256": "87ae2212498c35a6759d8732adee0ec9b9d8d60fa95688bc5904f1f07ceb8ff6",
+      "page_count": 36,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "adi-adxl354-355-datasheet",
+      "sha256": "d54235c1db7ffea74ee9c4a361294204eb8927c20657484aefb935eafb29e56c",
+      "page_count": 45,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2,
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "adi-mt031-appnote-zh",
+      "sha256": "4ce4f017e6fb6752409f8a3604ec7086ab94e2189ad69e02a148bfe72bbbbdc6",
+      "page_count": 17,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "aip-michelson-morley-1887-scan",
+      "sha256": "4398d1684ba61f83f3d0416948b0f961135b6a9194a443364022375a38aa863f",
+      "page_count": 7,
+      "pdf_kind": "scanned",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 7
+        }
+      ],
+      "role": "scanned-front",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata classifies the PDF as scanned",
+        "selection covers up to 24 front pages for scanned-layout evaluation"
+      ]
+    },
+    {
+      "id": "amd-xilinx-ds181-artix7",
+      "sha256": "3f0cb482d645e217ae834e9370c1320300abb85a8046287250f9a48856aed070",
+      "page_count": 64,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "amd-xilinx-en247-errata",
+      "sha256": "798e2e507caedf3c44e40a1d10e2ab2bed7664f27f9369ac46733beeb6bf5c28",
+      "page_count": 18,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "amd-xilinx-ug470-configuration",
+      "sha256": "52aa1f1943cdf631b5ff3d859a8d5905dc9fd198522e0e9d63cf3f87271d615c",
+      "page_count": 174,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "amd-xilinx-ug901-vivado-synthesis",
+      "sha256": "1aba4683c1fd5558d18e034c1422e1cf47d6a92442bef9a38c28a9f6fe8bccd0",
+      "page_count": 298,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "amd-xilinx-ug903-constraints",
+      "sha256": "fc3cbb6413424663f978cfea9dc863c710c7213ae65e22d99f45de0e5358a267",
+      "page_count": 198,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "aps-neutral-atom-quantum-computing-review-zh",
+      "sha256": "3b3f6691d14c15293484c7beaaaf62ff5e8ee5e44053ef117eb914f8806500cb",
+      "page_count": 17,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-attention-1706-03762",
+      "sha256": "bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697",
+      "page_count": 15,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-bert-1810-04805",
+      "sha256": "5692a5514787a8c6727b4ff3b726a3385798bc68e12138d1d4af83947e2acf6e",
+      "page_count": 16,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-climate-1906-05433",
+      "sha256": "132cdad1036648e8bb3bf13a0169ce8708d31fa9f4c0d041de55be38000a90bb",
+      "page_count": 111,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "arxiv-clip-2103-00020",
+      "sha256": "6478b6e571a7d6fcd846d8ef77bfd60c285f1986abb8f475eedc43de403074f5",
+      "page_count": 48,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-economics-1903-10075",
+      "sha256": "99a6cf367d85c0805584840fce998bedcca9cf928b30f544ba22b516e3cf3331",
+      "page_count": 62,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "arxiv-ferreri-2021-su11-interferometer-v2",
+      "sha256": "aa82d8b0403ef9145ba9c4f2e92fd52dcccb9da6166c063752717cb8d0925535",
+      "page_count": 19,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-guenther-2026-lossy-atom-interferometers-v3",
+      "sha256": "672ed068c0b1970ff8ca27e9625a0787216694d78d8c26abf600dbfd51f4a5b7",
+      "page_count": 12,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-henriet-2020-neutral-atom-computing-v2",
+      "sha256": "15da5c5074a1ae1d105ae4fc648ca5395b8aab7095a1931b3a45b2c706165b3b",
+      "page_count": 34,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-kalfus-2021-superconducting-qubit-control-v2",
+      "sha256": "d25686efc7068882cb39126eaac7019b74e42b56ea4589dc5d9057cbaac1a86d",
+      "page_count": 12,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-park-2023-rabi-interferometry-v3",
+      "sha256": "86272f93d53ec852f41abe989106a0c9108e00539c4b5c1b6f6f2706942b104a",
+      "page_count": 34,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-poincare-0211159",
+      "sha256": "945e278613c45ea1ab617b28c3095783d0e68958dc0546dfcfa9b42b9674fbe1",
+      "page_count": 39,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "arxiv-quantum-overview-1905-07240",
+      "sha256": "52d00e04f3e119c2c004dbecfacac2361a62190f5356b7d9c7e20e7e3309b6ae",
+      "page_count": 29,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "arxiv-resnet-1512-03385",
+      "sha256": "1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "page_count": 12,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "arxiv-yin-2024-heisenberg-metrology-v2",
+      "sha256": "48ce08fb3158170670c8968bbdca468bcfc98e83850404fe4c8bce98de35a6d9",
+      "page_count": 37,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        1
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "birmingham-nourshargh-2021-cavity-atom-interferometry-thesis",
+      "sha256": "5de6df9b76b84ce6790795c957705b73b575e757937c77894e3e3d1552558ef8",
+      "page_count": 159,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        8
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 16
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "caltech-madjarov-2021-strontium-tweezer-thesis",
+      "sha256": "d97fbdc9010d44dc7dee7bd5b4e84c881ac3de869a90b5166b6174fb224aa304",
+      "page_count": 283,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        6
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 14
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "cambridge-hsu-2025-aion-strontium-thesis",
+      "sha256": "707a795bf110d7812ee6d9127ce2a63dac97a6391839de753030404e90727033",
+      "page_count": 258,
+      "pdf_kind": "mixed",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents, list_of_figures, list_of_tables",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "commons-jihe-yuanben-volume-2-scan",
+      "sha256": "a7911daa84c8c12bfed790bbc2c4a2309f7cb99fd50b322b82beffcbdf5cb366",
+      "page_count": 106,
+      "pdf_kind": "scanned",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 24
+        }
+      ],
+      "role": "scanned-front",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata classifies the PDF as scanned",
+        "selection covers up to 24 front pages for scanned-layout evaluation"
+      ]
+    },
+    {
+      "id": "ems-padic-triple-product-lfunctions",
+      "sha256": "079f462cad170ab398d43e82a775bee7106126b35b4f5d1b4bc00ecb9448f3bb",
+      "page_count": 47,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "espressif-esp32-datasheet-zh",
+      "sha256": "fe7522f57c68e70d061945a7b54af883a42c4e499e3f134d51a6d6049a81b516",
+      "page_count": 74,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "espressif-esp32-hardware-guide-zh",
+      "sha256": "d89ea1c4ec6576e1d4fcc0994fce700d8cedb724eea6352ec6ba25b9d5c4159b",
+      "page_count": 36,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "espressif-esp32-trm-en",
+      "sha256": "4ba58e9fa0405ec2bf80b912a29b483f6edc8c4b2b1058201913a2fe37e582f0",
+      "page_count": 784,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 13
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "espressif-esp32-trm-zh",
+      "sha256": "771dece57dd64f7bced2ae4666273988f2b34eb98870aee54501266ebc9a882a",
+      "page_count": 726,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents, list_of_figures, list_of_tables",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "espressif-esp32c3-trm-zh",
+      "sha256": "dfe5ae3fa214014b5b0b607256397798882c635f3801f8e3782c52a3d7e07630",
+      "page_count": 844,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents, list_of_figures, list_of_tables",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "espressif-esp32s3-hardware-guide-zh",
+      "sha256": "74361c56e950575dedd717fbbb9112df82785680de216a60caa338f456c0cce6",
+      "page_count": 39,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "fudan-hu-2025-lmt-raman-thesis",
+      "sha256": "803d3c963b765cfaafed93f6857661413f2599acf7d35f8e24588d20d5ba54bf",
+      "page_count": 209,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 13
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "fudan-wang-2021-coherent-imaging-thesis",
+      "sha256": "20446b0434795061207cb3d1eef54e0b0b128ba56b93781043b3e26cc1eed772",
+      "page_count": 152,
+      "pdf_kind": "scanned",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 24
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents, list_of_figures, list_of_tables",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "hannover-rudolph-2016-bec-matter-wave-thesis",
+      "sha256": "8f158e7e2dac0d22b98db961d5461a6c656fa5c2d817e5fe198e6f7a06117815",
+      "page_count": 198,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        7,
+        8,
+        9
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 17
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "harvard-ocola-2023-nanophotonic-tweezer-thesis",
+      "sha256": "2ae27948c54de28aba7486c8a019c2015770e17f4f977444c4e2cec6cf8b7207",
+      "page_count": 214,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        8
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 16
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "harvard-wang-2025-dual-species-arrays-thesis",
+      "sha256": "647320821e1a6781d6397d78174b14f305a082f6cf5d0f2929f8ec26552645c0",
+      "page_count": 228,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        7
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 15
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "jila-ludlow-2008-strontium-clock-thesis",
+      "sha256": "dcf34a931f51423cf597f149a9a332c877798b840b84e83232793aa2e8c214e1",
+      "page_count": 251,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        9
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 17
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "lmu-tao-2025-strontium-tweezer-thesis",
+      "sha256": "c19b6e1e4db295fffca97b04d4405977614965594ac772c62a5cf132d7989890",
+      "page_count": 114,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 13
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "mee-contaminated-site-remediation-guide-2014-zh",
+      "sha256": "dace41a81f18946fc6e1ff8b330253dc9ad78f1f5f5b075685df9d7f24a044a7",
+      "page_count": 27,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "microchip-atmega328p-datasheet",
+      "sha256": "fb84858d0b12c695a12b13f0c74b962d81210247d440c7a24c0ed23dfabfdfaf",
+      "page_count": 294,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "mit-michelson-interferometer-lab",
+      "sha256": "ae8f748db512877101fef15f02cb249410bc5944e81cdcf822c92e6dbe32402b",
+      "page_count": 5,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 5
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "mit-sicp",
+      "sha256": "08709a87567d8311d6fd29c4f4a5386801153e71450e628c4a5a5d7e85feda8b",
+      "page_count": 883,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "mit-xiang-2025-quantum-gas-microscopy-thesis",
+      "sha256": "6aa14a6f1762037231cb31a23581ecea02277a1cae741c77fcef7beebdfc69fe",
+      "page_count": 191,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents, list_of_figures, list_of_tables",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "nasa-systems-engineering-handbook",
+      "sha256": "8eeb4887a4dc57a23049da7dd2ed556833cf98e214b240468d987873164ff688",
+      "page_count": 297,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3,
+        4
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "nature-quantum-clock-time-dilation",
+      "sha256": "49a598d1a483d15a55dbef6f8111cd815d97a569e60cb36c3c472aaec2f1edfd",
+      "page_count": 9,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "ni-fpga-interface-user-guide",
+      "sha256": "aa6fa940e21a7d72bbf4426a0866efab7754988ad109114bf7f70ee501c59cca",
+      "page_count": 5,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        1
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 5
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ni-labview-quick-reference",
+      "sha256": "3d4166e87c694d873d1d8864631812b7a866f40c9397ac0f9c7f67e80538a56b",
+      "page_count": 6,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 6
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "ni-labview-user-manual-1998",
+      "sha256": "85f119885b5f91c8e8242d56b621c0bbf64fe434739803df8d1a9095a9427ce2",
+      "page_count": 514,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 18
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "nist-1958-parallel-testing-interferometer",
+      "sha256": "17f3a73008afc55929ed7e5d2203809dd4935febe2059314650cf440cdc2fd62",
+      "page_count": 8,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 8
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    },
+    {
+      "id": "nist-ai-rmf-100-1",
+      "sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+      "page_count": 48,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        4
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "nist-csf-2",
+      "sha256": "3c31f46fee98cac0c4323453e5109291a213b4de7fef8c058af9bf67f717433c",
+      "page_count": 32,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        4
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "openlogic-complete-textbook",
+      "sha256": "e17ac6f54723999b727b56b60f864a969f2b7c883be5ce7149f13472a0ee14ae",
+      "page_count": 1016,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 18
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ostep-toc",
+      "sha256": "6bf28fd0e16c56c6e82f77bbec48dcbd3d80546852ec1bd0ebc6bd06452fd85f",
+      "page_count": 12,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        1
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "oxford-knapp-2023-compact-cold-atom-clock-thesis",
+      "sha256": "ba94874f73e66855c35352c49dfee72e01741a45f7df45513447388caf8dd7e7",
+      "page_count": 173,
+      "pdf_kind": "mixed",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents, list_of_figures, list_of_tables",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "oxford-stephenson-2019-ion-trap-network-thesis",
+      "sha256": "db8857e1479b85bca456cac8896fe0acea97927c61919de116d4eaffce823d11",
+      "page_count": 175,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 13
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "raspberrypi-getting-started-pico",
+      "sha256": "9ab41bf60dc4a67c6ca8c0230b88c05a496b01ea70ea0b46b62c337878141478",
+      "page_count": 40,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "raspberrypi-pico-sdk",
+      "sha256": "d830759c4c8124132b42d7d409d293e7820b48b13d8c8f2ec8d6127eb0aaeb59",
+      "page_count": 821,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "raspberrypi-rp1-peripherals",
+      "sha256": "87fb7b24e8d9add075b849d095a107827610c0409ea194785af624c1ea986c3d",
+      "page_count": 93,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "raspberrypi-rp2040-datasheet",
+      "sha256": "be56fbb75ba0ae9e26558a73c93ac3e75c2ad4e6878d3b6703de2a76d886ea8c",
+      "page_count": 642,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "raspberrypi-rp2040-hardware-design",
+      "sha256": "6523a2ebf743fcfbcc69bc3901b24ca3a2d23617d8ee50beb5f606b31134f0b5",
+      "page_count": 37,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        3
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 11
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "riscv-unprivileged-isa",
+      "sha256": "82f88088f1a159062f0dee6b8fc1f43afb9c889d6eea69083c21f1e79f55d83d",
+      "page_count": 670,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "scipost-fazio-2025-many-body-open-quantum-systems",
+      "sha256": "409f81244e76733674b9c572833cad4317097e16bb9a6680183eca2b2bfa656f",
+      "page_count": 192,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        1
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "scipost-girvin-2023-quantum-error-correction",
+      "sha256": "10552a7f67477e99e41e27719224df58cc603362bd3e58222fce5662be9fec71",
+      "page_count": 91,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "scipost-mbeng-2024-quantum-ising-chain",
+      "sha256": "8ca3258fc5190c9a458831be112a227b9c337917b78d3273800f4f0a4aff92af",
+      "page_count": 81,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        1
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "southampton-gregory-2015-atom-interferometer-control-thesis",
+      "sha256": "5b639a68e42bcb01e42d8b7d2c5ab0736494ff94171b80fb21097fa561416983",
+      "page_count": 192,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        10
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 18
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "st-stm32f4-rm0090",
+      "sha256": "f3ff2322eec21f4e49081f68481b764506eee81dba6031bc767e2f8955b27cca",
+      "page_count": 1741,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "stanford-sugarbaker-2014-10m-fountain-thesis",
+      "sha256": "7024f9ec0f5510b40a3f33623661baa8533ffec9d3e10a009c7641a30f8c299d",
+      "page_count": 162,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        8
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 16
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "sxu-bian-2023-pwave-rydberg-eit-thesis",
+      "sha256": "c0bc8c480d4d330bce314e0a8cfae1b9a9639d3d213edefdb482284eb9ddf688",
+      "page_count": 114,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "sxu-chen-2009-rb87-k40-degeneracy-thesis",
+      "sha256": "27dfd6277d460329c9108f3cfaa12b9385b4f42fd32ccdb1f6385517f8c9d9ae",
+      "page_count": 137,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "sxu-fu-2014-spin-orbit-thesis",
+      "sha256": "04f70a758e21a419cd58d3661a9c38bb31c76e346c8e71b94542f59f01b18c36",
+      "page_count": 135,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        7
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 15
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "sxu-huang-2016-strong-spin-orbit-thesis",
+      "sha256": "e31f276bc81865c2169490406dbe42dfb0983b3e4eb64e3e6624cc564dd92b18",
+      "page_count": 129,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5,
+        9
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 17
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "sxu-khan-2021-rb87-bec-thesis",
+      "sha256": "e6c33719223825098069f26410d34a874cbc413e2d7f2aeba2466c7f9ee66ae9",
+      "page_count": 165,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        4
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "sxu-li-2021-spin-tensor-rydberg-thesis",
+      "sha256": "974344c65801f2339a8081e555d2de4dae8e7a45c217031c771add03f88ee70c",
+      "page_count": 123,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5,
+        7
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 15
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "sxu-mi-2022-rb87-k39-mixture-thesis",
+      "sha256": "73e95edcdf8572ee83f6aeb39d417bece36aad972e15d1671a39ef1c4b50d022",
+      "page_count": 115,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "sxu-peng-2018-floquet-topology-thesis",
+      "sha256": "48f4d674a6c1e6cf09670b47996c0b3b57a4e294530ae64202e07f9d15d0368d",
+      "page_count": 112,
+      "pdf_kind": "scanned",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 24
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "sxu-shi-2022-na23-k40-mixture-thesis",
+      "sha256": "fef7732e0f9c53843c4a1658b26836e4874520d55f36431a3255f4d9de549336",
+      "page_count": 139,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        9
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 17
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "sxu-wen-2021-rb87-lattice-thesis",
+      "sha256": "f42a135708a2b160c95252c1de374a30c60eace5f0bc5b3f75fe58da140a7441",
+      "page_count": 156,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5,
+        10
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 18
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "tektronix-tds500b-service-manual",
+      "sha256": "c9572b4557042588160b636e607a8bdf49eef3259cfeb439f40e854e01854ce6",
+      "page_count": 306,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 18
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ti-ads1115-datasheet",
+      "sha256": "5fe00cf9509daba7ca311cd0a461debc563dd57598c5de3bf9c31903dc2238da",
+      "page_count": 57,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ti-ads131m08-datasheet-zh",
+      "sha256": "1bab6695630d783a1795dbcaeb1dd3969635358beb894e33d73344afb80ff9b3",
+      "page_count": 118,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 10
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ti-am263p2-datasheet-zh",
+      "sha256": "883ab89765d1a5cdb45ad5858f975c6312c679b237b1ac0be608b5cd363e5fef",
+      "page_count": 171,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "ti-am62ax-silicon-errata",
+      "sha256": "5214bfd0619c210f0c4de0115210d32a9888f0bd78e8dd99453b6bc1d39d9468",
+      "page_count": 28,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        1
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ti-msp430fr4xx-2xx-user-guide",
+      "sha256": "51a7bf416ee131898fa0c9da2efa72058caff887112a5da526783e7cd4ebddcf",
+      "page_count": 676,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 18
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ti-msp430fr5994-datasheet",
+      "sha256": "393e57231d0d93939c1bac4940b73b44038e2dcc6661cced9fd820bab30a0d20",
+      "page_count": 179,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        4
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "ti-opamp-esd-appnote-zh",
+      "sha256": "97cb0c7741d6c10c5a37bc48b75c62afbc844d5c297a196b167eb3216fcc8a23",
+      "page_count": 19,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 12
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "ucl-palmer-2020-rydberg-interferometry-thesis",
+      "sha256": "54f031d492a6672deb7c9e642c39a83635d0807df2326e904cb63b2c20420a70",
+      "page_count": 142,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [
+        9
+      ],
+      "selection": [
+        {
+          "start": 1,
+          "end": 17
+        }
+      ],
+      "role": "toc-positive",
+      "priority": "high",
+      "reasons": [
+        "inspect metadata contains table-of-contents candidate pages",
+        "selection includes the last candidate plus eight following pages, capped at page 40"
+      ]
+    },
+    {
+      "id": "wch-ch32v20x-eval-zh",
+      "sha256": "bc9ba3091e1845a0c835462534cb78894d48e9918ff8e7afa1eb8c5600efbe0c",
+      "page_count": 9,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 9
+        }
+      ],
+      "role": "toc-expected-undetected",
+      "priority": "high",
+      "reasons": [
+        "manifest expects navigation region(s): contents",
+        "inspect metadata contains no table-of-contents candidate page",
+        "sample remains a hard positive and must not be counted as a negative"
+      ]
+    },
+    {
+      "id": "wch-ch32v307-eval-zh",
+      "sha256": "aff702357b03ee78a774a2571829908885b4a3c7d7b8b685d8e08e2dcc40af20",
+      "page_count": 5,
+      "pdf_kind": "text",
+      "toc_candidate_pages": [],
+      "selection": [
+        {
+          "start": 1,
+          "end": 5
+        }
+      ],
+      "role": "toc-negative",
+      "priority": "normal",
+      "reasons": [
+        "inspect metadata contains no table-of-contents candidate page",
+        "selection provides a bounded text or mixed-PDF negative example"
+      ]
+    }
+  ],
+  "skipped": [
+    {
+      "id": "berkeley-xu-2020-lattice-interferometry-thesis",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "cern-hllhc-technical-design-report",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "eth-matt-2023-dual-isotope-ion-register-thesis",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "local-labview-fpga-watermarked",
+      "reason": "missing_inspect_metadata"
+    },
+    {
+      "id": "local-rp2350-datasheet",
+      "reason": "missing_inspect_metadata"
+    },
+    {
+      "id": "local-rp2350-hardware-design",
+      "reason": "missing_inspect_metadata"
+    },
+    {
+      "id": "michigan-duspayev-2024-quantum-sensing-thesis",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "mit-keith-1991-atom-interferometer-thesis",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "nottingham-mccormack-2022-rydberg-dressed-thesis",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "openstax-astronomy-2e",
+      "reason": "missing_local_pdf"
+    },
+    {
+      "id": "wuli-tidal-disruption-events-2018-zh",
+      "reason": "missing_local_pdf"
+    }
+  ]
+}

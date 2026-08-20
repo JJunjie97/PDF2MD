@@ -6,28 +6,40 @@ import re
 import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
+from collections.abc import Collection
+from itertools import islice
 from typing import Literal
 
 from pypdf import PdfReader
 
 
 NavKind = Literal["contents", "figures", "tables"]
-FRONT_MATTER_CACHE_VERSION = 6
+FRONT_MATTER_CACHE_VERSION = 8
 logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 PAGE_LABEL = r"(?:[A-Za-z]?\d+(?:[-–—.]\d+)*|[ivxlcdmIVXLCDM]+)"
 PAGE_ONLY_RE = re.compile(rf"^{PAGE_LABEL}$")
 TRAILING_PAGE_RE = re.compile(rf"^(?P<title>.+?\S)\s+(?P<page>{PAGE_LABEL})\s*$")
+DASH_PAGE_RE = re.compile(
+    rf"^(?P<title>.+?\S)\s+[-\u2013\u2014]\s*(?P<page>{PAGE_LABEL})\s*$"
+)
 GLUED_PAGE_RE = re.compile(r"^(?P<title>.+?[^\d\s])(?P<page>\d{1,3})$")
 SPACED_ROMAN_PAGE_RE = re.compile(
     r"(?<![A-Za-z])(?P<page>[ivxlcdm](?:\s+[ivxlcdm]){1,7})\s*$",
     re.IGNORECASE,
 )
 SPACED_DIGIT_PAGE_RE = re.compile(r"(?<!\d)(?P<page>\d(?:\s+\d){1,3})\s*$")
-LEADER_RUN_RE = re.compile(r"(?:\s*[.．·•…⋯]\s*){2,}")
+LEADER_RUN_RE = re.compile(r"(?:\s*[.．·•…⋯]\s*){2,}|-{4,}")
 LAYOUT_GAP_RE = re.compile(r"[ \t]{3,}")
 MERGED_TYPED_ENTRY_RE = re.compile(
     r"(?<=\d)(?=(?:Figure|Fig\.?|Table|图|表)\s*(?:\d+|[A-Z]))",
+    re.IGNORECASE,
+)
+MERGED_SEQUENTIAL_ENTRY_RE = re.compile(
+    r"(?P<page>\d{1,4})(?P<math_close>\$)?\s+"
+    r"(?P<entry>(?:(?:Figure|Fig\.?|Table|图|表)\s*"
+    r"(?:\d+|[A-Z])(?:[.．\-–—]\d+)*|"
+    r"(?:\d+|[A-Z])(?:[.．\-–—]\d+)+))(?=\s)",
     re.IGNORECASE,
 )
 ENTRY_ID_RE = re.compile(
@@ -68,6 +80,7 @@ KNOWN_UNNUMBERED = {
     "index",
     "introduction",
     "listoffigures",
+    "listingoffigures",
     "listofillustrations",
     "listofabbreviations",
     "listofpublications",
@@ -91,6 +104,7 @@ class FrontMatterEntry:
     kind: NavKind
     title: str
     page: str = ""
+    physical_page: int = 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -132,6 +146,7 @@ def navigation_kind(title: str) -> NavKind | None:
         return "contents"
     if compact in {
         "listoffigures",
+        "listingoffigures",
         "listoffiguresandtables",
         "listoffigurestables",
         "listofillustrations",
@@ -231,6 +246,11 @@ def split_title_page(value: str, kind: NavKind) -> tuple[str, str] | None:
         )
         if not technical_standard and (had_leaders or looks_like_entry_title(title, kind)):
             return title, match.group("page")
+    dash_page = DASH_PAGE_RE.match(cleaned)
+    if dash_page:
+        title = dash_page.group("title").strip(" .\u00b7\u2022\u2026\u22ef")
+        if looks_like_entry_title(title, kind):
+            return title, dash_page.group("page")
     glued = GLUED_PAGE_RE.match(cleaned)
     if glued:
         title = glued.group("title").strip(" .·•…⋯")
@@ -245,7 +265,10 @@ def _starts_entry(value: str, kind: NavKind) -> bool:
     cleaned = strip_inline_markdown(value)
     parsed = split_title_page(cleaned, kind)
     if parsed is not None and parsed[1]:
-        return looks_like_entry_title(parsed[0], kind)
+        _, had_leaders = _clean_leaders(cleaned)
+        return (kind == "contents" and had_leaders) or looks_like_entry_title(
+            parsed[0], kind
+        )
     if kind in {"figures", "tables"}:
         return looks_like_entry_title(cleaned, kind)
     return bool(
@@ -274,6 +297,86 @@ def _normalize_layout_line(value: str) -> str:
             line = f"{line[: match.start()].rstrip()} {page}".strip()
             break
     return line
+
+
+def _is_immediate_identifier_successor(left: str, right: str) -> bool:
+    """Return true only for identifiers such as F-3/F-4 or 6.11/6.12."""
+    left_parts = canonical_identifier(left).split(".")
+    right_parts = canonical_identifier(right).split(".")
+    if len(left_parts) != len(right_parts) or len(left_parts) < 1:
+        return False
+    if left_parts[:-1] != right_parts[:-1]:
+        return False
+    if not left_parts[-1].isdigit() or not right_parts[-1].isdigit():
+        return False
+    return int(right_parts[-1]) == int(left_parts[-1]) + 1
+
+
+def _split_sequential_merged_entries(value: str, kind: NavKind) -> list[str]:
+    """Conservatively split two figure/table rows merged by layout extraction.
+
+    A split needs an immediate identifier successor, an explicit page immediately
+    before it, and a final page on the following entry.  The pages must be close
+    and monotonic.  These constraints avoid treating formula numbers or a long
+    scientific caption as an entry boundary.
+    """
+    if kind not in {"figures", "tables"}:
+        return [value]
+    pending = value.strip()
+    parts: list[str] = []
+    while pending:
+        current_identifier = entry_identifier(pending)
+        parsed_pending = split_title_page(pending, kind)
+        if (
+            not current_identifier
+            or parsed_pending is None
+            or not parsed_pending[1].isdigit()
+        ):
+            break
+        final_page = int(parsed_pending[1])
+        split: tuple[str, str] | None = None
+        for match in MERGED_SEQUENTIAL_ENTRY_RE.finditer(pending):
+            next_value = pending[match.start("entry") :]
+            next_identifier = entry_identifier(next_value)
+            if not _is_immediate_identifier_successor(
+                current_identifier, next_identifier
+            ):
+                continue
+            boundary_page = int(match.group("page"))
+            if boundary_page > final_page or final_page - boundary_page > 4:
+                continue
+            left_title = pending[: match.start("page")].rstrip()
+            if match.group("math_close"):
+                # OCR can place a directory page inside the final inline-math
+                # delimiter: ``... 100 ns、117$ F-4 ...``.  Only repair that
+                # shape when a delimiter precedes the page and math is open.
+                delimited = re.fullmatch(r"(?P<title>.*?)[\s、,，;；]+", left_title)
+                if (
+                    delimited is None
+                    or len(re.findall(r"(?<!\\)\$", delimited.group("title"))) % 2 != 1
+                ):
+                    continue
+                left_title = delimited.group("title").rstrip() + "$"
+            left_value = f"{left_title} {boundary_page}".strip()
+            parsed_left = split_title_page(left_value, kind)
+            parsed_next = split_title_page(next_value, kind)
+            if (
+                parsed_left is None
+                or parsed_left[1] != str(boundary_page)
+                or entry_identifier(parsed_left[0]) != current_identifier
+                or parsed_next is None
+                or not parsed_next[1]
+                or entry_identifier(parsed_next[0]) != next_identifier
+            ):
+                continue
+            split = left_value, next_value
+            break
+        if split is None:
+            break
+        parts.append(split[0])
+        pending = split[1]
+    parts.append(pending)
+    return parts
 
 
 def _split_layout_columns(value: str, kind: NavKind) -> list[str]:
@@ -340,9 +443,10 @@ def parse_entry_lines(lines: list[str], kind: NavKind) -> list[FrontMatterEntry]
         buffer = ""
 
     expanded_lines = [
-        part
+        sequential_part
         for line in _layout_ordered_lines(lines, kind)
-        for part in MERGED_TYPED_ENTRY_RE.split(line)
+        for typed_part in MERGED_TYPED_ENTRY_RE.split(line)
+        for sequential_part in _split_sequential_merged_entries(typed_part, kind)
     ]
     for line_index, raw_line in enumerate(expanded_lines):
         line = _normalize_layout_line(raw_line)
@@ -380,9 +484,9 @@ def parse_entry_lines(lines: list[str], kind: NavKind) -> list[FrontMatterEntry]
     flush()
 
     deduplicated: list[FrontMatterEntry] = []
-    seen: set[tuple[str, str]] = set()
+    seen: set[tuple[str, str, str]] = set()
     for entry in entries:
-        key = (entry.kind, normalized_text(entry.title))
+        key = (entry.kind, normalized_text(entry.title), entry.page)
         if not key[1] or key in seen:
             continue
         seen.add(key)
@@ -404,8 +508,30 @@ def _page_segments(lines: list[str]) -> list[tuple[NavKind, str, list[str]]]:
     return segments
 
 
+def _normalized_physical_pages(
+    physical_pages: Collection[int] | None,
+) -> tuple[int, ...] | None:
+    if physical_pages is None:
+        return None
+    selected = sorted(
+        {
+            value
+            for value in islice(physical_pages, 4096)
+            if isinstance(value, int)
+            and not isinstance(value, bool)
+            and value > 0
+        }
+    )
+    if not selected or selected != list(range(selected[0], selected[-1] + 1)):
+        return ()
+    return tuple(selected)
+
+
 def _read_cache(
-    source: Path, cache_path: Path | None, max_pages: int
+    source: Path,
+    cache_path: Path | None,
+    max_pages: int,
+    physical_pages: tuple[int, ...] | None,
 ) -> dict[NavKind, FrontMatterSection] | None:
     if cache_path is None or not cache_path.is_file():
         return None
@@ -420,40 +546,57 @@ def _read_cache(
         if not isinstance(signature, dict):
             return None
         if (
-            signature.get("size") != stat.st_size
+            signature.get("path") != str(source.resolve())
+            or signature.get("size") != stat.st_size
             or signature.get("mtime_ns") != stat.st_mtime_ns
             or payload.get("max_pages") != max_pages
+            or payload.get("physical_pages")
+            != (list(physical_pages) if physical_pages is not None else None)
         ):
             return None
         result: dict[NavKind, FrontMatterSection] = {}
         raw_sections = payload.get("sections", [])
         if not isinstance(raw_sections, list):
             return None
+        allowed_pages = (
+            set(physical_pages)
+            if physical_pages is not None
+            else set(range(1, max_pages + 1))
+        )
         for item in raw_sections:
             if not isinstance(item, dict):
-                continue
+                return None
             kind = item.get("kind")
             if kind not in {"contents", "figures", "tables"}:
                 continue
             raw_entries = item.get("entries", [])
             if not isinstance(raw_entries, list):
-                continue
-            entries = tuple(
-                FrontMatterEntry(
-                    kind=entry["kind"],
-                    title=entry["title"],
-                    page=entry.get("page", ""),
+                return None
+            entries: list[FrontMatterEntry] = []
+            for entry in raw_entries:
+                if (
+                    not isinstance(entry, dict)
+                    or entry.get("kind") not in {"contents", "figures", "tables"}
+                    or not isinstance(entry.get("title"), str)
+                    or not isinstance(entry.get("page", ""), str)
+                    or not isinstance(entry.get("physical_page"), int)
+                    or isinstance(entry.get("physical_page"), bool)
+                    or entry["physical_page"] not in allowed_pages
+                ):
+                    return None
+                entries.append(
+                    FrontMatterEntry(
+                        kind=entry["kind"],
+                        title=entry["title"],
+                        page=entry.get("page", ""),
+                        physical_page=entry["physical_page"],
+                    )
                 )
-                for entry in raw_entries
-                if isinstance(entry, dict)
-                and entry.get("kind") in {"contents", "figures", "tables"}
-                and isinstance(entry.get("title"), str)
-            )
             if entries:
                 result[kind] = FrontMatterSection(
                     kind=kind,
                     title=str(item.get("title") or ""),
-                    entries=entries,
+                    entries=tuple(entries),
                 )
         return result
     except (OSError, ValueError, TypeError, KeyError):
@@ -464,6 +607,7 @@ def _write_cache(
     source: Path,
     cache_path: Path | None,
     max_pages: int,
+    physical_pages: tuple[int, ...] | None,
     result: dict[NavKind, FrontMatterSection],
 ) -> None:
     if cache_path is None:
@@ -473,13 +617,25 @@ def _write_cache(
         payload = {
             "version": FRONT_MATTER_CACHE_VERSION,
             "max_pages": max_pages,
-            "source": {"size": stat.st_size, "mtime_ns": stat.st_mtime_ns},
+            "physical_pages": (
+                list(physical_pages) if physical_pages is not None else None
+            ),
+            "source": {
+                "path": str(source.resolve()),
+                "size": stat.st_size,
+                "mtime_ns": stat.st_mtime_ns,
+            },
             "sections": [
                 {
                     "kind": section.kind,
                     "title": section.title,
                     "entries": [
-                        {"kind": entry.kind, "title": entry.title, "page": entry.page}
+                        {
+                            "kind": entry.kind,
+                            "title": entry.title,
+                            "page": entry.page,
+                            "physical_page": entry.physical_page,
+                        }
                         for entry in section.entries
                     ],
                 }
@@ -502,9 +658,20 @@ def extract_front_matter(
     max_pages: int = 64,
     cache_path: Path | None = None,
     force: bool = False,
+    physical_pages: Collection[int] | None = None,
 ) -> dict[NavKind, FrontMatterSection]:
-    """Read only likely front-matter pages and recover clean navigation entries."""
-    cached = None if force else _read_cache(source, cache_path, max_pages)
+    """Read only likely selected front-matter pages and recover navigation entries."""
+    selected_pages = _normalized_physical_pages(physical_pages)
+    # Native text may only bridge one continuous conversion selection.  An
+    # empty tuple represents invalid or disjoint provenance and must fail
+    # closed rather than aggregate entries across an unconverted page gap.
+    if selected_pages == ():
+        return {}
+    cached = (
+        None
+        if force
+        else _read_cache(source, cache_path, max_pages, selected_pages)
+    )
     if cached is not None:
         return cached
     try:
@@ -518,7 +685,16 @@ def extract_front_matter(
     found_any = False
     last_section_page = -1
 
-    for page_index in range(min(len(reader.pages), max_pages)):
+    page_indexes = (
+        range(min(len(reader.pages), max_pages))
+        if selected_pages is None
+        else (
+            page - 1
+            for page in selected_pages
+            if page <= max_pages and page <= len(reader.pages)
+        )
+    )
+    for page_index in page_indexes:
         try:
             page_text = reader.pages[page_index].extract_text(extraction_mode="layout") or ""
         except Exception:
@@ -534,12 +710,28 @@ def extract_front_matter(
             for kind, title, segment_lines in segments:
                 active = kind
                 titles.setdefault(kind, re.sub(r"\s*\(.*?continued.*?\)\s*$", "", title, flags=re.I).strip())
-                parsed = parse_entry_lines(segment_lines, kind)
+                parsed = tuple(
+                    FrontMatterEntry(
+                        kind=entry.kind,
+                        title=entry.title,
+                        page=entry.page,
+                        physical_page=page_index + 1,
+                    )
+                    for entry in parse_entry_lines(segment_lines, kind)
+                )
                 collected.setdefault(kind, []).extend(parsed)
                 page_entries += len(parsed)
                 last_section_page = page_index
         elif active is not None:
-            parsed = parse_entry_lines(lines, active)
+            parsed = tuple(
+                FrontMatterEntry(
+                    kind=entry.kind,
+                    title=entry.title,
+                    page=entry.page,
+                    physical_page=page_index + 1,
+                )
+                for entry in parse_entry_lines(lines, active)
+            )
             page_bearing = sum(bool(entry.page) for entry in parsed)
             if len(parsed) >= 3 and page_bearing * 5 >= len(parsed) * 3:
                 collected.setdefault(active, []).extend(parsed)
@@ -556,10 +748,10 @@ def extract_front_matter(
     result: dict[NavKind, FrontMatterSection] = {}
     for kind, entries in collected.items():
         deduplicated: list[FrontMatterEntry] = []
-        seen: set[str] = set()
+        seen: set[tuple[str, str]] = set()
         for entry in entries:
-            key = normalized_text(entry.title)
-            if not key or key in seen:
+            key = (normalized_text(entry.title), entry.page)
+            if not key[0] or key in seen:
                 continue
             seen.add(key)
             deduplicated.append(entry)
@@ -574,5 +766,5 @@ def extract_front_matter(
                 title=titles.get(kind, default_title),
                 entries=tuple(deduplicated),
             )
-    _write_cache(source, cache_path, max_pages, result)
+    _write_cache(source, cache_path, max_pages, selected_pages, result)
     return result

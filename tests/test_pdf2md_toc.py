@@ -73,6 +73,42 @@ class TocEnhancementTests(unittest.TestCase):
 
         self.assertTrue(enhance.call_args.kwargs["force_frontmatter"])
 
+    def test_partial_publish_forwards_source_and_selection_bound_native_cache(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "book.pdf"
+            source.write_bytes(b"pdf")
+            layout = core.output_layout(source, root / "output")
+            core.ensure_layout(layout)
+            selection = layout.selections / "cached.md"
+            selection.write_text(
+                "## List of Tables\n\nunusable OCR fragment\n",
+                encoding="utf-8",
+            )
+            with mock.patch.object(
+                core,
+                "enhance_document_navigation",
+                side_effect=lambda content, **_kwargs: content,
+            ) as enhance:
+                core._publish_document(
+                    layout,
+                    [{
+                        "selection": selection.relative_to(layout.root).as_posix(),
+                        "pages": "1-20",
+                    }],
+                    source=source,
+                    refresh_frontmatter=True,
+                )
+
+        kwargs = enhance.call_args.kwargs
+        self.assertEqual(kwargs["source"], source)
+        self.assertEqual(
+            kwargs["frontmatter_cache"].name,
+            "frontmatter-v8-1-20.json",
+        )
+        self.assertEqual(list(kwargs["selected_physical_pages"]), list(range(1, 21)))
+        self.assertTrue(kwargs["force_frontmatter"])
+
     def test_numbered_thesis_toc_becomes_nested_links(self) -> None:
         source = """# Paper
 
@@ -413,6 +449,67 @@ Text.
         self.assertNotIn("— 12", result)
         self.assertNotIn("— 13", result)
 
+    def test_structured_sequential_figure_merge_is_linked_and_idempotent(self) -> None:
+        source = """## List of Figures
+
+unusable figure-list fragment
+
+## Body
+
+Figure F-3: Frequency analysis.
+
+Figure F-4: Atom-number measurement.
+
+Figure F-5: Spectrum.
+
+Figure F-6: Scattering-rate comparison.
+"""
+        blocks = [[
+            "F-3 Frequency analysis, $T = 10, 50, 100\\,\\mathrm{ns}, 117$ "
+            "F-4 Atom-number measurement 117",
+            "F-5 Spectrum, $T = 10, 100, 1000\\,\\mathrm{ns}, 119$ "
+            "F-6 Scattering-rate comparison 120",
+        ]]
+        front_regions = {
+            "schema": "pdf2md.front-regions.v1",
+            "total_pages": 11,
+            "page_count": 1,
+            "scanned_pages": 1,
+            "truncated": False,
+            "body_start_page": None,
+            "pages": [{
+                "page": 11,
+                "kind": "list_of_figures",
+                "confidence": 0.98,
+                "evidence": ["explicit_title", "index_blocks"],
+                "stats": {"index_items": 2},
+            }],
+            "regions": [],
+            "navigation": {
+                "list_of_figures": [{"page": 11, "blocks": blocks}],
+            },
+            "warnings": [],
+        }
+
+        result = enhance_document_navigation(
+            source,
+            front_regions=front_regions,
+            selected_physical_pages={11},
+        )
+        repeated = enhance_document_navigation(
+            result,
+            front_regions=front_regions,
+            selected_physical_pages={11},
+        )
+
+        self.assertEqual(repeated, result)
+        for identifier in ("F-3", "F-4", "F-5", "F-6"):
+            self.assertEqual(len(re.findall(rf"^- \[{identifier} .*\]\(#\d+\)$", result, re.M)), 1)
+        self.assertNotRegex(result, r"F-3 .* F-4|F-5 .* F-6")
+        anchors = set(re.findall(r'<a\s+id="([^"]+)"', result))
+        links = set(re.findall(r"\]\(#([^)]+)\)", result))
+        self.assertFalse(links - anchors)
+
     def test_unrecoverable_long_list_debris_is_removed_before_body_heading(self) -> None:
         debris = "10.4 Comparison " + ". " * 400 + "garbled"
         source = f"""## List of Figures
@@ -527,6 +624,49 @@ Text.
 
 
 class FrontMatterEntryTests(unittest.TestCase):
+    def test_sequential_figure_entries_merged_at_math_page_are_split(self) -> None:
+        entries = parse_entry_lines(
+            [
+                "F-3 Frequency analysis, $T = 10, 50, 100\\,\\mathrm{ns} 、 117$ "
+                "F-4 Atom-number measurement 117",
+                "F-5 Spectrum, $T = 10, 100, 1000\\,\\mathrm{ns} 、 119$ "
+                "F-6 Scattering-rate comparison 120",
+            ],
+            "figures",
+        )
+
+        self.assertEqual(
+            [(entry.title, entry.page) for entry in entries],
+            [
+                ("F-3 Frequency analysis, $T = 10, 50, 100\\,\\mathrm{ns}$", "117"),
+                ("F-4 Atom-number measurement", "117"),
+                ("F-5 Spectrum, $T = 10, 100, 1000\\,\\mathrm{ns}$", "119"),
+                ("F-6 Scattering-rate comparison", "120"),
+            ],
+        )
+
+    def test_formula_number_before_identifier_is_not_split_without_page_evidence(self) -> None:
+        entries = parse_entry_lines(
+            [
+                "F-3 Transition from isotope 117 F-4 in a long caption "
+                "$x = 100$ 140"
+            ],
+            "figures",
+        )
+
+        self.assertEqual(len(entries), 1)
+        self.assertIn("isotope 117 F-4", entries[0].title)
+        self.assertEqual(entries[0].page, "140")
+
+    def test_nonsequential_identifier_in_long_caption_is_not_split(self) -> None:
+        entries = parse_entry_lines(
+            ["F-3 Comparison at page marker 117 F-8 transition result 118"],
+            "figures",
+        )
+
+        self.assertEqual(len(entries), 1)
+        self.assertIn("117 F-8 transition", entries[0].title)
+
     def test_wrapped_title_ending_in_scientific_number_is_not_mistaken_for_page(self) -> None:
         entries = parse_entry_lines(
             [

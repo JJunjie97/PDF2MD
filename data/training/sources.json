@@ -1,0 +1,50 @@
+{
+  "schema": "pdf2md.front-training-sources.v1",
+  "download_policy": "manual-only",
+  "datasets": [
+    {
+      "id": "doclaynet",
+      "name": "DocLayNet",
+      "official_url": "https://github.com/DS4SD/DocLayNet",
+      "license": "CDLA-Permissive-1.0",
+      "license_url": "https://github.com/DS4SD/DocLayNet/blob/main/LICENSE",
+      "training_use": "permitted-with-attribution",
+      "use_for": ["layout-pretraining", "region-proposals"],
+      "download_policy": "manual-only",
+      "notes": "Large page-layout corpus. Its object labels are auxiliary features, not PDF2MD front-page gold labels. Preserve attribution and license notices."
+    },
+    {
+      "id": "grotoap2",
+      "name": "GROTOAP2",
+      "official_url": "https://www.dlib.org/dlib/november14/tkaczyk/11tkaczyk.html",
+      "license": "CC-BY (as stated by the dataset paper)",
+      "license_url": "https://www.dlib.org/dlib/november14/tkaczyk/11tkaczyk.html",
+      "training_use": "permitted-with-attribution",
+      "use_for": ["scientific-zone-pretraining", "weak-label-ablation"],
+      "download_policy": "manual-only",
+      "notes": "Semi-automatically labelled scientific-document zones; useful as weak supervision and must not be treated as fully human-corrected gold data."
+    },
+    {
+      "id": "pmc-open-access-subset",
+      "name": "PMC Open Access Subset",
+      "official_url": "https://pmc.ncbi.nlm.nih.gov/tools/openftlist/",
+      "license": "Per-article license; terms vary",
+      "license_url": "https://pmc.ncbi.nlm.nih.gov/tools/openftlist/",
+      "training_use": "conditional-per-item-license",
+      "use_for": ["scientific-document-sampling", "domain-evaluation"],
+      "download_policy": "manual-only",
+      "notes": "Use only official PMC retrieval services and retain each article's license metadata. Open Access membership alone does not grant one uniform training or redistribution license."
+    },
+    {
+      "id": "comphrdoc",
+      "name": "CompHRDoc",
+      "official_url": "https://github.com/microsoft/CompHRDoc",
+      "license": "MIT for repository code/annotations; source images have separate restrictions",
+      "license_url": "https://github.com/microsoft/CompHRDoc/blob/main/LICENSE",
+      "training_use": "conditional-image-license",
+      "use_for": ["reading-order-evaluation", "toc-structure-evaluation", "hierarchy-evaluation"],
+      "download_policy": "manual-only",
+      "notes": "The official repository says HRDoc-Hard images must be obtained separately because of license restrictions. Do not infer image rights from the repository's MIT license."
+    }
+  ]
+}

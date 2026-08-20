@@ -3,8 +3,10 @@ from __future__ import annotations
 import difflib
 import re
 import unicodedata
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 from pdf2md_frontmatter import (
     FrontMatterEntry,
@@ -92,6 +94,12 @@ CONTAINER_ONLY_RE = re.compile(
     r")\s*[.．:：]?\s*$",
     re.IGNORECASE,
 )
+CONTEXTUAL_NAV_LEADER_RE = re.compile(
+    r"(?:\s*[.\u00b7\u2022\u2026]\s*){2,}"
+)
+CONTEXTUAL_CONTENTS_ALIAS = "\u5185\u5bb9"
+CONTEXTUAL_CONTENTS_MAX_LINE = 1000
+CONTEXTUAL_CONTENTS_MIN_CONFIDENCE = 0.90
 
 
 @dataclass(slots=True)
@@ -101,6 +109,7 @@ class NavEntry:
     page: str
     depth: int
     native: bool = False
+    structured: bool = False
     target: "Target | None" = None
 
 
@@ -115,6 +124,9 @@ class NavSection:
     sources: list["NavSection"] = field(default_factory=list)
     replace_debris: bool = False
     combined: bool = False
+    owned_tail_start: int = -1
+    owned_tail_records: list[tuple[int, int, str, str]] = field(default_factory=list)
+    suppressed: bool = False
 
 
 @dataclass(slots=True)
@@ -131,6 +143,10 @@ class Target:
     navigation_section: NavSection | None = None
     anchor: str = ""
     sources: list[NavSection] = field(default_factory=list)
+
+
+def _trusted_source_entry(entry: NavEntry) -> bool:
+    return entry.native or entry.structured
 
 
 def _is_continued(title: str) -> bool:
@@ -356,8 +372,125 @@ def _has_trusted_page_less_contents_run(
     return entries >= 6 and numbered >= 3 and layout_evidence
 
 
-def _section_ranges(lines: list[str]) -> list[NavSection]:
+def _trusted_contextual_contents_pages(
+    report: Mapping[str, Any] | None,
+    selected_physical_pages: Collection[int] | None,
+) -> set[int]:
+    """Return high-confidence V1 pages that also carry contents INDEX blocks."""
+    if not isinstance(report, Mapping) or report.get("schema") != "pdf2md.front-regions.v1":
+        return set()
+    selected = _selected_page_filter(selected_physical_pages)
+    if selected_physical_pages is not None and not selected:
+        return set()
+
+    navigation = report.get("navigation")
+    raw_contents = navigation.get("contents") if isinstance(navigation, Mapping) else None
+    if not isinstance(raw_contents, list):
+        return set()
+    navigation_pages: set[int] = set()
+    for raw_page in raw_contents[:64]:
+        if not isinstance(raw_page, Mapping):
+            continue
+        page = raw_page.get("page")
+        blocks = raw_page.get("blocks")
+        has_text_block = isinstance(blocks, list) and any(
+            isinstance(block, list)
+            and any(isinstance(value, str) and value.strip() for value in block[:512])
+            for block in blocks[:128]
+        )
+        if (
+            isinstance(page, int)
+            and not isinstance(page, bool)
+            and page > 0
+            and has_text_block
+            and (selected is None or page in selected)
+        ):
+            navigation_pages.add(page)
+
+    trusted: set[int] = set()
+    pages = report.get("pages")
+    if not isinstance(pages, list):
+        return trusted
+    for raw_page in pages[:64]:
+        if not isinstance(raw_page, Mapping):
+            continue
+        page = raw_page.get("page")
+        confidence = raw_page.get("confidence")
+        if (
+            isinstance(page, int)
+            and not isinstance(page, bool)
+            and page in navigation_pages
+            and raw_page.get("kind") == "contents"
+            and isinstance(confidence, (int, float))
+            and not isinstance(confidence, bool)
+            and float(confidence) >= CONTEXTUAL_CONTENTS_MIN_CONFIDENCE
+        ):
+            trusted.add(page)
+    return trusted
+
+
+def _is_contextual_contents_alias(
+    lines: list[str],
+    start: int,
+    title: str,
+    ignored: set[int],
+    trusted_pages: set[int],
+    structured_navigation: Collection[tuple[int, int, NavKind, NavEntry]],
+) -> bool:
+    """Accept ambiguous Chinese contents only with report and local INDEX evidence."""
+    if (
+        normalized_text(title) != normalized_text(CONTEXTUAL_CONTENTS_ALIAS)
+        or start >= CONTEXTUAL_CONTENTS_MAX_LINE
+        or not trusted_pages
+    ):
+        return False
+
+    structured_titles = {
+        normalized_text(entry.title)
+        for page, _order, source_kind, entry in structured_navigation
+        if page in trusted_pages and source_kind == "contents"
+    }
+    structured_titles.discard("")
+    matched_titles: set[str] = set()
+    leader_page_rows = 0
+    inspected = 0
+    for index in range(start + 1, min(len(lines), start + 65)):
+        if index in ignored or HEADING_RE.fullmatch(lines[index]) is not None:
+            break
+        cleaned = _clean_entry_line(lines[index])
+        if not cleaned:
+            continue
+        inspected += 1
+        if inspected > 16:
+            break
+        parsed = split_title_page(cleaned, "contents")
+        if (
+            parsed is not None
+            and parsed[1]
+            and CONTEXTUAL_NAV_LEADER_RE.search(lines[index]) is not None
+        ):
+            leader_page_rows += 1
+        local_title = parsed[0] if parsed is not None else cleaned
+        key = normalized_text(local_title)
+        if key and key in structured_titles:
+            matched_titles.add(key)
+        if leader_page_rows >= 3 or len(matched_titles) >= 3:
+            return True
+    return False
+
+
+def _section_ranges(
+    lines: list[str],
+    *,
+    front_regions: Mapping[str, Any] | None = None,
+    selected_physical_pages: Collection[int] | None = None,
+    structured_navigation: Collection[tuple[int, int, NavKind, NavEntry]] = (),
+) -> list[NavSection]:
     fenced = _code_line_indexes(lines)
+    trusted_contents_pages = _trusted_contextual_contents_pages(
+        front_regions,
+        selected_physical_pages,
+    )
     starts: list[tuple[int, NavKind, str, bool]] = []
     for index, line in enumerate(lines):
         if index in fenced:
@@ -365,9 +498,19 @@ def _section_ranges(lines: list[str]) -> list[NavSection]:
         heading = HEADING_RE.fullmatch(line)
         if not heading:
             continue
-        kind = navigation_kind(heading.group("title"))
+        title = heading.group("title")
+        kind = navigation_kind(title)
+        if kind is None and _is_contextual_contents_alias(
+            lines,
+            index,
+            title,
+            fenced,
+            trusted_contents_pages,
+            structured_navigation,
+        ):
+            kind = "contents"
         if kind is not None:
-            title = heading.group("title").strip()
+            title = title.strip()
             starts.append((index, kind, title, _is_combined_navigation(title)))
 
     sections: list[NavSection] = []
@@ -601,11 +744,7 @@ def _entries_from_markdown(lines: list[str], section: NavSection) -> list[NavEnt
         else:
             rendered_bullets.append(bullet)
 
-    if (
-        rendered_bullets
-        and any(bullet.group("link_title") for bullet in rendered_bullets)
-        and not has_raw_content
-    ):
+    if rendered_bullets and not has_raw_content:
         entries: list[NavEntry] = []
         for bullet in rendered_bullets:
             title = strip_inline_markdown(
@@ -640,6 +779,7 @@ def _entries_from_markdown(lines: list[str], section: NavSection) -> list[NavEnt
             cleaned.append("")
             continue
         cleaned.append(value)
+    cleaned = _recover_body_aligned_entry_lines(cleaned, lines, section)
     cleaned = _pair_parallel_page_column(cleaned, section.kind)
     return [
         NavEntry(
@@ -665,26 +805,491 @@ def _native_entries(entries: tuple[FrontMatterEntry, ...]) -> list[NavEntry]:
     ]
 
 
+StructuredEntryRecord = tuple[int, int, NavKind, NavEntry]
+_STRUCTURED_NAV_KINDS: dict[str, NavKind] = {
+    "contents": "contents",
+    "list_of_figures": "figures",
+    "list_of_tables": "tables",
+}
+
+
+@dataclass(slots=True)
+class StructuredNavigationRun:
+    """One physical-page run opened by an explicit navigation heading."""
+
+    kind: NavKind
+    start_page: int
+    records: list[StructuredEntryRecord] = field(default_factory=list)
+
+
+def _selected_page_filter(
+    selected_physical_pages: Collection[int] | None,
+) -> set[int] | None:
+    if selected_physical_pages is None:
+        return None
+    selected: set[int] = set()
+    for index, value in enumerate(selected_physical_pages):
+        if index >= 4096:
+            break
+        if isinstance(value, int) and not isinstance(value, bool) and value > 0:
+            selected.add(value)
+    return selected
+
+
+def _trusted_partial_native_kinds(
+    report: Mapping[str, Any] | None,
+    selected_physical_pages: Collection[int] | None,
+) -> set[NavKind]:
+    """Gate native-text repair to identified navigation inside one page run."""
+    selected = _selected_page_filter(selected_physical_pages)
+    if not selected:
+        return set()
+    ordered = sorted(selected)
+    if ordered != list(range(ordered[0], ordered[-1] + 1)):
+        return set()
+    if not isinstance(report, Mapping) or report.get("schema") != "pdf2md.front-regions.v1":
+        return set()
+
+    trusted: set[NavKind] = set()
+    raw_pages = report.get("pages")
+    if isinstance(raw_pages, list):
+        for raw_page in raw_pages[:64]:
+            if not isinstance(raw_page, Mapping):
+                continue
+            page = raw_page.get("page")
+            confidence = raw_page.get("confidence")
+            kind = _STRUCTURED_NAV_KINDS.get(str(raw_page.get("kind")))
+            if (
+                kind is not None
+                and isinstance(page, int)
+                and not isinstance(page, bool)
+                and page in selected
+                and isinstance(confidence, (int, float))
+                and not isinstance(confidence, bool)
+                and float(confidence) >= 0.68
+            ):
+                trusted.add(kind)
+
+    # A damaged list can be confidently identified by its explicit heading
+    # even when its unusable entry block correctly makes the classifier
+    # abstain.  This metadata never supplies text; it only permits pypdf to
+    # recover entries from the same selected physical page.
+    recovery_pages = report.get("native_recovery_pages")
+    if isinstance(recovery_pages, list):
+        for item in recovery_pages[:64]:
+            if not isinstance(item, Mapping):
+                continue
+            page = item.get("page")
+            confidence = item.get("confidence")
+            kind = _STRUCTURED_NAV_KINDS.get(str(item.get("kind")))
+            evidence = item.get("evidence")
+            evidence_set = {
+                value for value in evidence if isinstance(value, str)
+            } if isinstance(evidence, list) else set()
+            if (
+                kind is not None
+                and isinstance(page, int)
+                and not isinstance(page, bool)
+                and page in selected
+                and isinstance(confidence, (int, float))
+                and not isinstance(confidence, bool)
+                and float(confidence) >= 0.60
+                and {"explicit_title", "unusable_navigation_debris"}
+                <= evidence_set
+            ):
+                trusted.add(kind)
+    return trusted
+
+
+def _structured_navigation_entries(
+    report: Mapping[str, Any] | None,
+    selected_physical_pages: Collection[int] | None,
+) -> list[StructuredEntryRecord]:
+    """Parse bounded MinerU INDEX evidence; never create a link target."""
+    if not isinstance(report, Mapping) or report.get("schema") != "pdf2md.front-regions.v1":
+        return []
+    selected = _selected_page_filter(selected_physical_pages)
+    if selected_physical_pages is not None and not selected:
+        return []
+
+    page_evidence: dict[tuple[int, str], float] = {}
+    pages = report.get("pages")
+    if isinstance(pages, list):
+        for raw_page in pages[:64]:
+            if not isinstance(raw_page, Mapping):
+                continue
+            page = raw_page.get("page")
+            kind = raw_page.get("kind")
+            confidence = raw_page.get("confidence")
+            if (
+                isinstance(page, int)
+                and not isinstance(page, bool)
+                and page > 0
+                and kind in _STRUCTURED_NAV_KINDS
+                and isinstance(confidence, (int, float))
+                and not isinstance(confidence, bool)
+                and float(confidence) >= 0.68
+            ):
+                page_evidence[(page, str(kind))] = float(confidence)
+
+    navigation = report.get("navigation")
+    if not isinstance(navigation, Mapping):
+        return []
+    records: list[StructuredEntryRecord] = []
+    order = 0
+    for report_kind, entry_kind in _STRUCTURED_NAV_KINDS.items():
+        raw_pages = navigation.get(report_kind)
+        if not isinstance(raw_pages, list):
+            continue
+        for raw_page in raw_pages[:64]:
+            if not isinstance(raw_page, Mapping):
+                continue
+            page = raw_page.get("page")
+            if (
+                not isinstance(page, int)
+                or isinstance(page, bool)
+                or page <= 0
+                or (selected is not None and page not in selected)
+                or (page, report_kind) not in page_evidence
+            ):
+                continue
+            blocks = raw_page.get("blocks")
+            if not isinstance(blocks, list):
+                continue
+            for raw_block in blocks[:128]:
+                if not isinstance(raw_block, list):
+                    continue
+                texts = [
+                    value.strip()
+                    for value in raw_block[:512]
+                    if isinstance(value, str) and 0 < len(value.strip()) <= 4096
+                ]
+                if not texts:
+                    continue
+                for parsed in parse_entry_lines(texts, entry_kind):
+                    records.append(
+                        (
+                            page,
+                            order,
+                            entry_kind,
+                            NavEntry(
+                                kind=parsed.kind,
+                                title=parsed.title,
+                                page=parsed.page,
+                                depth=_entry_depth(parsed.title, parsed.kind),
+                                structured=True,
+                            ),
+                        )
+                    )
+                    order += 1
+    records.sort(key=lambda item: (item[0], item[1]))
+    return records
+
+
+def _structured_navigation_runs(
+    report: Mapping[str, Any] | None,
+    selected_physical_pages: Collection[int] | None,
+    records: Collection[StructuredEntryRecord],
+) -> dict[NavKind, list[StructuredNavigationRun]]:
+    """Partition trusted records at explicit physical-page navigation headings."""
+    if not isinstance(report, Mapping) or report.get("schema") != "pdf2md.front-regions.v1":
+        return {}
+    selected = _selected_page_filter(selected_physical_pages)
+    if selected_physical_pages is not None and not selected:
+        return {}
+
+    by_page: dict[tuple[NavKind, int], list[StructuredEntryRecord]] = {}
+    for record in records:
+        page, _order, kind, _entry = record
+        by_page.setdefault((kind, page), []).append(record)
+
+    page_runs: dict[NavKind, list[tuple[int, bool]]] = {}
+    seen: set[tuple[NavKind, int]] = set()
+    pages = report.get("pages")
+    if not isinstance(pages, list):
+        return {}
+    for raw_page in pages[:64]:
+        if not isinstance(raw_page, Mapping):
+            continue
+        page = raw_page.get("page")
+        report_kind = raw_page.get("kind")
+        confidence = raw_page.get("confidence")
+        kind = _STRUCTURED_NAV_KINDS.get(str(report_kind))
+        if (
+            kind is None
+            or not isinstance(page, int)
+            or isinstance(page, bool)
+            or page <= 0
+            or (selected is not None and page not in selected)
+            or not isinstance(confidence, (int, float))
+            or isinstance(confidence, bool)
+            or float(confidence) < 0.68
+            or (kind, page) in seen
+        ):
+            continue
+        seen.add((kind, page))
+        evidence = raw_page.get("evidence")
+        explicit = isinstance(evidence, list) and any(
+            value in {"explicit_title", "explicit_heading"}
+            for value in evidence
+            if isinstance(value, str)
+        )
+        page_runs.setdefault(kind, []).append((page, explicit))
+
+    result: dict[NavKind, list[StructuredNavigationRun]] = {}
+    for kind, page_evidence in page_runs.items():
+        active: StructuredNavigationRun | None = None
+        runs: list[StructuredNavigationRun] = []
+        for page, explicit in sorted(page_evidence):
+            if explicit and active is not None:
+                if active.records:
+                    runs.append(active)
+                active = None
+            if active is None:
+                active = StructuredNavigationRun(kind=kind, start_page=page)
+            active.records.extend(by_page.get((kind, page), ()))
+        if active is not None and active.records:
+            runs.append(active)
+        if runs:
+            result[kind] = runs
+    return result
+
+
+def _run_entries(run: StructuredNavigationRun) -> list[NavEntry]:
+    return [
+        entry
+        for _page, _order, source_kind, entry in run.records
+        if entry.kind == source_kind
+    ]
+
+
+def _exact_entry_overlap(left: Collection[NavEntry], right: Collection[NavEntry]) -> int:
+    """Count exact normalized titles; numeric identifiers alone are not evidence."""
+    left_titles = {
+        (entry.kind, normalized_text(entry.title))
+        for entry in left
+        if normalized_text(entry.title)
+    }
+    right_titles = {
+        (entry.kind, normalized_text(entry.title))
+        for entry in right
+        if normalized_text(entry.title)
+    }
+    return len(left_titles & right_titles)
+
+
+def _monotonic_run_alignment_supported(
+    sections: Collection[NavSection],
+    parsed: Mapping[int, list[NavEntry]],
+    run_entries: Collection[list[NavEntry]],
+) -> bool:
+    """Require each Markdown section to match its same-position physical run."""
+    section_list = list(sections)
+    entry_runs = list(run_entries)
+    if len(section_list) != len(entry_runs):
+        return False
+    scores = [
+        [
+            _exact_entry_overlap(parsed.get(section.start, ()), entries)
+            for entries in entry_runs
+        ]
+        for section in section_list
+    ]
+    for index, row in enumerate(scores):
+        chosen = row[index]
+        alternatives = row[:index] + row[index + 1 :]
+        if chosen <= 0 or (alternatives and chosen <= max(alternatives)):
+            return False
+    return True
+
+
+def _partitioned_structured_entries(
+    sections: Collection[NavSection],
+    parsed: Mapping[int, list[NavEntry]],
+    runs: Mapping[NavKind, list[StructuredNavigationRun]],
+) -> tuple[dict[int, list[NavEntry]], set[NavKind]]:
+    """Monotonically align multiple same-kind sections to distinct page runs.
+
+    Partitioning is deliberately withheld unless every section has a strictly
+    stronger exact-title overlap with its same-position physical run.  This
+    uses the local raw order plus report boundaries and cannot guess from a
+    Chinese/English language label alone.
+    """
+    assigned: dict[int, list[NavEntry]] = {}
+    partitioned: set[NavKind] = set()
+    for kind, kind_runs in runs.items():
+        kind_sections = [
+            section
+            for section in sections
+            if not section.combined and section.kind == kind
+        ]
+        if len(kind_sections) < 2 or len(kind_runs) != len(kind_sections):
+            continue
+        run_entries = [_run_entries(run) for run in kind_runs]
+        if not _monotonic_run_alignment_supported(
+            kind_sections, parsed, run_entries
+        ):
+            continue
+        for section, entries in zip(kind_sections, run_entries):
+            assigned[section.start] = entries
+        partitioned.add(kind)
+    return assigned, partitioned
+
+
+def _collapse_repeated_structured_sections(
+    lines: list[str],
+    sections: list[NavSection],
+    runs: Mapping[NavKind, list[StructuredNavigationRun]],
+    report: Mapping[str, Any] | None,
+) -> None:
+    """Fold a repeated same-title page header into the preceding list.
+
+    Some datasheets repeat ``TABLE OF CONTENTS`` at the top of every physical
+    directory page. MinerU consequently emits several Markdown sections. We
+    collapse only a proven one-to-one structured-page alignment, consecutive
+    physical runs, adjacent navigation sections, and an exact normalized title.
+    Different bilingual headings therefore remain independent.
+    """
+    body_start = (
+        report.get("body_start_page") if isinstance(report, Mapping) else None
+    )
+    if (
+        isinstance(body_start, bool)
+        or not isinstance(body_start, int)
+        or body_start <= 0
+    ):
+        body_start = None
+    positions = {id(section): index for index, section in enumerate(sections)}
+    parsed = {section.start: section.entries for section in sections}
+    for kind, kind_runs in runs.items():
+        kind_sections = [
+            section
+            for section in sections
+            if not section.combined and section.kind == kind
+        ]
+        if len(kind_sections) < 2 or len(kind_runs) != len(kind_sections):
+            continue
+        run_entries = [_run_entries(run) for run in kind_runs]
+        if not _monotonic_run_alignment_supported(
+            kind_sections, parsed, run_entries
+        ):
+            continue
+
+        keeper = kind_sections[0]
+        previous_section = kind_sections[0]
+        previous_run = kind_runs[0]
+        for section, run in zip(kind_sections[1:], kind_runs[1:]):
+            previous_pages = [page for page, *_rest in previous_run.records]
+            current_pages = [page for page, *_rest in run.records]
+            adjacent_pages = bool(
+                previous_pages
+                and current_pages
+                and max(previous_pages) + 1 == min(current_pages)
+            )
+            adjacent_sections = (
+                positions[id(section)] == positions[id(previous_section)] + 1
+            )
+            same_title = bool(
+                normalized_text(keeper.title)
+                and normalized_text(keeper.title) == normalized_text(section.title)
+            )
+            before_body = (
+                body_start is None
+                or min(current_pages, default=body_start) < body_start
+            )
+            interstitial_headings = [
+                match.group("title")
+                for line in lines[previous_section.end : section.start]
+                if (match := HEADING_RE.fullmatch(line)) is not None
+            ]
+            frontmatter_only_gap = all(
+                normalized_text(title)
+                in {
+                    "revisionhistory",
+                    "revisions",
+                    "changehistory",
+                    "documenthistory",
+                    "recordofchanges",
+                }
+                or re.search(r"\b(?:rev(?:ision)?s?)\.?\b", title, re.I)
+                is not None
+                for title in interstitial_headings
+            )
+            if (
+                adjacent_pages
+                and adjacent_sections
+                and same_title
+                and before_body
+                and frontmatter_only_gap
+            ):
+                keeper.entries = _merge_entry_sequences(keeper.entries, section.entries)
+                section.suppressed = True
+            else:
+                keeper = section
+            previous_section = section
+            previous_run = run
+
+
 def _populate_entries(
     lines: list[str],
     sections: list[NavSection],
     source: Path | None,
     frontmatter_cache: Path | None,
     force_frontmatter: bool = False,
+    front_regions: Mapping[str, Any] | None = None,
+    selected_physical_pages: Collection[int] | None = None,
+    structured_navigation: Collection[StructuredEntryRecord] | None = None,
 ) -> None:
-    native = (
-        extract_front_matter(
+    partial_native_kinds = (
+        _trusted_partial_native_kinds(front_regions, selected_physical_pages)
+        if selected_physical_pages is not None
+        else None
+    )
+    native = {}
+    if (
+        source is not None
+        and source.is_file()
+        and (partial_native_kinds is None or partial_native_kinds)
+    ):
+        native = extract_front_matter(
             source,
             cache_path=frontmatter_cache,
             force=force_frontmatter,
+            physical_pages=selected_physical_pages,
         )
-        if source is not None and source.is_file()
-        else {}
+        if partial_native_kinds is not None:
+            native = {
+                kind: section
+                for kind, section in native.items()
+                if kind in partial_native_kinds
+            }
+    structured = list(structured_navigation) if structured_navigation is not None else (
+        _structured_navigation_entries(
+            front_regions,
+            selected_physical_pages,
+        )
+    )
+    parsed_by_section = {
+        section.start: _entries_from_markdown(lines, section)
+        for section in sections
+    }
+    runs = _structured_navigation_runs(
+        front_regions,
+        selected_physical_pages,
+        structured,
+    )
+    partitioned_entries, partitioned_kinds = _partitioned_structured_entries(
+        sections,
+        parsed_by_section,
+        runs,
     )
     used_native: set[NavKind] = set()
+    used_structured: set[NavKind] = set(partitioned_kinds)
     for section in sections:
-        parsed = _entries_from_markdown(lines, section)
-        native_section = native.get(section.kind)
+        parsed = parsed_by_section[section.start]
+        native_section = (
+            None if section.kind in partitioned_kinds else native.get(section.kind)
+        )
         if native_section and section.kind not in used_native:
             native_entries = _native_entries(native_section.entries)
             native_pages = sum(bool(entry.page) for entry in native_entries)
@@ -696,12 +1301,106 @@ def _populate_entries(
                 section.entries = parsed
         else:
             section.entries = parsed
+        assigned_entries = partitioned_entries.get(section.start)
+        if assigned_entries is not None:
+            section.entries = _merge_entry_sequences(
+                section.entries,
+                assigned_entries,
+            )
+            continue
+        accepted_sources: set[NavKind] = (
+            {"figures", "tables"} if section.combined else {section.kind}
+        )
+        available_sources = accepted_sources - used_structured
+        structured_entries = [
+            entry
+            for _page, _order, source_kind, entry in structured
+            if source_kind in available_sources
+            and (
+                section.combined
+                or entry.kind == section.kind
+            )
+        ]
+        if structured_entries:
+            section.entries = _merge_entry_sequences(
+                section.entries,
+                structured_entries,
+            )
+            used_structured.update(available_sources)
 
 
 RAW_TRAILING_PAGE_RE = re.compile(
     rf"^(?P<title>.+?\S)\s+(?P<page>{PAGE_LABEL})\s*$",
     re.IGNORECASE,
 )
+
+
+def _body_heading_targets_for_section(
+    lines: list[str], section: NavSection
+) -> dict[str, list[Target]]:
+    """Index explicit body headings outside the owned navigation block."""
+    indexed: dict[str, list[Target]] = {}
+    for target in _collect_heading_targets(lines, [section]):
+        key = normalized_text(target.title)
+        if key:
+            indexed.setdefault(key, []).append(target)
+        prefix, body = _prefix_and_body(target.title, allow_single_letter=False)
+        if prefix and body and body != key:
+            indexed.setdefault(body, []).append(target)
+    return indexed
+
+
+def _body_aligned_source_entry(
+    value: str,
+    kind: NavKind,
+    body_targets: dict[str, list[Target]],
+) -> tuple[str, str] | None:
+    """Recover one damaged list row from a unique explicit body heading."""
+    if kind != "contents":
+        return None
+    fallback = RAW_TRAILING_PAGE_RE.fullmatch(_clean_entry_line(value))
+    if fallback is None:
+        return None
+    source_title = re.sub(r"(?:\s*\.\s*){2,}", " ", fallback.group("title"))
+    source_title = re.sub(r"\s+", " ", source_title).strip(" .")
+    if not source_title or _prefix_key(source_title, allow_single_letter=False):
+        return None
+    candidates = body_targets.get(normalized_text(source_title), [])
+    if len(candidates) != 1:
+        return None
+    target = candidates[0]
+    title = strip_inline_markdown(target.title)
+    if target.context_prefix and not _prefix_key(title, allow_single_letter=False):
+        title = f"{target.context_prefix} {title}".strip()
+    return title, fallback.group("page")
+
+
+def _recover_body_aligned_entry_lines(
+    values: list[str], lines: list[str], section: NavSection
+) -> list[str]:
+    """Repair only otherwise-unparseable rows from the body heading index."""
+    if section.kind != "contents":
+        return values
+    body_targets = _body_heading_targets_for_section(lines, section)
+    recovered: list[str] = []
+    for value in values:
+        if not value:
+            recovered.append(value)
+            continue
+        aligned = _body_aligned_source_entry(value, section.kind, body_targets)
+        parsed = split_title_page(value, section.kind)
+        should_restore_context = bool(
+            aligned
+            and parsed
+            and parsed[1]
+            and not _prefix_key(parsed[0], allow_single_letter=False)
+            and _prefix_key(aligned[0], allow_single_letter=False)
+        )
+        if parsed is None or should_restore_context:
+            recovered.append(f"{aligned[0]} {aligned[1]}" if aligned else value)
+        else:
+            recovered.append(value)
+    return recovered
 
 
 def _native_source_candidate(value: str, kind: NavKind) -> tuple[str, str] | None:
@@ -726,12 +1425,12 @@ def _native_source_match_end(
     native_title_pages = {
         (normalized_text(entry.title), entry.page.casefold())
         for entry in section.entries
-        if entry.native and entry.page
+        if _trusted_source_entry(entry) and entry.page
     }
     native_identifiers = {
         (entry.kind, entry_identifier(entry.title), entry.page.casefold())
         for entry in section.entries
-        if entry.native and entry_identifier(entry.title) and entry.page
+        if _trusted_source_entry(entry) and entry_identifier(entry.title) and entry.page
     }
     joined = ""
     for index in range(start, min(start + 3, limit)):
@@ -763,10 +1462,12 @@ def _extend_native_section_ranges(lines: list[str], sections: list[NavSection]) 
     """Consume only source-list remnants corroborated by native front-matter entries."""
     ignored = _code_line_indexes(lines)
     for position, section in enumerate(sections):
-        if not any(entry.native for entry in section.entries):
+        if not any(_trusted_source_entry(entry) for entry in section.entries):
             continue
         limit = sections[position + 1].start if position + 1 < len(sections) else len(lines)
         cursor = section.end
+        claimed_start = cursor
+        confirmed = False
         while cursor < limit:
             line = lines[cursor]
             if not line.strip():
@@ -782,8 +1483,397 @@ def _extend_native_section_ranges(lines: list[str], sections: list[NavSection]) 
             match_end = _native_source_match_end(lines, cursor, limit, section, ignored)
             if match_end is None:
                 break
+            confirmed = True
             section.end = match_end
             cursor = match_end
+        if confirmed:
+            section.owned_tail_start = (
+                claimed_start
+                if section.owned_tail_start < 0
+                else min(section.owned_tail_start, claimed_start)
+            )
+
+
+TailRecord = tuple[int, int, str, str]
+
+
+def _next_heading_index(lines: list[str], start: int, ignored: set[int]) -> int | None:
+    for index in range(start, len(lines)):
+        if index not in ignored and HEADING_RE.fullmatch(lines[index]) is not None:
+            return index
+    return None
+
+
+def _scan_structural_navigation_tail(
+    lines: list[str], start: int, limit: int, kind: NavKind, ignored: set[int]
+) -> tuple[list[TailRecord], int, bool]:
+    """Scan a continuous list-shaped tail without making link decisions."""
+    records: list[TailRecord] = []
+    boundary = start
+    index = start
+    stopped_on_text = False
+    last_sequence: tuple[int, ...] | None = None
+    while index < limit:
+        line = lines[index]
+        cleaned = _clean_entry_line(line)
+        if not cleaned:
+            boundary = index + 1
+            index += 1
+            continue
+        if (
+            index in ignored
+            or HEADING_RE.fullmatch(line) is not None
+            or line.startswith(("    ", "\t"))
+        ):
+            break
+        if PAGE_ONLY_RE.fullmatch(cleaned):
+            boundary = index + 1
+            index += 1
+            continue
+        if _is_navigation_debris(line):
+            recovered = _recover_navigation_debris_title(line, kind)
+            if recovered is None:
+                stopped_on_text = True
+                break
+            sequence = _numeric_identifier_sequence(recovered)
+            if sequence is not None and last_sequence is not None and sequence <= last_sequence:
+                stopped_on_text = True
+                break
+            if sequence is not None:
+                last_sequence = sequence
+            records.append((index, index + 1, recovered, ""))
+            boundary = index + 1
+            index += 1
+            continue
+
+        parsed = split_title_page(cleaned, kind)
+        if parsed is None or not parsed[1]:
+            fallback = RAW_TRAILING_PAGE_RE.fullmatch(cleaned)
+            if fallback is not None:
+                title = re.sub(
+                    r"(?:\s*\.\s*){2,}", " ", fallback.group("title")
+                )
+                title = re.sub(r"\s+", " ", title).strip(" .")
+                parsed = (title, fallback.group("page")) if title else None
+        if parsed is not None and parsed[1]:
+            sequence = _numeric_identifier_sequence(parsed[0])
+            if sequence is not None and last_sequence is not None and sequence <= last_sequence:
+                stopped_on_text = True
+                break
+            if sequence is not None:
+                last_sequence = sequence
+            records.append((index, index + 1, parsed[0], parsed[1]))
+            boundary = index + 1
+            index += 1
+            continue
+
+        completion = _wrapped_entry_completion(lines, index, limit, kind, ignored)
+        if completion is not None:
+            completion_end, title = completion
+            joined = " ".join(
+                _clean_entry_line(lines[item])
+                for item in range(index, completion_end + 1)
+            )
+            joined_entry = split_title_page(joined, kind)
+            page = joined_entry[1] if joined_entry is not None else ""
+            sequence = _numeric_identifier_sequence(title)
+            if sequence is not None and last_sequence is not None and sequence <= last_sequence:
+                stopped_on_text = True
+                break
+            if sequence is not None:
+                last_sequence = sequence
+            records.append((index, completion_end + 1, title, page))
+            boundary = completion_end + 1
+            index = completion_end + 1
+            continue
+
+        stopped_on_text = True
+        break
+    return records, boundary, stopped_on_text
+
+
+_STRICT_LEADER_ROW_RE = re.compile(r"(?:\s*[.．·•…⋯]\s*){3,}")
+
+
+def _is_strict_inter_navigation_tail(
+    lines: list[str],
+    records: list[TailRecord],
+    *,
+    boundary: int,
+    limit: int,
+    next_navigation: int | None,
+    stopped_on_text: bool,
+) -> bool:
+    """Trust only a complete dot-leader run immediately before another list.
+
+    This covers back-matter rows that a structured extractor may merge into one
+    record (for example acknowledgement/profile/authorization rows).  Requiring
+    every row to carry an explicit numeric page, a strong leader, monotonic page
+    order, and the next navigation heading as the exact boundary keeps ordinary
+    body prose outside the owned block.
+    """
+    if (
+        stopped_on_text
+        or next_navigation is None
+        or limit != next_navigation
+        or boundary != limit
+        or len(records) < 3
+    ):
+        return False
+    pages: list[int] = []
+    for start, end, title, page in records:
+        if (
+            end != start + 1
+            or not title
+            or len(title) > 200
+            or re.fullmatch(r"[0-9]+", page) is None
+            or _STRICT_LEADER_ROW_RE.search(lines[start]) is None
+        ):
+            return False
+        pages.append(int(page))
+    return all(left <= right for left, right in zip(pages, pages[1:]))
+
+
+def _reference_supports_tail_record(record: TailRecord, entries: list[NavEntry]) -> bool:
+    _start, _end, title, page = record
+    full = normalized_text(title)
+    identifier = _prefix_key(title, allow_single_letter=False)
+    _prefix, body = _prefix_and_body(title, allow_single_letter=False)
+    body_matches: list[NavEntry] = []
+    for entry in entries:
+        if entry.kind != "contents":
+            continue
+        entry_full = normalized_text(entry.title)
+        entry_identifier_value = _prefix_key(
+            entry.title, allow_single_letter=False
+        )
+        _entry_prefix, entry_body = _prefix_and_body(
+            entry.title, allow_single_letter=False
+        )
+        page_compatible = not page or not entry.page or page == entry.page
+        if full and full == entry_full and page_compatible:
+            return True
+        if identifier and entry_identifier_value == identifier and page_compatible:
+            return True
+        if body and body == entry_body and _trusted_source_entry(entry) and page == entry.page:
+            body_matches.append(entry)
+    return len(body_matches) == 1
+
+
+def _body_supports_tail_record(record: TailRecord, targets: list[Target]) -> bool:
+    _start, _end, title, _page = record
+    entry = NavEntry(kind="contents", title=title, page="", depth=0)
+    if any(_heading_score(entry, target) >= 0.84 for target in targets):
+        return True
+    normalized = normalized_text(title)
+    return any(
+        normalized and normalized == normalized_text(target.title)
+        for target in targets
+    )
+
+
+def _extend_body_backed_section_ranges(
+    lines: list[str], sections: list[NavSection]
+) -> None:
+    """Atomically own a list-shaped TOC tail when body/reference evidence proves it."""
+    ignored = _code_line_indexes(lines)
+    for position, section in enumerate(sections):
+        if section.kind != "contents" or section.start >= 1000:
+            continue
+        next_navigation = (
+            sections[position + 1].start if position + 1 < len(sections) else None
+        )
+        next_heading = _next_heading_index(lines, section.end, ignored)
+        boundaries = [
+            boundary
+            for boundary in (next_navigation, next_heading)
+            if boundary is not None
+        ]
+        limit = min(boundaries) if boundaries else None
+        if limit is None or limit <= section.end or limit - section.start > 1500:
+            continue
+        records, boundary, stopped_on_text = _scan_structural_navigation_tail(
+            lines, section.end, limit, section.kind, ignored
+        )
+        if len(records) < 3:
+            continue
+
+        strict_inter_navigation_tail = _is_strict_inter_navigation_tail(
+            lines,
+            records,
+            boundary=boundary,
+            limit=limit,
+            next_navigation=next_navigation,
+            stopped_on_text=stopped_on_text,
+        )
+
+        probe = NavSection(
+            start=section.start,
+            end=limit,
+            kind=section.kind,
+            title=section.title,
+            combined=section.combined,
+        )
+        target_map = _body_heading_targets_for_section(lines, probe)
+        targets = list(
+            {
+                target.line_index: target
+                for values in target_map.values()
+                for target in values
+            }.values()
+        )
+        support = [
+            _reference_supports_tail_record(record, section.entries)
+            or _body_supports_tail_record(record, targets)
+            for record in records
+        ]
+        if stopped_on_text:
+            while records and not support[-1]:
+                records.pop()
+                support.pop()
+            if records:
+                boundary = records[-1][1]
+                while boundary < limit and not lines[boundary].strip():
+                    boundary += 1
+        if len(records) < 3:
+            continue
+        supported = sum(support)
+        required_support = len(records) if len(records) <= 4 else 3
+        if (
+            not strict_inter_navigation_tail
+            and (supported < required_support or supported / len(records) < 0.75)
+        ):
+            continue
+        if not strict_inter_navigation_tail and any(
+            not is_supported
+            and (
+                index == 0
+                or index == len(support) - 1
+                or not support[index - 1]
+                or not support[index + 1]
+            )
+            for index, is_supported in enumerate(support)
+        ):
+            continue
+        section.owned_tail_start = (
+            section.end
+            if section.owned_tail_start < 0
+            else min(section.owned_tail_start, section.end)
+        )
+        section.owned_tail_records = records
+        section.end = boundary
+
+
+def _entries_can_overlap(left: NavEntry, right: NavEntry) -> bool:
+    if left.kind != right.kind:
+        return False
+    if left.page and right.page and left.page != right.page:
+        return False
+    left_full = normalized_text(left.title)
+    right_full = normalized_text(right.title)
+    if left_full and left_full == right_full:
+        return True
+    left_key = _prefix_key(left.title, allow_single_letter=False)
+    right_key = _prefix_key(right.title, allow_single_letter=False)
+    if left_key and right_key:
+        return left_key == right_key
+    _left_prefix, left_body = _prefix_and_body(
+        left.title, allow_single_letter=False
+    )
+    _right_prefix, right_body = _prefix_and_body(
+        right.title, allow_single_letter=False
+    )
+    return bool(
+        left_body
+        and left_body == right_body
+        and left.page
+        and right.page
+        and left.page == right.page
+    )
+
+
+def _merge_entry_sequences(
+    prefix: list[NavEntry], tail: list[NavEntry]
+) -> list[NavEntry]:
+    rows = len(prefix)
+    columns = len(tail)
+    lcs = [[0] * (columns + 1) for _ in range(rows + 1)]
+    for row in range(rows):
+        for column in range(columns):
+            if _entries_can_overlap(prefix[row], tail[column]):
+                lcs[row + 1][column + 1] = lcs[row][column] + 1
+            else:
+                lcs[row + 1][column + 1] = max(
+                    lcs[row][column + 1], lcs[row + 1][column]
+                )
+
+    matches: list[tuple[int, int]] = []
+    row = rows
+    column = columns
+    while row and column:
+        if _entries_can_overlap(prefix[row - 1], tail[column - 1]):
+            matches.append((row - 1, column - 1))
+            row -= 1
+            column -= 1
+        elif lcs[row - 1][column] > lcs[row][column - 1]:
+            row -= 1
+        else:
+            column -= 1
+    matches.reverse()
+
+    merged: list[NavEntry] = []
+    prefix_cursor = 0
+    tail_cursor = 0
+    for prefix_index, tail_index in matches:
+        merged.extend(prefix[prefix_cursor:prefix_index])
+        merged.extend(tail[tail_cursor:tail_index])
+        left = prefix[prefix_index]
+        right = tail[tail_index]
+        left_rank = 2 if left.native else (1 if left.structured else 0)
+        right_rank = 2 if right.native else (1 if right.structured else 0)
+        merged.append(right if right_rank > left_rank else left)
+        prefix_cursor = prefix_index + 1
+        tail_cursor = tail_index + 1
+    merged.extend(prefix[prefix_cursor:])
+    merged.extend(tail[tail_cursor:])
+    return merged
+
+
+def _refresh_section_entries(lines: list[str], sections: list[NavSection]) -> None:
+    for section in sections:
+        if section.owned_tail_start < 0 or not section.owned_tail_records:
+            if not any(_trusted_source_entry(entry) for entry in section.entries):
+                section.entries = _entries_from_markdown(lines, section)
+            continue
+
+        if any(_trusted_source_entry(entry) for entry in section.entries):
+            prefix_entries = section.entries
+        else:
+            prefix = NavSection(
+                start=section.start,
+                end=section.owned_tail_start,
+                kind=section.kind,
+                title=section.title,
+                combined=section.combined,
+            )
+            prefix_entries = _entries_from_markdown(lines, prefix)
+        target_map = _body_heading_targets_for_section(lines, section)
+        tail_entries: list[NavEntry] = []
+        for _start, _end, title, page in section.owned_tail_records:
+            aligned = _body_aligned_source_entry(
+                f"{title} {page}".strip(), section.kind, target_map
+            )
+            resolved_title = aligned[0] if aligned is not None else title
+            entry_kind = explicit_entry_kind(resolved_title) or section.kind
+            tail_entries.append(
+                NavEntry(
+                    kind=entry_kind,
+                    title=resolved_title,
+                    page=page,
+                    depth=_entry_depth(resolved_title, entry_kind),
+                )
+            )
+        section.entries = _merge_entry_sequences(prefix_entries, tail_entries)
 
 
 def _prefix_and_body(title: str, *, allow_single_letter: bool = True) -> tuple[str, str]:
@@ -966,13 +2056,85 @@ def _collect_caption_targets(lines: list[str], sections: list[NavSection]) -> li
     return targets
 
 
-def _heading_score(entry: NavEntry, target: Target) -> float:
-    entry_full = normalized_text(entry.title)
-    target_full = normalized_text(target.title)
-    entry_prefix, entry_body = _prefix_and_body(entry.title)
-    target_prefix, target_body = _prefix_and_body(target.title, allow_single_letter=False)
-    entry_key = _prefix_key(entry.title)
-    target_key = _prefix_key(target.title, allow_single_letter=False) or target.context_prefix
+@dataclass(frozen=True, slots=True)
+class HeadingTarget:
+    """One body heading with canonical values computed exactly once."""
+
+    target: Target = field(repr=False, compare=False)
+    position: int
+    canonical_full: str
+    canonical_prefix: str
+    canonical_body: str
+    canonical_key: str
+
+    @classmethod
+    def build(cls, target: Target, position: int) -> "HeadingTarget":
+        prefix, body = _prefix_and_body(
+            target.title, allow_single_letter=False
+        )
+        return cls(
+            target=target,
+            position=position,
+            canonical_full=normalized_text(target.title),
+            canonical_prefix=prefix,
+            canonical_body=body,
+            canonical_key=(
+                _prefix_key(target.title, allow_single_letter=False)
+                or target.context_prefix
+            ),
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class _HeadingEntry:
+    """Canonical entry values shared by direction and target selection."""
+
+    canonical_full: str
+    canonical_prefix: str
+    canonical_body: str
+    canonical_key: str
+    single_prefix: str
+    single_body: str
+    single_key: str
+
+    @classmethod
+    def build(cls, entry: NavEntry) -> "_HeadingEntry":
+        prefix, body = _prefix_and_body(
+            entry.title, allow_single_letter=False
+        )
+        single_prefix, single_body = _prefix_and_body(entry.title)
+        return cls(
+            canonical_full=normalized_text(entry.title),
+            canonical_prefix=prefix,
+            canonical_body=body,
+            canonical_key=_prefix_key(entry.title, allow_single_letter=False),
+            single_prefix=single_prefix,
+            single_body=single_body,
+            single_key=_prefix_key(entry.title),
+        )
+
+
+def _heading_score(
+    entry: NavEntry,
+    target: Target,
+    *,
+    entry_features: _HeadingEntry | None = None,
+    target_features: HeadingTarget | None = None,
+) -> float:
+    entry_values = entry_features or _HeadingEntry.build(entry)
+    target_values = target_features or HeadingTarget.build(target, -1)
+    entry_full = entry_values.canonical_full
+    target_full = target_values.canonical_full
+    target_prefix = target_values.canonical_prefix
+    target_body = target_values.canonical_body
+    target_key = target_values.canonical_key
+    entry_prefix = entry_values.canonical_prefix
+    entry_body = entry_values.canonical_body
+    entry_key = entry_values.canonical_key
+    if target_key and entry_values.single_key == target_key:
+        entry_prefix = entry_values.single_prefix
+        entry_body = entry_values.single_body
+        entry_key = entry_values.single_key
     if entry_key and target_key and entry_key != target_key:
         return -1.0
     if entry_full == target_full:
@@ -1002,12 +2164,106 @@ def _heading_score(entry: NavEntry, target: Target) -> float:
     return ratio if ratio >= threshold else -1.0
 
 
-def _direction_for_section(section: NavSection, targets: list[Target]) -> str:
+@dataclass(slots=True)
+class _HeadingCandidateIndex:
+    targets: list[Target]
+    canonical_targets: dict[int, HeadingTarget]
+    by_identifier: dict[str, list[Target]]
+    by_full: dict[str, list[Target]]
+    positions: dict[int, int]
+    entry_features: dict[int, _HeadingEntry]
+    candidate_cache: dict[int, list[Target]]
+    score_cache: dict[tuple[int, int], float]
+
+    @classmethod
+    def build(cls, targets: list[Target]) -> "_HeadingCandidateIndex":
+        canonical_targets: dict[int, HeadingTarget] = {}
+        by_identifier: dict[str, list[Target]] = {}
+        by_full: dict[str, list[Target]] = {}
+        positions: dict[int, int] = {}
+        for position, target in enumerate(targets):
+            identity = id(target)
+            canonical = HeadingTarget.build(target, position)
+            canonical_targets[identity] = canonical
+            if canonical.canonical_key:
+                by_identifier.setdefault(canonical.canonical_key, []).append(target)
+            if canonical.canonical_full:
+                by_full.setdefault(canonical.canonical_full, []).append(target)
+            positions[identity] = position
+        return cls(
+            targets,
+            canonical_targets,
+            by_identifier,
+            by_full,
+            positions,
+            {},
+            {},
+            {},
+        )
+
+    def features(self, entry: NavEntry) -> _HeadingEntry:
+        cache_key = id(entry)
+        cached = self.entry_features.get(cache_key)
+        if cached is None:
+            cached = _HeadingEntry.build(entry)
+            self.entry_features[cache_key] = cached
+        return cached
+
+    def candidates(self, entry: NavEntry) -> list[Target]:
+        cache_key = id(entry)
+        cached = self.candidate_cache.get(cache_key)
+        if cached is not None:
+            return cached
+        features = self.features(entry)
+
+        # A numbered identifier is a complete index: _heading_score rejects every
+        # target carrying a different (or missing) identifier.  Exact candidates
+        # are merged first so lookup remains O(1) even when a context heading
+        # supplied the target identifier.
+        #
+        # An unnumbered entry has no such completeness guarantee.  A near-exact
+        # body heading can still pass the fuzzy threshold and can also trigger the
+        # 0.08 ambiguity gate, so retain the original full scan in that case.
+        if not features.canonical_key:
+            self.candidate_cache[cache_key] = self.targets
+            return self.targets
+
+        merged: list[Target] = []
+        seen: set[int] = set()
+        for bucket in (
+            self.by_full.get(features.canonical_full, ()),
+            self.by_identifier.get(features.canonical_key, ()),
+        ):
+            for target in bucket:
+                identity = id(target)
+                if identity in seen:
+                    continue
+                seen.add(identity)
+                merged.append(target)
+        merged.sort(key=lambda target: self.positions[id(target)])
+        self.candidate_cache[cache_key] = merged
+        return merged
+
+    def score(self, entry: NavEntry, target: Target) -> float:
+        key = (id(entry), id(target))
+        if key not in self.score_cache:
+            self.score_cache[key] = _heading_score(
+                entry,
+                target,
+                entry_features=self.features(entry),
+                target_features=self.canonical_targets[id(target)],
+            )
+        return self.score_cache[key]
+
+
+def _direction_for_section(
+    section: NavSection, heading_index: _HeadingCandidateIndex
+) -> str:
     before = 0
     after = 0
     for entry in section.entries:
-        for target in targets:
-            if _heading_score(entry, target) < 0.95:
+        for target in heading_index.candidates(entry):
+            if heading_index.score(entry, target) < 0.95:
                 continue
             if target.line_index < section.start:
                 before += 1
@@ -1029,13 +2285,18 @@ def _choose_heading(
     cursor: int,
     direction: str,
     section: NavSection,
+    heading_index: _HeadingCandidateIndex,
 ) -> Target | None:
     if direction == "after":
         allowed = [target for target in candidates if target.line_index > cursor]
     else:
         allowed = [target for target in candidates if cursor < target.line_index < section.start]
     ranked = sorted(
-        ((score, target) for target in allowed if (score := _heading_score(entry, target)) >= 0),
+        (
+            (score, target)
+            for target in allowed
+            if (score := heading_index.score(entry, target)) >= 0
+        ),
         key=lambda item: (-item[0], item[1].line_index),
     )
     if not ranked:
@@ -1047,16 +2308,25 @@ def _choose_heading(
 
 def _match_contents(sections: list[NavSection], targets: list[Target]) -> None:
     used: set[int] = set()
+    heading_index = _HeadingCandidateIndex.build(targets)
     for section in (item for item in sections if item.kind == "contents"):
-        direction = _direction_for_section(section, targets)
+        direction = _direction_for_section(section, heading_index)
         cursor = -1 if direction == "before" else section.end - 1
         for entry in section.entries:
-            available = [target for target in targets if target.line_index not in used]
+            available = [
+                target
+                for target in heading_index.candidates(entry)
+                if target.line_index not in used
+            ]
             front_entry = direction == "after" and _is_front_before_entry(entry)
             if front_entry:
                 before = [target for target in available if target.line_index < section.start]
                 ranked = sorted(
-                    ((score, target) for target in before if (score := _heading_score(entry, target)) >= 0.95),
+                    (
+                        (score, target)
+                        for target in before
+                        if (score := heading_index.score(entry, target)) >= 0.95
+                    ),
                     key=lambda item: (-item[0], -item[1].line_index),
                 )
                 target = (
@@ -1066,9 +2336,23 @@ def _match_contents(sections: list[NavSection], targets: list[Target]) -> None:
                     else None
                 )
                 if target is None:
-                    target = _choose_heading(entry, available, cursor, direction, section)
+                    target = _choose_heading(
+                        entry,
+                        available,
+                        cursor,
+                        direction,
+                        section,
+                        heading_index,
+                    )
             else:
-                target = _choose_heading(entry, available, cursor, direction, section)
+                target = _choose_heading(
+                    entry,
+                    available,
+                    cursor,
+                    direction,
+                    section,
+                    heading_index,
+                )
             if target is None:
                 continue
             entry.target = target
@@ -1173,7 +2457,7 @@ def _rebuild_corrupt_caption_lists(
         )
         if not debris:
             continue
-        if section.entries and any(entry.native for entry in section.entries):
+        if section.entries and any(_trusted_source_entry(entry) for entry in section.entries):
             continue
         section.replace_debris = True
         section.entries = []
@@ -1290,6 +2574,7 @@ def _preserved_section_blocks(lines: list[str], section: NavSection) -> list[str
             for value in cleaned
         )
         is_navigation = any(navigation_kind(value) is not None for value in cleaned)
+        is_rendered_navigation = any(BULLET_RE.fullmatch(line) for line in block)
         is_debris = any(
             len(line) > 500 or re.search(r"(?:\s*[.．·•…⋯]\s*){5,}", line)
             for line in block
@@ -1298,6 +2583,7 @@ def _preserved_section_blocks(lines: list[str], section: NavSection) -> list[str
             cleaned
             and not is_page_noise
             and not is_navigation
+            and not is_rendered_navigation
             and not is_debris
             and not parse_entry_lines(cleaned, section.kind)
         ):
@@ -1306,7 +2592,12 @@ def _preserved_section_blocks(lines: list[str], section: NavSection) -> list[str
             preserved.extend(block)
         block = []
 
-    for line in lines[section.start + 1 : section.end]:
+    content_end = (
+        section.owned_tail_start
+        if section.owned_tail_start >= 0
+        else section.end
+    )
+    for line in lines[section.start + 1 : content_end]:
         if line.strip():
             block.append(line)
         else:
@@ -1316,6 +2607,8 @@ def _preserved_section_blocks(lines: list[str], section: NavSection) -> list[str
 
 
 def _render_section(section: NavSection, lines: list[str]) -> list[str]:
+    if section.suppressed:
+        return []
     rendered = [
         f'<a id="{section.anchor}" data-pdf2md-nav="section"></a>',
         lines[section.start],
@@ -1387,11 +2680,22 @@ def enhance_document_navigation(
     source: Path | None = None,
     frontmatter_cache: Path | None = None,
     force_frontmatter: bool = False,
+    front_regions: Mapping[str, Any] | None = None,
+    selected_physical_pages: Collection[int] | None = None,
 ) -> str:
     """Rebuild front-matter lists and create strict heading-to-list navigation."""
     had_trailing_newline = content.endswith("\n")
     lines = _strip_generated_navigation(content.splitlines())
-    sections = _section_ranges(lines)
+    structured_navigation = _structured_navigation_entries(
+        front_regions,
+        selected_physical_pages,
+    )
+    sections = _section_ranges(
+        lines,
+        front_regions=front_regions,
+        selected_physical_pages=selected_physical_pages,
+        structured_navigation=structured_navigation,
+    )
     if not sections:
         return content
     _populate_entries(
@@ -1400,8 +2704,21 @@ def enhance_document_navigation(
         source,
         frontmatter_cache,
         force_frontmatter=force_frontmatter,
+        front_regions=front_regions,
+        selected_physical_pages=selected_physical_pages,
+        structured_navigation=structured_navigation,
     )
     _extend_native_section_ranges(lines, sections)
+    _extend_body_backed_section_ranges(lines, sections)
+    _refresh_section_entries(lines, sections)
+    structured_runs = _structured_navigation_runs(
+        front_regions,
+        selected_physical_pages,
+        structured_navigation,
+    )
+    _collapse_repeated_structured_sections(
+        lines, sections, structured_runs, front_regions
+    )
     caption_targets = _collect_caption_targets(lines, sections)
     _rebuild_corrupt_caption_lists(lines, sections, caption_targets)
     sections = [section for section in sections if section.entries or section.replace_debris]
@@ -1409,12 +2726,13 @@ def enhance_document_navigation(
         return content
 
     used_anchors = _existing_anchor_ids(lines)
-    _assign_section_anchors(sections, used_anchors)
+    active_sections = [section for section in sections if not section.suppressed]
+    _assign_section_anchors(active_sections, used_anchors)
     heading_targets = _collect_heading_targets(lines, sections)
-    heading_targets.extend(_collect_navigation_targets(lines, sections))
-    _match_contents(sections, heading_targets)
-    _match_captions(lines, sections, caption_targets)
+    heading_targets.extend(_collect_navigation_targets(lines, active_sections))
+    _match_contents(active_sections, heading_targets)
+    _match_captions(lines, active_sections, caption_targets)
 
-    targets = _assign_target_anchors(sections, used_anchors)
+    targets = _assign_target_anchors(active_sections, used_anchors)
     rendered = "\n".join(_render_document(lines, sections, targets)).rstrip()
     return rendered + ("\n" if had_trailing_newline else "")

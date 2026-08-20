@@ -50,9 +50,75 @@ def _source_for(markdown: Path) -> Path | None:
     return source if source.is_file() else None
 
 
+def _frontmatter_cache_for(output: Path, pages: str) -> Path | None:
+    """Return an existing cache without causing the audit to read the PDF."""
+    cache_root = output / "raw" / "cache"
+    candidates = [cache_root / f"frontmatter-v8-{pages}.json"]
+    if pages == "all":
+        candidates.extend(
+            (
+                cache_root / "frontmatter-v8.json",
+                cache_root / "frontmatter-v7.json",
+            )
+        )
+    return next((candidate for candidate in candidates if candidate.is_file()), None)
+
+
+def _front_region_report(output: Path) -> dict[str, object] | None:
+    report_path = output / "raw" / "cache" / "front-regions-v1.json"
+    try:
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    return report if isinstance(report, dict) else None
+
+
+def _navigation_replay_context(
+    markdown: Path,
+) -> tuple[Path | None, Path | None, dict[str, object] | None, range | None]:
+    """Recover the context used to publish a single-selection artifact."""
+    output = markdown.parent
+    manifest_path = output / "raw" / "manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        manifest = None
+    selections = manifest.get("selections") if isinstance(manifest, dict) else None
+    if not isinstance(selections, list) or len(selections) != 1:
+        source = _source_for(markdown)
+        cache = _frontmatter_cache_for(output, "all")
+        return (source if cache is not None else None), cache, None, None
+    selection = selections[0]
+    if not isinstance(selection, dict):
+        return None, None, None, None
+    pages = str(selection.get("pages", "")).strip().casefold()
+    if pages == "all":
+        source = _source_for(markdown)
+        cache = _frontmatter_cache_for(output, pages)
+        return (
+            source if cache is not None else None,
+            cache,
+            _front_region_report(output),
+            None,
+        )
+    match = re.fullmatch(r"(?P<start>[0-9]+)(?:-(?P<end>[0-9]+))?", pages)
+    if match is None:
+        return None, None, None, None
+    start = int(match.group("start"))
+    end = int(match.group("end") or start)
+    if start < 1 or end < start:
+        return None, None, None, None
+    cache = _frontmatter_cache_for(output, pages)
+    source = _source_for(markdown) if cache is not None else None
+    return source, cache, _front_region_report(output), range(start, end + 1)
+
+
 def audit(markdown: Path, check_idempotence: bool = False) -> dict[str, object]:
     content = markdown.read_text(encoding="utf-8", errors="strict")
     lines = content.splitlines()
+    source, cache, front_regions, selected_pages = _navigation_replay_context(
+        markdown
+    )
     anchor_pairs = [
         (match.group("id"), index)
         for index, line in enumerate(lines)
@@ -76,7 +142,16 @@ def audit(markdown: Path, check_idempotence: bool = False) -> dict[str, object]:
             errors.append(f"line {index + 1}: target #{target.group('id')} is not followed by a heading")
 
     section_metrics: list[dict[str, object]] = []
-    sections = navigation._section_ranges(lines)
+    structured_navigation = navigation._structured_navigation_entries(
+        front_regions,
+        selected_pages,
+    )
+    sections = navigation._section_ranges(
+        lines,
+        front_regions=front_regions,
+        selected_physical_pages=selected_pages,
+        structured_navigation=structured_navigation,
+    )
     for section in sections:
         section_anchor = ""
         if section.start > 0:
@@ -121,14 +196,21 @@ def audit(markdown: Path, check_idempotence: bool = False) -> dict[str, object]:
         )
 
     if check_idempotence:
-        source = _source_for(markdown)
-        cache = markdown.parent / "raw" / "cache" / "frontmatter-v6.json"
-        second = navigation.enhance_document_navigation(
+        first = navigation.enhance_document_navigation(
             content,
             source=source,
-            frontmatter_cache=cache if source is not None else None,
+            frontmatter_cache=cache,
+            front_regions=front_regions,
+            selected_physical_pages=selected_pages,
         )
-        if second != content:
+        second = navigation.enhance_document_navigation(
+            first,
+            source=source,
+            frontmatter_cache=cache,
+            front_regions=front_regions,
+            selected_physical_pages=selected_pages,
+        )
+        if second != first:
             errors.append("navigation publishing is not idempotent")
 
     return {
