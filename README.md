@@ -37,6 +37,8 @@ flowchart TD
     Publish --> Tables --> Front --> Native --> Toc --> Output
 ```
 
+模型、Python 匹配代码与 MinerU 内部调用顺序的实现级说明见 [识别模型、匹配代码与执行流程](docs/recognition-models-and-pipeline.md)。
+
 ### 分层职责
 
 | 层 | 主要文件 | 只负责什么 |
@@ -424,6 +426,7 @@ PDF2MD/
 │  └─ README.md                  # 脚本分类与用途索引
 ├─ docs/                         # 设计文档
 │  ├─ README.md                  # 文档索引
+│  ├─ recognition-models-and-pipeline.md # 模型、匹配代码与执行流程
 │  └─ front-region-cascade.md    # 前置区域级联设计
 ├─ tests/                        # 无 GPU 单测与安全回归
 ├─ data/                         # 所有测试/训练 PDF、解析结果、清单和标注
